@@ -7,4 +7,6 @@
     [OrganizationId] CHAR(36) NULL, 
     [CreatedAt] DATETIME2 NULL DEFAULT getutcdate(), 
     [LastModifiedAt] DATETIME2 NULL DEFAULT getutcdate() 
+
+    CONSTRAINT [FK_User_Organization] FOREIGN KEY ([OrganizationId]) REFERENCES [Organization]([Id])
 )

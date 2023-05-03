@@ -6,4 +6,6 @@
     [PipelineId] CHAR(36) NOT NULL, 
     [CreatedAt] DATETIME2 NULL DEFAULT getutcdate(), 
     [LastModifiedAt] DATETIME2 NULL DEFAULT getutcdate()
+
+    CONSTRAINT [FK_Stage_Pipeline] FOREIGN KEY ([PipelineId]) REFERENCES [Pipeline]([Id])
 )

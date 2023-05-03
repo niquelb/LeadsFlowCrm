@@ -5,4 +5,7 @@
     [OrganizationId] CHAR(36) NOT NULL, 
     [CreatedAt] DATETIME2 NULL DEFAULT getutcdate(), 
     [LastModifiedAt] DATETIME2 NULL DEFAULT getutcdate()
+
+    CONSTRAINT [FK_PipelineOrganization_Pipeline] FOREIGN KEY ([PipelineId]) REFERENCES [Pipeline]([Id])
+    CONSTRAINT [FK_PipelineOrganization_Organization] FOREIGN KEY ([OrganizationId]) REFERENCES [Organization]([Id])
 )
