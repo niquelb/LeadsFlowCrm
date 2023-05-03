@@ -61,6 +61,8 @@
     <Folder Include="dbo\Views" />
     <Folder Include="dbo\StoredProcedures" />
     <Folder Include="PublishLocations" />
+    <Folder Include="dbo\StoredProcedures\UserCRUD" />
+    <Folder Include="dbo\StoredProcedures\PipelineCRUD" />
   </ItemGroup>
   <ItemGroup>
     <None Include="PublishLocations\LeadsFlowDB.publish.xml" />
@@ -73,6 +75,16 @@
     <Build Include="dbo\Tables\Pipeline_Organization.sql" />
     <Build Include="dbo\Tables\Stage.sql" />
     <Build Include="dbo\Tables\Fields.sql" />
+    <Build Include="dbo\StoredProcedures\UserCRUD\spUser_Delete.sql" />
+    <Build Include="dbo\StoredProcedures\UserCRUD\spUser_Get.sql" />
+    <Build Include="dbo\StoredProcedures\UserCRUD\spUser_GetAll.sql" />
+    <Build Include="dbo\StoredProcedures\UserCRUD\spUser_Insert.sql" />
+    <Build Include="dbo\StoredProcedures\UserCRUD\spUser_Update.sql" />
+    <Build Include="dbo\StoredProcedures\PipelineCRUD\spPipeline_GetAll.sql" />
+    <Build Include="dbo\StoredProcedures\PipelineCRUD\spPipeline_Get.sql" />
+    <Build Include="dbo\StoredProcedures\PipelineCRUD\spPipeline_Delete.sql" />
+    <Build Include="dbo\StoredProcedures\PipelineCRUD\spPipeline_Insert.sql" />
+    <Build Include="dbo\StoredProcedures\PipelineCRUD\spPipeline_Update.sql" />
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="LeadsFlowDB.refactorlog" />
