@@ -13,4 +13,5 @@ BEGIN
     [DisplayName] = @DisplayName, 
     [OrganizationId] = @OrganizationId,
     [LastModifiedAt] = getutcdate()
+    WHERE [Id] = @Id;
 END

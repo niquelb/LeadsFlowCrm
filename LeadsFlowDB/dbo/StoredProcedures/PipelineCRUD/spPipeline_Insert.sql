@@ -4,7 +4,7 @@
 	@CreatorId CHAR(36)
 AS
 BEGIN
-	INSERT INTO [Pipeline] ([Id], [Name], [CreatorId])
-	VALUES (@Id, @Name, @CreatorId)
+	INSERT INTO [Pipeline] ([Id], [Name], [CreatorId], [CreatedAt], [LastModifiedAt])
+	VALUES (@Id, @Name, @CreatorId, getutcdate(), getutcdate())
 
 END

@@ -63,6 +63,7 @@
     <Folder Include="PublishLocations" />
     <Folder Include="dbo\StoredProcedures\UserCRUD" />
     <Folder Include="dbo\StoredProcedures\PipelineCRUD" />
+    <Folder Include="dbo\StoredProcedures\ContactCRUD" />
   </ItemGroup>
   <ItemGroup>
     <None Include="PublishLocations\LeadsFlowDB.publish.xml" />
@@ -85,6 +86,11 @@
     <Build Include="dbo\StoredProcedures\PipelineCRUD\spPipeline_Delete.sql" />
     <Build Include="dbo\StoredProcedures\PipelineCRUD\spPipeline_Insert.sql" />
     <Build Include="dbo\StoredProcedures\PipelineCRUD\spPipeline_Update.sql" />
+    <Build Include="dbo\StoredProcedures\ContactCRUD\spContact_GetAll.sql" />
+    <Build Include="dbo\StoredProcedures\ContactCRUD\spContact_Get.sql" />
+    <Build Include="dbo\StoredProcedures\ContactCRUD\spContact_Delete.sql" />
+    <Build Include="dbo\StoredProcedures\ContactCRUD\spContact_Insert.sql" />
+    <Build Include="dbo\StoredProcedures\ContactCRUD\spContact_Update.sql" />
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="LeadsFlowDB.refactorlog" />

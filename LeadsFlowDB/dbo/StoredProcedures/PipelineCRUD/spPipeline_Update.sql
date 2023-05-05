@@ -10,4 +10,5 @@ BEGIN
 	[Name] = @Name, 
 	[CreatorId] = @CreatorId, 
 	[LastModifiedAt] = getutcdate()
+	WHERE [Id] = @Id;
 END
