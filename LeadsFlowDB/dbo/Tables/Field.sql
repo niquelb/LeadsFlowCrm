@@ -1,4 +1,4 @@
-﻿CREATE TABLE [dbo].[Fields]
+﻿CREATE TABLE [dbo].[Field]
 (
 	[Id] CHAR(36) NOT NULL PRIMARY KEY, 
     [Name] NVARCHAR(50) NOT NULL, 

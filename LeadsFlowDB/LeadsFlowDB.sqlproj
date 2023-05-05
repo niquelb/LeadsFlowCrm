@@ -61,6 +61,13 @@
     <Folder Include="dbo\Views" />
     <Folder Include="dbo\StoredProcedures" />
     <Folder Include="PublishLocations" />
+    <Folder Include="dbo\StoredProcedures\UserCRUD" />
+    <Folder Include="dbo\StoredProcedures\PipelineCRUD" />
+    <Folder Include="dbo\StoredProcedures\ContactCRUD" />
+    <Folder Include="dbo\StoredProcedures\PipelineOrganizationCRUD" />
+    <Folder Include="dbo\StoredProcedures\StageCRUD" />
+    <Folder Include="dbo\StoredProcedures\FieldCRUD" />
+    <Folder Include="dbo\StoredProcedures\OrganizationCRUD" />
   </ItemGroup>
   <ItemGroup>
     <None Include="PublishLocations\LeadsFlowDB.publish.xml" />
@@ -72,7 +79,41 @@
     <Build Include="dbo\Tables\Pipeline.sql" />
     <Build Include="dbo\Tables\Pipeline_Organization.sql" />
     <Build Include="dbo\Tables\Stage.sql" />
-    <Build Include="dbo\Tables\Fields.sql" />
+    <Build Include="dbo\Tables\Field.sql" />
+    <Build Include="dbo\StoredProcedures\UserCRUD\spUser_Delete.sql" />
+    <Build Include="dbo\StoredProcedures\UserCRUD\spUser_Get.sql" />
+    <Build Include="dbo\StoredProcedures\UserCRUD\spUser_GetAll.sql" />
+    <Build Include="dbo\StoredProcedures\UserCRUD\spUser_Insert.sql" />
+    <Build Include="dbo\StoredProcedures\UserCRUD\spUser_Update.sql" />
+    <Build Include="dbo\StoredProcedures\PipelineCRUD\spPipeline_GetAll.sql" />
+    <Build Include="dbo\StoredProcedures\PipelineCRUD\spPipeline_Get.sql" />
+    <Build Include="dbo\StoredProcedures\PipelineCRUD\spPipeline_Delete.sql" />
+    <Build Include="dbo\StoredProcedures\PipelineCRUD\spPipeline_Insert.sql" />
+    <Build Include="dbo\StoredProcedures\PipelineCRUD\spPipeline_Update.sql" />
+    <Build Include="dbo\StoredProcedures\ContactCRUD\spContact_GetAll.sql" />
+    <Build Include="dbo\StoredProcedures\ContactCRUD\spContact_Get.sql" />
+    <Build Include="dbo\StoredProcedures\ContactCRUD\spContact_Delete.sql" />
+    <Build Include="dbo\StoredProcedures\ContactCRUD\spContact_Insert.sql" />
+    <Build Include="dbo\StoredProcedures\ContactCRUD\spContact_Update.sql" />
+    <Build Include="dbo\StoredProcedures\PipelineOrganizationCRUD\spPipelineOrganization_GetAll.sql" />
+    <Build Include="dbo\StoredProcedures\PipelineOrganizationCRUD\spPipelineOrganization_Get.sql" />
+    <Build Include="dbo\StoredProcedures\PipelineOrganizationCRUD\spPipelineOrganization_Insert.sql" />
+    <Build Include="dbo\StoredProcedures\PipelineOrganizationCRUD\spPipelineOrganization_Delete.sql" />
+    <Build Include="dbo\StoredProcedures\StageCRUD\spStage_GetAll.sql" />
+    <Build Include="dbo\StoredProcedures\StageCRUD\spStage_Get.sql" />
+    <Build Include="dbo\StoredProcedures\StageCRUD\spStage_Delete.sql" />
+    <Build Include="dbo\StoredProcedures\StageCRUD\spStage_Insert.sql" />
+    <Build Include="dbo\StoredProcedures\StageCRUD\spStage_Update.sql" />
+    <Build Include="dbo\StoredProcedures\FieldCRUD\spField_GetAll.sql" />
+    <Build Include="dbo\StoredProcedures\FieldCRUD\spField_Get.sql" />
+    <Build Include="dbo\StoredProcedures\FieldCRUD\spField_Delete.sql" />
+    <Build Include="dbo\StoredProcedures\FieldCRUD\spField_Insert.sql" />
+    <Build Include="dbo\StoredProcedures\FieldCRUD\spField_Update.sql" />
+    <Build Include="dbo\StoredProcedures\OrganizationCRUD\spOrganization_GetAll.sql" />
+    <Build Include="dbo\StoredProcedures\OrganizationCRUD\spOrganization_Get.sql" />
+    <Build Include="dbo\StoredProcedures\OrganizationCRUD\spOrganization_Delete.sql" />
+    <Build Include="dbo\StoredProcedures\OrganizationCRUD\spOrganization_Insert.sql" />
+    <Build Include="dbo\StoredProcedures\OrganizationCRUD\spOrganization_Update.sql" />
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="LeadsFlowDB.refactorlog" />
