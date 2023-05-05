@@ -6,6 +6,6 @@
     @OrganizationId CHAR(36)
 AS
 BEGIN
-    INSERT INTO [User] ([Id], [OauthToken], [Email], [DisplayName], [OrganizationId], [CreatedAt], [LastModifiedAt])
-    VALUES (@Id, @OauthToken, @Email, @DisplayName, @OrganizationId, getutcdate(), getutcdate());
+    INSERT INTO [User] ([Id], [OauthToken], [Email], [DisplayName], [OrganizationId])
+    VALUES (@Id, @OauthToken, @Email, @DisplayName, @OrganizationId);
 END

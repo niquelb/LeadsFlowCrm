@@ -12,6 +12,6 @@
     @Notes NVARCHAR(MAX)
 AS
 BEGIN
-    INSERT INTO [Contact] ([Id], [Email], [FirstName], [LastNames], [Phone], [Address], [Company], [JobTitle], [Website], [Location], [Notes], [CreatedAt], [LastModifiedAt])
-    VALUES (@Id, @Email, @FirstName, @LastNames, @Phone, @Address, @Company, @JobTitle, @Website, @Location, @Notes, getutcdate(), getutcdate())
+    INSERT INTO [Contact] ([Id], [Email], [FirstName], [LastNames], [Phone], [Address], [Company], [JobTitle], [Website], [Location], [Notes])
+    VALUES (@Id, @Email, @FirstName, @LastNames, @Phone, @Address, @Company, @JobTitle, @Website, @Location, @Notes)
 END
