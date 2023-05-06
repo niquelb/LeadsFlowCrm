@@ -7,7 +7,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LeadsFlowCrm", "LeadsFlowCr
 EndProject
 Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "LeadsFlowDB", "LeadsFlowDB\LeadsFlowDB.sqlproj", "{AED68634-F61B-4D2C-919C-56E7B8639F8D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LeadsFlowAPI", "LeadsFlowAPI\LeadsFlowAPI.csproj", "{9C17000C-8277-460F-9A42-3735F00C257B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LeadsFlowAPI", "LeadsFlowAPI\LeadsFlowAPI.csproj", "{9C17000C-8277-460F-9A42-3735F00C257B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataAccess", "DataAccess\DataAccess.csproj", "{6E06C920-983C-4365-AF98-A11C848B1AF1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -29,6 +31,10 @@ Global
 		{9C17000C-8277-460F-9A42-3735F00C257B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9C17000C-8277-460F-9A42-3735F00C257B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9C17000C-8277-460F-9A42-3735F00C257B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6E06C920-983C-4365-AF98-A11C848B1AF1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6E06C920-983C-4365-AF98-A11C848B1AF1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6E06C920-983C-4365-AF98-A11C848B1AF1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6E06C920-983C-4365-AF98-A11C848B1AF1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

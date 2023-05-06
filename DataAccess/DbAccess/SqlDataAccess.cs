@@ -5,6 +5,9 @@ using System.Data.SqlClient;
 
 namespace DataAccess.DbAccess;
 
+/// <summary>
+/// Class used for uploading and retrieving data to and from the DB using Dapper
+/// </summary>
 public class SqlDataAccess : ISqlDataAccess
 {
 	private readonly IConfiguration _config;
@@ -17,8 +20,8 @@ public class SqlDataAccess : ISqlDataAccess
 	/// <summary>
 	/// Method for retrieving data from the DB using a Stored Procedure
 	/// </summary>
-	/// <typeparam name="T">Generic</typeparam>
-	/// <typeparam name="U">Generic</typeparam>
+	/// <typeparam name="T">Generic for the model object</typeparam>
+	/// <typeparam name="U">Generic for the parameters</typeparam>
 	/// <param name="storedProcedure">Stored Procedure for the query</param>
 	/// <param name="parameters">Optional parameters for the query</param>
 	/// <param name="connectionId">Connection string, default is "Default"</param>
@@ -35,7 +38,7 @@ public class SqlDataAccess : ISqlDataAccess
 	/// <summary>
 	/// Method for uploading data to thee DB using a Stored Procedure
 	/// </summary>
-	/// <typeparam name="T">Generic</typeparam>
+	/// <typeparam name="T">Generic for the parameters</typeparam>
 	/// <param name="storedProcedure">Stored Procedure for the query</param>
 	/// <param name="parameters">Optional parameters for the query</param>
 	/// <param name="connectionId">Connection string, default is "Default"</param>
