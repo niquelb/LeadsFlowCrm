@@ -1,4 +1,5 @@
 using DataAccess.DbAccess;
+using LeadsFlowAPI.Endpoints;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,5 +18,7 @@ app.UseSwagger();
 app.UseSwaggerUI();
 
 app.UseHttpsRedirection();
+
+app.ConfigureUserEndpoints();
 
 app.Run();
