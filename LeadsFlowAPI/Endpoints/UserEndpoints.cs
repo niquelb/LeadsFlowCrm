@@ -2,6 +2,8 @@
 
 public static class UserEndpoints
 {
+	// TODO: Make method to assign an organizationId to an existing user (new SP?)
+
 	/// <summary>
 	/// Configures all the User endpoints for the API
 	/// </summary>
