@@ -58,7 +58,7 @@ public class UserDAO : IUserDAO
 	/// <summary>
 	/// Delete user
 	/// </summary>
-	/// <param name="Id">Id to be used for deletion</param>
+	/// <param name="Id">ID for the query</param>
 	/// <returns></returns>
 	public async Task DeleteUser(string Id) => 
 		await _db.SaveData("dbo.spUser_Delete", new { Id });
