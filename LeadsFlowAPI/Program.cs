@@ -12,6 +12,7 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddSingleton<ISqlDataAccess, SqlDataAccess>();
 builder.Services.AddSingleton<IUserDAO, UserDAO>();
 builder.Services.AddSingleton<IOrganizationDAO, OrganizationDAO>();
+builder.Services.AddSingleton<IPipelineDAO, PipelineDAO>();
 
 var app = builder.Build();
 
@@ -23,5 +24,6 @@ app.UseHttpsRedirection();
 
 app.ConfigureUserEndpoints();
 app.ConfigureOrganizationEndpoints();
+app.ConfigurePipelineEndpoints();
 
 app.Run();

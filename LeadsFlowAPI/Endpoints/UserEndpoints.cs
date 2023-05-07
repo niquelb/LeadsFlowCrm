@@ -102,7 +102,7 @@ public static class UserEndpoints
 		try
 		{
 			/*
-			 Before doing the updating we check if the user exists, this is done because otherwise
+			Before doing the updating we check if the user exists, this is done because otherwise
 			the API will return 200 even if the updating failed due to not being any user with that ID
 			 */
 			var result = await userDAO.GetUser(user.Id);
