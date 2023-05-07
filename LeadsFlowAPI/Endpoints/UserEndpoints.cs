@@ -5,7 +5,7 @@ namespace LeadsFlowAPI.Endpoints;
 public static class UserEndpoints
 {
 	/// <summary>
-	/// Configures all the API endpoints
+	/// Configures all the User endpoints for the API
 	/// </summary>
 	/// <param name="app">Application</param>
 	public static void ConfigureUserEndpoints(this WebApplication app)
@@ -21,7 +21,10 @@ public static class UserEndpoints
 	/// Endpoint for getting all the users
 	/// </summary>
 	/// <param name="userDAO">DAO object from Dependency Injection</param>
-	/// <returns>Result wrapped in an HTTP response code</returns>
+	/// <returns>
+	/// [200 -> The call was successful, all the users are returned]
+	/// [Any other error -> Call failed]
+	/// </returns>
 	private static async Task<IResult> GetUsers(IUserDAO userDAO)
 	{
 		try
@@ -39,7 +42,11 @@ public static class UserEndpoints
 	/// </summary>
 	/// <param name="id">ID for the query</param>
 	/// <param name="userDAO">DAO object from Dependency Injection</param>
-	/// <returns>Result wrapped in an HTTP response code</returns>
+	/// <returns>	
+	/// [200 -> The call was successful, requested user is returned]
+	/// [404 -> No user with that ID was found, used ID is return]
+	/// [Any other error -> Call failed]
+	/// </returns>
 	private static async Task<IResult> GetUser(String id, IUserDAO userDAO)
 	{
 		try
@@ -63,7 +70,10 @@ public static class UserEndpoints
 	/// </summary>
 	/// <param name="user">User to be inserted</param>
 	/// <param name="userDAO">DAO object from Dependency Injection</param>
-	/// <returns>HTTP response code, if succesful, the ID of the inserted user is returned</returns>
+	/// <returns>
+	/// [200 -> The call was successful, inserted user's ID is returned]
+	/// [Any other error -> Call failed]
+	/// </returns>
 	private static async Task<IResult> PostUser(User user, IUserDAO userDAO)
 	{
 		try
@@ -82,7 +92,11 @@ public static class UserEndpoints
 	/// </summary>
 	/// <param name="user">User to be updated</param>
 	/// <param name="userDAO">DAO object from Dependency Injection</param>
-	/// <returns>HTTP response code, if succesful, the ID of the updated user is returned</returns>
+	/// <returns>
+	/// [200 -> The call was succesful, updated user's ID is returned]
+	/// [404 -> No user with that ID was found, used ID is return]
+	/// [Any other error -> Call failed]
+	/// </returns>
 	private static async Task<IResult> PutUser(User user, IUserDAO userDAO)
 	{
 		try
@@ -110,13 +124,16 @@ public static class UserEndpoints
 	/// </summary>
 	/// <param name="id">ID for the query</param>
 	/// <param name="userDAO">DAO object from Dependency Injection</param>
-	/// <returns>Result wrapped in an HTTP response code</returns>
+	/// <returns>
+	/// [200 -> The call was successful, deleted user's ID is returned]
+	/// [Any other error -> Call failed]
+	/// </returns>
 	private static async Task<IResult> DeleteUser(string id, IUserDAO userDAO)
 	{
 		try
 		{
 			await userDAO.DeleteUser(id);
-			return Results.Ok();
+			return Results.Ok(id);
 		}
 		catch (Exception ex)
 		{
