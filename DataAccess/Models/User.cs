@@ -12,6 +12,6 @@ public class User
     public String OAuthToken { get; set; }
     public String Email { get; set; }
     public String DisplayName { get; set; }
-    public String OrganizationId { get; set; }
+    public String? OrganizationId { get; set; }
 
 }
