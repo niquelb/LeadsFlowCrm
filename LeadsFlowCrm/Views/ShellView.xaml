@@ -4,9 +4,67 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:LeadsFlowCrm.Views"
-        mc:Ignorable="d"
-        Title="ShellView" Height="450" Width="800">
-    <Grid>
-        
-    </Grid>
+        mc:Ignorable="d" FontSize="18"
+        Title="LeadsFlow CRM" Height="650" Width="1200"
+         Background="#0F0F0F"
+        WindowStyle="None"
+        AllowsTransparency="True"
+        ResizeMode="CanResizeWithGrip">
+    <DockPanel>
+        <Menu DockPanel.Dock="Top"
+              FontSize="16"
+              Background="#001333"
+              Foreground="#FFF"
+              Padding="3">
+            <MenuItem Header="_File">
+
+            </MenuItem>
+            <MenuItem Header="_Account">
+
+            </MenuItem>
+            <MenuItem Header="_Edit">
+
+            </MenuItem>
+            <MenuItem Header="_Pipelines">
+
+            </MenuItem>
+            <MenuItem Header="_Utils">
+
+            </MenuItem>
+            <MenuItem Header="_Contacts">
+
+            </MenuItem>
+        </Menu>
+        <Grid DockPanel.Dock="Bottom">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="5*" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+
+            <Grid Grid.Row="0" Grid.Column="0"
+                  Background="#001333">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="5" />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="50" />
+                    <RowDefinition Height="auto" />
+                    <RowDefinition Height="auto" />
+                    <RowDefinition Height="auto" />
+                    <RowDefinition Height="auto" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+
+                <TextBlock Grid.Row="1" Grid.Column="0"
+                           Foreground="#FFF"
+                           HorizontalAlignment="Center">
+                    Inicio
+                </TextBlock>
+            </Grid>
+        </Grid>
+    </DockPanel>
 </Window>
