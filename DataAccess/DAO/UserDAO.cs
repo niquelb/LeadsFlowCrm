@@ -24,7 +24,8 @@ public class UserDAO : IUserDAO
 	/// Get all users
 	/// </summary>
 	/// <returns>All users</returns>
-	public async Task<IEnumerable<User>> GetUsers() => await _db.LoadData<User, dynamic>("dbo.spUser_GetAll", new { });
+	public async Task<IEnumerable<User>> GetUsers() => 
+		await _db.LoadData<User, dynamic>("dbo.spUser_GetAll", new { });
 
 	/// <summary>
 	/// Get user by ID
@@ -43,19 +44,22 @@ public class UserDAO : IUserDAO
 	/// </summary>
 	/// <param name="user">User to be inserted</param>
 	/// <returns></returns>
-	public async Task InsertUser(User user) => await _db.SaveData("dbo.spUser_Insert", user);
+	public async Task InsertUser(User user) => 
+		await _db.SaveData("dbo.spUser_Insert", user);
 
 	/// <summary>
 	/// Update user
 	/// </summary>
 	/// <param name="user">User to be updated</param>
 	/// <returns></returns>
-	public async Task UpdateUser(User user) => await _db.SaveData("dbo.spUser_Update", user);
+	public async Task UpdateUser(User user) => 
+		await _db.SaveData("dbo.spUser_Update", user);
 
 	/// <summary>
 	/// Delete user
 	/// </summary>
 	/// <param name="Id">Id to be used for deletion</param>
 	/// <returns></returns>
-	public async Task DeleteUser(string Id) => await _db.SaveData("dbo.spUser_Delete", new { Id });
+	public async Task DeleteUser(string Id) => 
+		await _db.SaveData("dbo.spUser_Delete", new { Id });
 }
