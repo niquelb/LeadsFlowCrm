@@ -1,6 +1,4 @@
-﻿using DataAccess.Models;
-
-namespace LeadsFlowAPI.Endpoints;
+﻿namespace LeadsFlowAPI.Endpoints;
 
 public static class UserEndpoints
 {
@@ -110,6 +108,7 @@ public static class UserEndpoints
 			{
 				return Results.NotFound(user.Id);
 			}
+
 			await userDAO.UpdateUser(user);
 			return Results.Ok(user.Id);
 		}

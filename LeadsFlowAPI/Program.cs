@@ -1,3 +1,4 @@
+using DataAccess.DAO;
 using DataAccess.DbAccess;
 using LeadsFlowAPI.Endpoints;
 
@@ -10,6 +11,7 @@ builder.Services.AddSwaggerGen();
 // Dpendency Injection
 builder.Services.AddSingleton<ISqlDataAccess, SqlDataAccess>();
 builder.Services.AddSingleton<IUserDAO, UserDAO>();
+builder.Services.AddSingleton<IOrganizationDAO, OrganizationDAO>();
 
 var app = builder.Build();
 
@@ -20,5 +22,6 @@ app.UseSwaggerUI();
 app.UseHttpsRedirection();
 
 app.ConfigureUserEndpoints();
+app.ConfigureOrganizationEndpoints();
 
 app.Run();
