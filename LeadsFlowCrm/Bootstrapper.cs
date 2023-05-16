@@ -10,9 +10,9 @@ using System.Windows;
 namespace LeadsFlowCrm;
 
 /// <summary>
-/// Class responsible for setting up all the necessary backend for the app
+/// Class responsible for setting up all the necessary backend for the app and configuring CaliburnMicro
 /// </summary>
-internal class Bootstrapper : BootstrapperBase
+public class Bootstrapper : BootstrapperBase
 {
 	// SimpleContainer is used for Dependency Injection
 	private SimpleContainer _container = new();
@@ -41,7 +41,7 @@ internal class Bootstrapper : BootstrapperBase
 	protected override void OnStartup(object sender, StartupEventArgs e)
 	{
 		// Set "ShellView" as the startup window
-		DisplayRootViewForAsync<ShellViewModel>();
+		DisplayRootViewForAsync<LoginViewModel>();
 	}
 
 	protected override object GetInstance(Type service, string key)

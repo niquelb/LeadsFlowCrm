@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:LeadsFlowCrm.Views"
         mc:Ignorable="d" FontSize="18"
         Title="LeadsFlow CRM" Height="650" Width="1200"
-         Background="#0F0F0F"
+        Background="#0F0F0F"
         WindowStyle="None"
         AllowsTransparency="True"
         ResizeMode="CanResizeWithGrip">
@@ -20,8 +20,8 @@
 
             </MenuItem>
             <MenuItem Header="_Account">
-                <MenuItem x:Name="LoginScreen" 
-                          Header="Login"
+                <MenuItem x:Name="Logout" 
+                          Header="Logout"
                           Background="#001333"
                           Foreground="#FFF"
                           BorderThickness="0"/>
