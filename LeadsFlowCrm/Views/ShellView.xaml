@@ -20,7 +20,11 @@
 
             </MenuItem>
             <MenuItem Header="_Account">
-
+                <MenuItem x:Name="LoginScreen" 
+                          Header="Login"
+                          Background="#001333"
+                          Foreground="#FFF"
+                          BorderThickness="0"/>
             </MenuItem>
             <MenuItem Header="_Edit">
 
@@ -36,35 +40,8 @@
             </MenuItem>
         </Menu>
         <Grid DockPanel.Dock="Bottom">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="5*" />
-            </Grid.ColumnDefinitions>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="*" />
-            </Grid.RowDefinitions>
-
-            <Grid Grid.Row="0" Grid.Column="0"
-                  Background="#001333">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="5" />
-                </Grid.ColumnDefinitions>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="50" />
-                    <RowDefinition Height="auto" />
-                    <RowDefinition Height="auto" />
-                    <RowDefinition Height="auto" />
-                    <RowDefinition Height="auto" />
-                    <RowDefinition Height="*" />
-                </Grid.RowDefinitions>
-
-                <TextBlock Grid.Row="1" Grid.Column="0"
-                           Foreground="#FFF"
-                           HorizontalAlignment="Center">
-                    Inicio
-                </TextBlock>
-            </Grid>
+            <ContentControl x:Name="ActiveItem" 
+                            Margin="5" />
         </Grid>
     </DockPanel>
 </Window>
