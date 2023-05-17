@@ -11,6 +11,7 @@
     <DockPanel>
         <Menu DockPanel.Dock="Top"
               FontSize="16"
+              FontWeight="Light"
               Background="#08003A"
               Padding="3">
             <MenuItem Header="_File">
