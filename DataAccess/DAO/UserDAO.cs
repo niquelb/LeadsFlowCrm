@@ -11,6 +11,7 @@ namespace DataAccess.Data;
 /// <summary>
 /// Data Access Object for the User model
 /// </summary>
+/// <see cref="User"/>
 public class UserDAO : IUserDAO
 {
 	private readonly ISqlDataAccess _db;

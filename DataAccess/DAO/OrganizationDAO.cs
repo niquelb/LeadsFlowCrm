@@ -11,6 +11,7 @@ namespace DataAccess.DAO;
 /// <summary>
 /// Data Access Object for the Organization model
 /// </summary>
+/// <see cref="Organization"/>
 public class OrganizationDAO : IOrganizationDAO
 {
 	private readonly ISqlDataAccess _db;

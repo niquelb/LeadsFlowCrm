@@ -43,7 +43,7 @@ public static class OrganizationEndpoints
 	/// <param name="id">ID for the query</param>
 	/// <param name="organizationDAO">DAO object from Dependency Injection</param>
 	/// [200 -> The call was successful, requested organization is returned]
-	/// [404 -> No organization with that ID was found, used ID is return]
+	/// [404 -> No organization with that ID was found, used ID is returned]
 	/// [Any other error -> Call failed]
 	/// </returns>
 	private static async Task<IResult> GetOrganization(String id, IOrganizationDAO organizationDAO)
