@@ -45,7 +45,7 @@
                     Grid.Row="2"
                     Content="Please log in to your Google account."
                     Margin="10"
-                    Padding="15"/>
+                    Padding="10"/>
             <TextBlock Grid.Row="3"
                        Grid.Column="1"
                        FontWeight="Light"
