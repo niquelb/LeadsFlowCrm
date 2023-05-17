@@ -15,6 +15,7 @@ builder.Services.AddSingleton<IOrganizationDAO, OrganizationDAO>();
 builder.Services.AddSingleton<IPipelineDAO, PipelineDAO>();
 builder.Services.AddSingleton<IContactDAO, ContactDAO>();
 builder.Services.AddSingleton<IFieldDAO, FieldDAO>();
+builder.Services.AddSingleton<IStageDAO, StageDAO>();
 
 var app = builder.Build();
 
@@ -30,5 +31,6 @@ app.ConfigureOrganizationEndpoints();
 app.ConfigurePipelineEndpoints();
 app.ConfigureContactEndpoints();
 app.ConfigureFieldEndpoints();
+app.ConfigureStageEndpoints();
 
 app.Run();

@@ -12,12 +12,12 @@ namespace DataAccess.DAO;
 /// Data Access Object for the Stage model
 /// </summary>
 /// <see cref="Stage"/>
-public class StageDAO
+public class StageDAO : IStageDAO
 {
 	private readonly ISqlDataAccess _db;
 
 	public StageDAO(ISqlDataAccess db)
-    {
+	{
 		_db = db;
 	}
 
