@@ -12,12 +12,12 @@ namespace DataAccess.DAO;
 /// Data Access Object for the Field model
 /// </summary>
 /// <see cref="Field"/>
-public class FieldDAO
+public class FieldDAO : IFieldDAO
 {
 	private readonly ISqlDataAccess _db;
 
 	public FieldDAO(ISqlDataAccess db)
-    {
+	{
 		_db = db;
 	}
 

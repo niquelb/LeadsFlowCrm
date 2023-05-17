@@ -1,5 +1,4 @@
 ﻿using DataAccess.DAO;
-using DataAccess.Models;
 
 namespace LeadsFlowAPI.Endpoints;
 
@@ -101,8 +100,8 @@ public static class ContactEndpoints
 		try
 		{
 			/*
-			Before doing the updating we check if the organization exists, this is done because otherwise
-			the API will return 200 even if the updating failed due to not being any organization with that ID
+			Before doing the updating we check if the entry exists, this is done because otherwise
+			the API will return 200 even if the updating failed due to not being any entries with that ID
 			*/
 			var result = await contactDAO.GetContact(contact.Id);
 			if (result == null)
