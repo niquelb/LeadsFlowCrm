@@ -2,10 +2,10 @@
 
 public class User
 {
-    public String Id { get; set; } = Guid.NewGuid().ToString();
-    public String OAuthToken { get; set; }
-    public String Email { get; set; }
-    public String DisplayName { get; set; }
-    public String? OrganizationId { get; set; }
+    public string Id { get; set; } = Guid.NewGuid().ToString();
+    public string OAuthToken { get; set; }
+    public string Email { get; set; }
+    public string DisplayName { get; set; }
+    public string? OrganizationId { get; set; }
 
 }

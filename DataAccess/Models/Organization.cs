@@ -2,7 +2,7 @@
 
 public class Organization
 {
-	public String Id { get; set; } = Guid.NewGuid().ToString();
-	public String Name { get; set; }
-    public String? CreatorId { get; set; }
+	public string Id { get; set; } = Guid.NewGuid().ToString();
+	public string Name { get; set; }
+    public string? CreatorId { get; set; }
 }

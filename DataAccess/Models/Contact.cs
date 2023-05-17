@@ -2,16 +2,16 @@
 
 public class Contact
 {
-	public String Id { get; set; } = Guid.NewGuid().ToString();
-	public String Email { get; set; }
-    public String FirstName { get; set; }
-    public String? LastNames { get; set; }
-    public String? Phone { get; set; }
-    public String? Address { get; set; }
-    public String? Company { get; set; }
-    public String? JobTitle { get; set; }
-    public String? Website { get; set; }
-    public String? Location { get; set; }
-    public String? Notes { get; set; }
+	public string Id { get; set; } = Guid.NewGuid().ToString();
+	public string Email { get; set; }
+    public string FirstName { get; set; }
+    public string? LastNames { get; set; }
+    public string? Phone { get; set; }
+    public string? Address { get; set; }
+    public string? Company { get; set; }
+    public string? JobTitle { get; set; }
+    public string? Website { get; set; }
+    public string? Location { get; set; }
+    public string? Notes { get; set; }
 
 }
