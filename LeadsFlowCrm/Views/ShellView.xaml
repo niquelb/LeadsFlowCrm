@@ -11,6 +11,7 @@
     <DockPanel>
         <Menu DockPanel.Dock="Top"
               FontSize="16"
+              Background="#08003A"
               Padding="3">
             <MenuItem Header="_File">
                 <MenuItem x:Name="New"
@@ -35,8 +36,10 @@
 
             </MenuItem>
         </Menu>
+        <local:SidebarView x:Name="Sidebar"
+                           DockPanel.Dock="Left"/>
         <Grid DockPanel.Dock="Bottom">
-            <ContentControl x:Name="ActiveItem" 
+            <ContentControl x:Name="ActiveItem"
                             Margin="5" />
         </Grid>
     </DockPanel>
