@@ -9,4 +9,12 @@ namespace LeadsFlowCrm.ViewModels;
 
 public class ShellViewModel : Conductor<object>
 {
+	private readonly InboxViewModel _inboxViewModel;
+
+	public ShellViewModel(InboxViewModel inboxViewModel)
+    {
+		_inboxViewModel = inboxViewModel;
+
+		ActivateItemAsync(inboxViewModel);
+	}
 }

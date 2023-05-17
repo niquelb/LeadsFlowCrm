@@ -10,10 +10,12 @@ namespace LeadsFlowCrm.ViewModels;
 public class LoginViewModel : Screen
 {
 	private readonly IWindowManager _windowManager;
+	private readonly ShellViewModel _shellViewModel;
 
-	public LoginViewModel(IWindowManager windowManager)
+	public LoginViewModel(IWindowManager windowManager, ShellViewModel shellViewModel)
     {
 		_windowManager = windowManager;
+		_shellViewModel = shellViewModel;
 	}
 
 	public void Login()
@@ -26,7 +28,7 @@ public class LoginViewModel : Screen
 			TryCloseAsync();
 
 			// Open the shell view
-			_windowManager.ShowWindowAsync(new ShellViewModel());
+			_windowManager.ShowWindowAsync(_shellViewModel);
 		}
 	}
 }
