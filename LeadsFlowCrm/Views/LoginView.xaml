@@ -6,7 +6,7 @@
         mc:Ignorable="d" FontSize="18"
         Title="Login - Leads Flow CRM" Height="700" Width="900"
         Style="{DynamicResource CustomWindowStyle}"
-        ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
+        WindowStartupLocation="CenterScreen">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*" />
@@ -40,11 +40,12 @@
                        VerticalAlignment="Center"
                        HorizontalAlignment="Center"
                        Text="Log In"/>
-            <Button Grid.Column="1"
+            <Button x:Name="Login"
+                    Grid.Column="1"
                     Grid.Row="2"
                     Content="Please log in to your Google account."
                     Margin="10"
-                    Padding="5"/>
+                    Padding="15"/>
             <TextBlock Grid.Row="3"
                        Grid.Column="1"
                        FontWeight="Light"
