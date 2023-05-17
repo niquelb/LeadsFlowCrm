@@ -6,7 +6,7 @@
              xmlns:local="clr-namespace:LeadsFlowCrm.Views"
              mc:Ignorable="d"  Background="#08003A"
              FontSize="24"
-             d:DesignHeight="450" Width="225">
+             d:DesignHeight="700" Width="300">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*" />
@@ -21,36 +21,55 @@
             <RowDefinition Height="auto" />
             <RowDefinition Height="auto" />
             <RowDefinition Height="*" />
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="auto" />
 
         </Grid.RowDefinitions>
 
         <Button x:Name="Inbox"
-                Grid.Column="1"
+                Grid.Column="0"
+                Grid.ColumnSpan="3"
                 Grid.Row="1"
                 Background="Transparent"
                 BorderThickness="0"
                 Margin="10"
+                Padding="5"
                 Content="Inbox" />
         <Button x:Name="Pipelines"
-                Grid.Column="1"
+                Grid.Column="0"
+                Grid.ColumnSpan="3"
                 Grid.Row="2"
                 Background="Transparent"
                 BorderThickness="0"
                 Margin="10"
+                Padding="5"
                 Content="Pipelines" />
         <Button x:Name="Utils"
-                Grid.Column="1"
+                Grid.Column="0"
+                Grid.ColumnSpan="3"
                 Grid.Row="3"
                 Background="Transparent"
                 BorderThickness="0"
                 Margin="10"
+                Padding="5"
                 Content="Utils" />
         <Button x:Name="Contacts"
-                Grid.Column="1"
+                Grid.Column="0"
+                Grid.ColumnSpan="3"
                 Grid.Row="4"
                 Background="Transparent"
                 BorderThickness="0"
                 Margin="10"
+                Padding="5"
                 Content="Contacts" />
+        <Button x:Name="NewCorrespondence"
+                Grid.Column="1"
+                Grid.Row="6"
+                Background="Transparent"
+                BorderBrush="Aqua"
+                BorderThickness="3"
+                Padding="15"
+                Content="New Correspondence" />
     </Grid>
 </UserControl>
