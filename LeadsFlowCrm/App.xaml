@@ -8,6 +8,9 @@
                 <ResourceDictionary>
                     <local:Bootstrapper x:Key="Bootstrapper" />
                 </ResourceDictionary>
+                <ResourceDictionary Source="Themes/VeryDarkTheme.xaml"/>
+                <ResourceDictionary Source="Themes/ControlColours.xaml"/>
+                <ResourceDictionary Source="Themes/Controls.xaml"/>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Application.Resources>

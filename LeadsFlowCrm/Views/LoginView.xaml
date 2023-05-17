@@ -5,10 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d" FontSize="18"
         Title="Login - Leads Flow CRM" Height="700" Width="900"
-        Background="#0F0F0F"
-        WindowStyle="None"
-        AllowsTransparency="True"
-        ResizeMode="CanResizeWithGrip">
+        Style="{DynamicResource CustomWindowStyle}"
+        ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*" />
@@ -38,20 +36,17 @@
             </Grid.RowDefinitions>
             <TextBlock Grid.Row="1"
                        Grid.Column="1"
-                       Foreground="#FFF"
                        FontSize="24"
                        VerticalAlignment="Center"
                        HorizontalAlignment="Center"
                        Text="Log In"/>
             <Button Grid.Column="1"
                     Grid.Row="2"
-                    Background="#FFF"
                     Content="Please log in to your Google account."
                     Margin="10"
                     Padding="5"/>
             <TextBlock Grid.Row="3"
                        Grid.Column="1"
-                       Foreground="#FFF"
                        FontWeight="Light"
                        VerticalAlignment="Center"
                        HorizontalAlignment="Center"
