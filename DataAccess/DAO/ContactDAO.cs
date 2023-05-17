@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 namespace DataAccess.DAO;
 
 /// <summary>
-/// Data Access Object for the Contact 
+/// Data Access Object for the Contact model
 /// </summary>
 /// <see cref="Contact"/>
 public class ContactDAO : IContactDAO
@@ -33,7 +33,7 @@ public class ContactDAO : IContactDAO
 	/// </summary>
 	/// <param name="Id">ID for the query</param>
 	/// <returns>One contact</returns>
-	public async Task<Contact?> GetContact(String Id)
+	public async Task<Contact?> GetContact(string Id)
 	{
 		var result = await _db.LoadData<Contact, dynamic>("dbo.spContact_Get", new { Id });
 
@@ -61,6 +61,6 @@ public class ContactDAO : IContactDAO
 	/// </summary>
 	/// <param name="Id">ID for the query</param>
 	/// <returns></returns>
-	public async Task DeleteContact(String Id) =>
+	public async Task DeleteContact(string Id) =>
 		await _db.SaveData("dbo.spContact_Delete", new { Id });
 }
