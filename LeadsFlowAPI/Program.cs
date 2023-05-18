@@ -1,3 +1,4 @@
+using DataAccess.DataAccess;
 using DataAccess.DbAccess;
 using LeadsFlowAPI.Endpoints;
 
@@ -16,6 +17,7 @@ builder.Services.AddSingleton<IContactDAO, ContactDAO>();
 builder.Services.AddSingleton<IFieldDAO, FieldDAO>();
 builder.Services.AddSingleton<IStageDAO, StageDAO>();
 builder.Services.AddSingleton<IPipelineOrgDAO, PipelineOrgDAO>();
+builder.Services.AddSingleton<IUserOrgRelationship, UserOrgRelationship>();
 
 var app = builder.Build();
 
@@ -33,5 +35,7 @@ app.ConfigureContactEndpoints();
 app.ConfigureFieldEndpoints();
 app.ConfigureStageEndpoints();
 app.ConfigurePipelineOrgEndpoints();
+
+app.SetupRelationshipEndpoints();
 
 app.Run();
