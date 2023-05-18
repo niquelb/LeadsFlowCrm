@@ -1,6 +1,4 @@
-﻿using DataAccess.DAO;
-
-namespace LeadsFlowAPI.Endpoints;
+﻿namespace LeadsFlowAPI.Endpoints;
 
 public static class FieldEndpoints
 {
