@@ -17,7 +17,7 @@ builder.Services.AddSingleton<IContactDAO, ContactDAO>();
 builder.Services.AddSingleton<IFieldDAO, FieldDAO>();
 builder.Services.AddSingleton<IStageDAO, StageDAO>();
 builder.Services.AddSingleton<IPipelineOrgDAO, PipelineOrgDAO>();
-builder.Services.AddSingleton<IUserOrgRelationship, UserOrgRelationship>();
+builder.Services.AddSingleton<IForeignKeyRelationships, ForeignKeyRelationships>();
 
 var app = builder.Build();
 

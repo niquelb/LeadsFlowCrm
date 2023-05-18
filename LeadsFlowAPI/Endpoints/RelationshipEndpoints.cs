@@ -22,7 +22,7 @@ public static class RelationshipEndpoints
 	/// <param name="userDAO">DAO object from Dependency Injection</param>
 	/// <param name="orgDAO">DAO object from Dependency Injection</param>
 	/// <returns></returns>
-	public static async Task<IResult> SetupUserOrgRelationship(string userId, string orgId, IUserOrgRelationship relationship, IUserDAO userDAO, IOrganizationDAO orgDAO)
+	public static async Task<IResult> SetupUserOrgRelationship(string userId, string orgId, IForeignKeyRelationships relationship, IUserDAO userDAO, IOrganizationDAO orgDAO)
 	{
 		try
 		{
@@ -42,7 +42,7 @@ public static class RelationshipEndpoints
 				return Results.NotFound($"Organization not found: {orgId}");
 			}
 
-			await relationship.SetupRelationship(userId, orgId);
+			await relationship.SetupUserOrgRelationship(userId, orgId);
 			return Results.Ok("Relationship created successfully");
 
 		}

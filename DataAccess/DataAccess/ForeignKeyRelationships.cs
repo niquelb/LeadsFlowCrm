@@ -7,15 +7,15 @@ using System.Threading.Tasks;
 
 namespace DataAccess.DataAccess;
 
-public class UserOrgRelationship : IUserOrgRelationship
+public class ForeignKeyRelationships : IForeignKeyRelationships
 {
 	private readonly ISqlDataAccess _db;
 
-	public UserOrgRelationship(ISqlDataAccess db)
+	public ForeignKeyRelationships(ISqlDataAccess db)
 	{
 		_db = db;
 	}
 
-	public async Task SetupRelationship(string UserId, string OrgId) =>
+	public async Task SetupUserOrgRelationship(string UserId, string OrgId) =>
 		await _db.SaveData("spUserOrganization_Relationship", new { UserId, OrgId });
 }
