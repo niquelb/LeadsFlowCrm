@@ -11,4 +11,5 @@ BEGIN
     [Type] = @Type,
     [PipelineId] = @PipelineId,
     [LastModifiedAt] = getutcdate()
+	WHERE [Id] = @Id;
 END

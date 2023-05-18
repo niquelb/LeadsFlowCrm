@@ -6,9 +6,9 @@
 AS
 	UPDATE [Stage]
     SET
-    [Id] = @Id,
     [Name] = @Name,
     [Color] = @Color,
     [PipelineId] = @PipelineId,
-    [LastModifiedAt] = getutcdate();
+    [LastModifiedAt] = getutcdate()
+	WHERE [Id] = @Id;
 RETURN 0

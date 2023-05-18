@@ -6,8 +6,8 @@ AS
 BEGIN
     UPDATE [Organization]
     SET
-    [Id] = @Id,
     [Name] = @Name,
     [CreatorId] = @CreatorId,
     [LastModifiedAt] = getutcdate()
+	WHERE [Id] = @Id;
 END

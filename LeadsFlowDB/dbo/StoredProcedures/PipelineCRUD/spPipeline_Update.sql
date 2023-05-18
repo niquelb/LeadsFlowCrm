@@ -6,7 +6,6 @@ AS
 BEGIN
 	UPDATE [Pipeline]
 	SET
-	[Id] = @Id, 
 	[Name] = @Name, 
 	[CreatorId] = @CreatorId, 
 	[LastModifiedAt] = getutcdate()
