@@ -1,6 +1,10 @@
 ﻿CREATE PROCEDURE [dbo].[spUserOrganization_Relationship]
-	@param1 int = 0,
-	@param2 int
+	@UserId CHAR(36),
+	@OrgId CHAR(36)
 AS
-	SELECT @param1, @param2
-RETURN 0
+BEGIN
+	UPDATE [User]
+	SET
+	[OrganizationId] = @OrgId
+	WHERE [Id] = @UserId;
+END
