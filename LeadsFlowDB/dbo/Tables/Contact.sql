@@ -12,5 +12,6 @@
     [Location] NVARCHAR(50) NULL, 
     [Notes] NVARCHAR(MAX) NULL, 
     [CreatedAt] DATETIME2 NULL DEFAULT getutcdate(), 
-    [LastModifiedAt] DATETIME2 NULL DEFAULT getutcdate()
+    [LastModifiedAt] DATETIME2 NULL DEFAULT getutcdate(),
+    [Deleted] BIT NOT NULL DEFAULT 0
 )

@@ -2,7 +2,7 @@
 	@Id char(36)
 AS
 BEGIN
-	DELETE
-	FROM [Pipeline]
+	UPDATE [Pipeline]
+	SET [Deleted] = 1
 	WHERE [Id] = @Id;
 END

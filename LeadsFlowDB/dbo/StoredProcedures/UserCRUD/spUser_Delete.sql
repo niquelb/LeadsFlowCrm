@@ -2,7 +2,7 @@
 	@Id char(36)
 AS
 BEGIN
-	DELETE
-	FROM [User]
+	UPDATE [User]
+	SET [Deleted] = 1
 	WHERE [Id] = @Id;
 END

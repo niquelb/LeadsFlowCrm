@@ -5,7 +5,8 @@
     [Type] VARCHAR(10) NULL, 
     [PipelineId] CHAR(36) NOT NULL, 
     [CreatedAt] DATETIME2 NULL DEFAULT getutcdate(), 
-    [LastModifiedAt] DATETIME2 NULL DEFAULT getutcdate()
+    [LastModifiedAt] DATETIME2 NULL DEFAULT getutcdate(),
+    [Deleted] BIT NOT NULL DEFAULT 0
 
     CONSTRAINT [FK_Fields_Pipeline] FOREIGN KEY ([PipelineId]) REFERENCES [Pipeline]([Id])
 )
