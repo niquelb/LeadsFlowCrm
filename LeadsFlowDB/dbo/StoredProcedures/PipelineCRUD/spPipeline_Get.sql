@@ -2,7 +2,7 @@
 	@Id char(36)
 AS
 BEGIN
-	SELECT [Id], [Name], [CreatorId], [CreatedAt], [LastModifiedAt]
+	SELECT [Id], [Name], [CreatorId], [CreatedAt], [LastModifiedAt], [Deleted]
 	FROM [Pipeline]
 	WHERE [Id] = @Id;
 END

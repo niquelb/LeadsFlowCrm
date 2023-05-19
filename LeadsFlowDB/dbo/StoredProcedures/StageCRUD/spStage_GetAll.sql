@@ -1,6 +1,6 @@
 ﻿CREATE PROCEDURE [dbo].[spStage_GetAll]
 AS
 BEGIN
-	SELECT [Id], [Name], [Color], [PipelineId], [CreatedAt], [LastModifiedAt]
+	SELECT [Id], [Name], [Color], [PipelineId], [CreatedAt], [LastModifiedAt], [Deleted]
 	FROM [Stage];
 END
