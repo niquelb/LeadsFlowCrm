@@ -1,4 +1,4 @@
-﻿CREATE PROCEDURE [dbo].[spOrganzationCreator_Relationship]
+﻿CREATE PROCEDURE [dbo].[spOrganizationCreator_Relationship]
 	@OrgId CHAR(36),
 	@CreatorId CHAR(36)
 AS
