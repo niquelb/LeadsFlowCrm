@@ -116,6 +116,10 @@
     <Build Include="dbo\StoredProcedures\OrganizationCRUD\spOrganization_Insert.sql" />
     <Build Include="dbo\StoredProcedures\OrganizationCRUD\spOrganization_Update.sql" />
     <Build Include="dbo\StoredProcedures\TableRelationships\spUserOrganization_Relationship.sql" />
+    <Build Include="dbo\StoredProcedures\TableRelationships\spOrganzationCreator_Relationship.sql" />
+    <Build Include="dbo\StoredProcedures\TableRelationships\spPipelineUser_Relationship.sql" />
+    <Build Include="dbo\StoredProcedures\TableRelationships\spStagePipeline_Relationship.sql" />
+    <Build Include="dbo\StoredProcedures\TableRelationships\spFieldPipeline_Relationship.sql" />
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="LeadsFlowDB.refactorlog" />
