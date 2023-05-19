@@ -13,6 +13,4 @@ public class Contact
     public string? Website { get; set; }
     public string? Location { get; set; }
     public string? Notes { get; set; }
-    public bool Deleted { get; set; }
-
 }
