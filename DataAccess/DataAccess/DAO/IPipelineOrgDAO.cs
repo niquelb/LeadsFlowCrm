@@ -8,6 +8,5 @@ namespace DataAccess.DataAccess.DAO
         Task<PipelineOrganization?> GetPipelineOrg(string Id);
         Task<IEnumerable<PipelineOrganization>> GetPipelineOrgs();
         Task InsertPipelineOrg(PipelineOrganization pipelineOrg);
-        Task UpdatePipelineOrg(PipelineOrganization pipelineOrg);
     }
 }

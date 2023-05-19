@@ -49,14 +49,6 @@ public class PipelineOrgDAO : IPipelineOrgDAO
         await _db.SaveData("dbo.spPipelineOrganization_Insert", pipelineOrg);
 
     /// <summary>
-    /// Update pipelineOrg
-    /// </summary>
-    /// <param name="pipelineOrg">PipelineOrg to be updated</param>
-    /// <returns></returns>
-    public async Task UpdatePipelineOrg(PipelineOrganization pipelineOrg) =>
-        await _db.SaveData("dbo.spPipelineOrganization_Update", pipelineOrg);
-
-    /// <summary>
     /// Delete pipelineOrg
     /// </summary>
     /// <param name="Id">ID for the query</param>
