@@ -63,4 +63,13 @@ public class UserDAO : IUserDAO
     /// <returns></returns>
     public async Task DeleteUser(string Id) =>
         await _db.SaveData("dbo.spUser_Delete", new { Id });
+
+	/// <summary>
+	/// Sets up the OrganizationId field with a given OrgId
+	/// </summary>
+	/// <param name="UserId">ID for the query</param>
+	/// <param name="OrgId">ID for the query</param>
+	/// <returns></returns>
+	public async Task SetupUserOrgRelationship(string UserId, string OrgId) =>
+		await _db.SaveData("spUserOrganization_Relationship", new { UserId, OrgId });
 }

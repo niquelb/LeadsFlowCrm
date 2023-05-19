@@ -9,5 +9,7 @@ namespace DataAccess.DataAccess.DAO
         Task<IEnumerable<User>> GetUsers();
         Task InsertUser(User user);
         Task UpdateUser(User user);
-    }
+        Task SetupUserOrgRelationship(string UserId, string OrgId);
+
+	}
 }

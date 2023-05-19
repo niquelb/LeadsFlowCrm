@@ -1,4 +1,6 @@
-﻿namespace LeadsFlowAPI.Endpoints;
+﻿using DataAccess.DataAccess;
+
+namespace LeadsFlowAPI.Endpoints;
 
 public static class UserEndpoints
 {
@@ -15,6 +17,7 @@ public static class UserEndpoints
 		app.MapPost("/Users", PostUser);
 		app.MapPut("/Users", PutUser);
 		app.MapDelete("/Users", DeleteUser);
+		app.MapPut("/Users/Organization", PutUserOrgRelationship);
 	}
 
 	/// <summary>
@@ -135,6 +138,53 @@ public static class UserEndpoints
 		{
 			await userDAO.DeleteUser(id);
 			return Results.Ok(id);
+		}
+		catch (Exception ex)
+		{
+			return Results.Problem(ex.Message);
+		}
+	}
+
+	/// <summary>
+	/// Updates the user with the given ID's relationship using the given organization ID
+	/// </summary>
+	/// <param name="userId">ID for the query</param>
+	/// <param name="orgId">ID for the query</param>
+	/// <param name="relationship">DAO object from Dependency Injection</param>
+	/// <param name="userDAO">DAO object from Dependency Injection</param>
+	/// <param name="orgDAO">DAO object from Dependency Injection</param>
+	/// <returns>
+	/// [200] -> Relationship was successful.
+	/// [404] -> User or Organization with given IDs were not found
+	/// [Any other error] -> Query failed
+	/// </returns>
+	public static async Task<IResult> PutUserOrgRelationship(
+		string userId,
+		string orgId,
+		IUserDAO userDAO,
+		IOrganizationDAO orgDAO)
+	{
+		try
+		{
+			/*
+			 * Before doing anything we will check if the IDs exist
+			 */
+			var user = await userDAO.GetUser(userId);
+			var org = await orgDAO.GetOrganization(orgId);
+
+			if (user == null)
+			{
+				return Results.NotFound($"User not found: {userId}");
+			}
+
+			if (org == null)
+			{
+				return Results.NotFound($"Organization not found: {orgId}");
+			}
+
+			await userDAO.SetupUserOrgRelationship(userId, orgId);
+			return Results.Ok("Relationship created successfully");
+
 		}
 		catch (Exception ex)
 		{
