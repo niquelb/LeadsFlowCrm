@@ -18,10 +18,22 @@
             <RowDefinition Height="*" />
             <RowDefinition Height="auto" />
         </Grid.RowDefinitions>
-        
-        <DataGrid x:Name="Emails"
+
+        <ListView ItemsSource="{Binding Emails}"
+                  SelectionMode="Extended"
                   Grid.Column="1"
-                  Grid.Row="1" />
-        
+                  Grid.Row="1" >
+            <ListView.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <StackPanel Orientation="Vertical" />
+                </ItemsPanelTemplate>
+            </ListView.ItemsPanel>
+            <ListView.View>
+                <GridView AllowsColumnReorder="true" ColumnHeaderToolTip="Emails">
+                    <GridViewColumn Header="Test" DisplayMemberBinding="{Binding SubjectLine}" />
+                </GridView>
+            </ListView.View>
+        </ListView>
+
     </Grid>
 </UserControl>

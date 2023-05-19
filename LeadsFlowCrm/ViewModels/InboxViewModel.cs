@@ -2,15 +2,25 @@
 using LeadsFlowCrm.Models;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace LeadsFlowCrm.ViewModels;
 
-public class InboxViewModel
+public class InboxViewModel : Screen
 {
-	private BindableCollection<EmailModel> _emails = new();
+	private ObservableCollection<EmailModel> _emails = new();
+
+	public ObservableCollection<EmailModel> Emails
+	{
+		get { return _emails; }
+		set {
+			_emails = value;
+			NotifyOfPropertyChange();
+		}
+	}
 
 	public InboxViewModel()
 	{
@@ -22,12 +32,6 @@ public class InboxViewModel
 			IsFavorite = true,
 			IsRead = true,
 		});
-	}
-
-	public BindableCollection<EmailModel> Emails
-	{
-		get { return _emails; }
-		set { _emails = value; }
 	}
 
 }
