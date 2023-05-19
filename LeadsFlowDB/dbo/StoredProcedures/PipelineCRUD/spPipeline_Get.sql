@@ -4,5 +4,6 @@ AS
 BEGIN
 	SELECT [Id], [Name], [CreatorId], [CreatedAt], [LastModifiedAt], [Deleted]
 	FROM [Pipeline]
-	WHERE [Id] = @Id;
+	WHERE [Id] = @Id
+	AND [Deleted] = 0;
 END

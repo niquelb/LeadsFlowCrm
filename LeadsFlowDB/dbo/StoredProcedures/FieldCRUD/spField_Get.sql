@@ -4,5 +4,6 @@ AS
 BEGIN
 	SELECT [Id], [Name], [Type], [PipelineId], [CreatedAt], [LastModifiedAt], [Deleted]
 	FROM [Field]
-	WHERE [Id] = @Id;
+	WHERE [Id] = @Id
+	AND [Deleted] = 0;
 END

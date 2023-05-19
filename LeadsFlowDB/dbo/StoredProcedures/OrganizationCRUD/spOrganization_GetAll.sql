@@ -2,5 +2,6 @@
 AS
 BEGIN
 	SELECT [Id], [Name], [CreatorId], [CreatedAt], [LastModifiedAt], [Deleted]
-	FROM [Organization];
+	FROM [Organization]
+	WHERE [Deleted] = 0;
 END

@@ -2,5 +2,6 @@
 AS
 BEGIN
 	SELECT [Id], [OauthToken], [Email], [DisplayName], [OrganizationId], [CreatedAt], [LastModifiedAt], [Deleted]
-	FROM [User];
+	FROM [User]
+	WHERE [Deleted] = 0;
 END

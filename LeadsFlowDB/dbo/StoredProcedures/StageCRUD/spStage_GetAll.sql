@@ -2,5 +2,6 @@
 AS
 BEGIN
 	SELECT [Id], [Name], [Color], [PipelineId], [CreatedAt], [LastModifiedAt], [Deleted]
-	FROM [Stage];
+	FROM [Stage]
+	WHERE [Deleted] = 0;
 END

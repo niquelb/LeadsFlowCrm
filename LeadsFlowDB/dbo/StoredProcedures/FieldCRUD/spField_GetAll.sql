@@ -2,5 +2,6 @@
 AS
 BEGIN
 	SELECT [Id], [Name], [Type], [PipelineId], [CreatedAt], [LastModifiedAt], [Deleted]
-	FROM [Field];
+	FROM [Field]
+	WHERE [Deleted] = 0;
 END
