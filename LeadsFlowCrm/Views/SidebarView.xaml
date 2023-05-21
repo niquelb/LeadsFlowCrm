@@ -48,6 +48,12 @@
                             <TextBlock Text="Contacts"/>
                         </StackPanel>
                     </Button>
+                    <Button x:Name="Utils" Style="{StaticResource SidebarBtn}">
+                        <StackPanel Orientation="Horizontal">
+                            <Icon:PackIconMaterial Kind="Tools" Style="{StaticResource SidebarIcon}"/>
+                            <TextBlock Text="Utils"/>
+                        </StackPanel>
+                    </Button>
                 </StackPanel>
 
                 <Grid DockPanel.Dock="Bottom" Margin="15">
