@@ -6,81 +6,76 @@
              xmlns:local="clr-namespace:LeadsFlowCrm.Views"
              xmlns:Icon="http://metro.mahapps.com/winfx/xaml/iconpacks"
              mc:Ignorable="d"  
-             Style="{StaticResource Sidebar}"
              FontSize="24" FontWeight="Light"
              d:DesignHeight="700" Width="300">
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*" />
             <ColumnDefinition Width="auto" />
             <ColumnDefinition Width="*" />
-            <ColumnDefinition Width="2" />
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="auto" />
+            <RowDefinition Height="50" />
             <RowDefinition Height="*" />
-            <RowDefinition Height="auto" />
-            <RowDefinition Height="auto" />
-            <RowDefinition Height="auto" />
-            <RowDefinition Height="auto" />
-            <RowDefinition Height="*" />
-            <RowDefinition Height="auto" />
-            <RowDefinition Height="*" />
-            <RowDefinition Height="auto" />
-
         </Grid.RowDefinitions>
 
         <Button Grid.Column="0"
-                Grid.ColumnSpan="3"
                 Grid.Row="0"
                 Style="{StaticResource SidebarMenuBtn}">
-            
+
             <Icon:PackIconMaterial Kind="Menu" Width="20" Height="20" Margin="15"/>
         </Button>
 
-        <Button x:Name="Inbox"
-                Grid.Column="0"
-                Grid.ColumnSpan="3"
-                Grid.Row="2"
-                Background="Transparent"
-                BorderThickness="0"
-                Margin="10"
-                Padding="5"
-                Content="Inbox" />
-        <Button x:Name="Pipelines"
-                Grid.Column="0"
-                Grid.ColumnSpan="3"
-                Grid.Row="3"
-                Background="Transparent"
-                BorderThickness="0"
-                Margin="10"
-                Padding="5"
-                Content="Pipelines" />
-        <Button x:Name="Utils"
-                Grid.Column="0"
-                Grid.ColumnSpan="3"
-                Grid.Row="4"
-                Background="Transparent"
-                BorderThickness="0"
-                Margin="10"
-                Padding="5"
-                Content="Utils" />
-        <Button x:Name="Contacts"
-                Grid.Column="0"
-                Grid.ColumnSpan="3"
-                Grid.Row="5"
-                Background="Transparent"
-                BorderThickness="0"
-                Margin="10"
-                Padding="5"
-                Content="Contacts" />
-        <Button x:Name="NewCorrespondence"
-                Grid.Column="1"
-                Grid.Row="7"
-                Background="Transparent"
-                BorderBrush="Aqua"
-                BorderThickness="3"
-                Padding="15"
-                Content="New Correspondence" />
+        <Border Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="1"
+                Style="{StaticResource Sidebar}">
+            <DockPanel>
+                <Separator Margin="25" DockPanel.Dock="Top" Width="0"/>
+                <StackPanel DockPanel.Dock="Top">
+                    <Button x:Name="Inbox" Style="{StaticResource SidebarBtn}">
+                        <StackPanel Orientation="Horizontal">
+                            <Icon:PackIconMaterial Kind="Gmail" Style="{StaticResource SidebarIcon}"/>
+                            <TextBlock Text="Inbox"/>
+                        </StackPanel>
+                    </Button>
+                    <Button x:Name="Pipelines" Style="{StaticResource SidebarBtn}">
+                        <StackPanel Orientation="Horizontal">
+                            <Icon:PackIconMaterial Kind="Pipe" Style="{StaticResource SidebarIcon}"/>
+                            <TextBlock Text="Pipelines"/>
+                        </StackPanel>
+                    </Button>
+                    <Button x:Name="Contacts" Style="{StaticResource SidebarBtn}">
+                        <StackPanel Orientation="Horizontal">
+                            <Icon:PackIconMaterial Kind="Contacts" Style="{StaticResource SidebarIcon}"/>
+                            <TextBlock Text="Contacts"/>
+                        </StackPanel>
+                    </Button>
+                </StackPanel>
+
+                <Grid DockPanel.Dock="Bottom" Margin="15">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="auto" />
+                        <RowDefinition Height="auto" />
+                        <RowDefinition Height="auto" />
+                    </Grid.RowDefinitions>
+
+                    <Button x:Name="NewCorrespondence" 
+                            Grid.Row="1"
+                            Style="{StaticResource BaseBtnStyling}" 
+                            Content="New Correspondence" />
+
+                    <Separator Grid.Row="2" Margin="25" Width="0"/>
+
+                    <StackPanel Grid.Row="3" Orientation="Horizontal">
+                        <Button x:Name="Settings" Style="{StaticResource SidebarBottomBtn}">
+                            <Icon:PackIconMaterial Kind="SettingsHelper" Margin="15"/>
+                        </Button>
+                        <Button x:Name="Logout" Style="{StaticResource SidebarBottomBtn}">
+                            <Icon:PackIconMaterial Kind="Logout" Margin="15"/>
+                        </Button>
+                    </StackPanel>
+
+                </Grid>
+            </DockPanel>
+        </Border>
     </Grid>
 </UserControl>

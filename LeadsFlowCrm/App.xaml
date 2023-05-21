@@ -11,6 +11,7 @@
                 <ResourceDictionary Source="Themes/DarkTheme/VeryDarkTheme.xaml"/>
                 <ResourceDictionary Source="Themes/DarkTheme/ControlColours.xaml"/>
                 <ResourceDictionary Source="Themes/DarkTheme/Controls.xaml"/>
+                <ResourceDictionary Source="Themes/CustomResources/BaseStyling.xaml"/>
                 <ResourceDictionary Source="Themes/CustomResources/SidebarStyling.xaml"/>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
