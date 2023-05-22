@@ -13,6 +13,7 @@
                 <ResourceDictionary Source="Themes/DarkTheme/Controls.xaml"/>
                 <ResourceDictionary Source="Themes/CustomResources/BaseStyling.xaml"/>
                 <ResourceDictionary Source="Themes/CustomResources/SidebarStyling.xaml"/>
+                <ResourceDictionary Source="Themes/CustomResources/InboxStyling.xaml"/>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Application.Resources>
