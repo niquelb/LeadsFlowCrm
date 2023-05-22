@@ -42,7 +42,33 @@
 
         <Separator Margin="5" Height="0"/>
 
-        <!--#region Inbox DataGrid-->
+        <!--#region Inbox-->
+        
+        <!--#region ListView-->
+        <ListView x:Name="InboxLV" Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="1" 
+                  ItemsSource="{Binding Emails}" Margin="0 15">
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn Width="40">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <CheckBox IsChecked="{Binding IsFavorite}" IsEnabled="False"/>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                    <GridViewColumn Header="Sender" 
+                                    DisplayMemberBinding="{Binding Sender}"
+                                    Width="100" />
+                    <GridViewColumn Header="Subject Line" 
+                                    DisplayMemberBinding="{Binding SubjectLine}"
+                                    Width="auto" />
+                    <GridViewColumn Header="Body" 
+                                    DisplayMemberBinding="{Binding Body}"
+                                    Width="auto" />
+                </GridView>
+            </ListView.View>
+        </ListView>
+        <!--#endregion-->
 
         <!--#region Paginator-->
         <Border Grid.Column="1" Grid.ColumnSpan="2" Grid.Row="3" 
@@ -55,39 +81,40 @@
                 <Button x:Name="FirstPage" Style="{StaticResource PaginatorBtn}">
                     <Icon:PackIconMaterial Kind="ChevronDoubleLeft" Style="{StaticResource PaginatorBtnIcon}" />
                 </Button>
-                
+
                 <Rectangle Width="1" Fill="{StaticResource AREghZyBrush.Foreground.Deeper}"
                            Margin="3 7" />
-                
+
                 <Button x:Name="PreviousPage" Style="{StaticResource PaginatorBtn}">
                     <Icon:PackIconMaterial Kind="ChevronLeft" Style="{StaticResource PaginatorBtnIcon}" />
                 </Button>
-                
+
                 <Rectangle Width="1" Fill="{StaticResource AREghZyBrush.Foreground.Deeper}"
                            Margin="3 7" />
-                
+
                 <Button x:Name="CurrentPage" Style="{StaticResource PaginatorBtn}">
                     <TextBlock Text="1" Style="{StaticResource PaginatorCurrentPageText}" />
                 </Button>
-                
+
                 <Rectangle Width="1" Fill="{StaticResource AREghZyBrush.Foreground.Deeper}"
                            Margin="3 7" />
-                
+
                 <Button x:Name="NextPage" Style="{StaticResource PaginatorBtn}">
                     <Icon:PackIconMaterial Kind="ChevronRight" Style="{StaticResource PaginatorBtnIcon}" />
                 </Button>
-                
+
                 <Rectangle Width="1" Fill="{StaticResource AREghZyBrush.Foreground.Deeper}"
                            Margin="3 7" />
-                
+
                 <Button x:Name="LastPage" Style="{StaticResource PaginatorBtn}">
                     <Icon:PackIconMaterial Kind="ChevronDoubleRight" Style="{StaticResource PaginatorBtnIcon}" />
                 </Button>
 
             </StackPanel>
-            
+
         </Border>
         <!--#endregion-->
+
         <!--#endregion-->
 
     </Grid>
