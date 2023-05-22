@@ -10,6 +10,8 @@
 
   <ItemGroup>
     <PackageReference Include="Caliburn.Micro" Version="4.0.212" />
+    <PackageReference Include="Google.Apis.Auth" Version="1.60.0" />
+    <PackageReference Include="Google.Apis.Oauth2.v2" Version="1.60.0.1869" />
     <PackageReference Include="MahApps.Metro.IconPacks.Material" Version="4.11.0" />
   </ItemGroup>
 
