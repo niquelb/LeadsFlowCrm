@@ -31,10 +31,10 @@ public class LoginViewModel : Screen
 		if (isAuthenticated)
 		{
 			// Close the login view
-			TryCloseAsync();
+			await TryCloseAsync();
 
 			// Open the shell view
-			_windowManager.ShowWindowAsync(_shellViewModel);
+			await _windowManager.ShowWindowAsync(_shellViewModel);
 		}
 	}
 

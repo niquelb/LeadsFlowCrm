@@ -34,5 +34,7 @@ app.ConfigureContactEndpoints();
 app.ConfigureFieldEndpoints();
 app.ConfigureStageEndpoints();
 app.ConfigurePipelineOrgEndpoints();
+app.ConfigureGoogleClientEndpoints();
+
 
 app.Run();
