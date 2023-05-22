@@ -2,6 +2,8 @@
 using Google.Apis.Auth.OAuth2;
 using Google.Apis.Oauth2.v2;
 using Google.Apis.Services;
+using LeadsFlowCrm.Models;
+using LeadsFlowCrm.Utils;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -17,11 +19,13 @@ public class LoginViewModel : Screen
 {
 	private readonly IWindowManager _windowManager;
 	private readonly ShellViewModel _shellViewModel;
+	private readonly IApiHelper _apiHelper;
 
-	public LoginViewModel(IWindowManager windowManager, ShellViewModel shellViewModel)
+	public LoginViewModel(IWindowManager windowManager, ShellViewModel shellViewModel, IApiHelper apiHelper)
     {
 		_windowManager = windowManager;
 		_shellViewModel = shellViewModel;
+		_apiHelper = apiHelper;
 	}
 
 	public async void Login()
@@ -42,19 +46,21 @@ public class LoginViewModel : Screen
 	/// Google Sign-In method
 	/// </summary>
 	/// <returns></returns>
-	private static async Task<bool> GoogleSignIn()
+	private async Task<bool> GoogleSignIn()
 	{
-		// TODO: Replace logic with propietary API
-		UserCredential credential;
-		using (var stream = new FileStream("C:\\Users\\nique\\source\\repos\\LeadsFlowCrmApp\\LeadsFlowCrm\\client_secret.json", FileMode.Open, FileAccess.Read))
+		ClientSecrets? clientSecrets = await _apiHelper.GetGoogleClientSecrets();
+
+		if (clientSecrets == null)
 		{
-			credential = await GoogleWebAuthorizationBroker.AuthorizeAsync(
-				GoogleClientSecrets.FromStream(stream).Secrets,
+			throw new ArgumentNullException(nameof(clientSecrets));
+		}
+
+		UserCredential credential = await GoogleWebAuthorizationBroker.AuthorizeAsync(
+				clientSecrets,
 				new[] { "email", "profile" },
 				"user",
 				CancellationToken.None
 			);
-		}
 
 		var oauthService = new Oauth2Service(new BaseClientService.Initializer
 		{
@@ -65,9 +71,6 @@ public class LoginViewModel : Screen
 		var userInfo = await oauthService.Userinfo.Get().ExecuteAsync();
 		string email = userInfo.Email;
 		string profileName = userInfo.Name;
-
-		Trace.WriteLine(email, profileName);
-		Trace.WriteLine(credential.Token.AccessToken, profileName);
 
 		return credential != null;
 	}
