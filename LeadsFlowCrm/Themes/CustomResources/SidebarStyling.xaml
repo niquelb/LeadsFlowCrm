@@ -57,6 +57,7 @@
         </Style.Triggers>
     </Style>
 
+    <!--Sidebar Icons-->
     <Style x:Key="SidebarIcon" TargetType="Icon:PackIconMaterial">
         <Setter Property="VerticalAlignment" Value="Center" />
         <Setter Property="HorizontalAlignment" Value="Center" />
@@ -65,7 +66,8 @@
         <Setter Property="Margin" Value="10 0 25 0" />
     </Style>
 
-    <Style x:Key="SidebarBottomBtn" TargetType="Button">
+    <!--Footer Buttons-->
+    <Style x:Key="SidebarFooterBtn" TargetType="Button">
         <Setter Property="Background" Value="Transparent" />
         <Setter Property="Foreground" Value="White" />
         <Setter Property="Height" Value="50" />

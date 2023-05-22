@@ -71,11 +71,11 @@
 
                     <Separator Grid.Row="2" Margin="25" Width="0"/>
 
-                    <StackPanel Grid.Row="3" Orientation="Horizontal">
-                        <Button x:Name="Settings" Style="{StaticResource SidebarBottomBtn}">
-                            <Icon:PackIconMaterial Kind="SettingsHelper" Margin="15"/>
+                    <StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Right">
+                        <Button x:Name="Settings" Style="{StaticResource SidebarFooterBtn}">
+                            <Icon:PackIconMaterial Kind="Cog" Margin="15"/>
                         </Button>
-                        <Button x:Name="Logout" Style="{StaticResource SidebarBottomBtn}">
+                        <Button x:Name="Logout" Style="{StaticResource SidebarFooterBtn}">
                             <Icon:PackIconMaterial Kind="Logout" Margin="15"/>
                         </Button>
                     </StackPanel>
