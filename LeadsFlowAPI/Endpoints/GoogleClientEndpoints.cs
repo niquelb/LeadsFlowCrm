@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+﻿using LeadsFlowAPI.Models;
+using System.Reflection;
 using System.Text.Json;
 
 namespace LeadsFlowAPI.Endpoints;
@@ -14,7 +15,7 @@ public static class GoogleClientEndpoints
 	/// <param name="app">Application</param>
 	public static void ConfigureGoogleClientEndpoints(this WebApplication app)
 	{
-		app.MapGet("Google/ClientId", GetClientId);
+		app.MapGet("Google/ClientSecrets", GetClientInfo);
 	}
 
 	/// <summary>
@@ -25,7 +26,7 @@ public static class GoogleClientEndpoints
 	/// [404] -> The necessary JSON file with the client information was not found
 	/// [Any other error] -> Call failed
 	/// </returns>
-	public static IResult GetClientId()
+	public static IResult GetClientInfo()
 	{
 		try
 		{
@@ -51,14 +52,14 @@ public static class GoogleClientEndpoints
 					JsonElement root = jsonDocument.RootElement;
 					JsonElement installedElement = root.GetProperty("installed");
 
-					string? clientId = installedElement.GetProperty("client_id").GetString();
+					ClientSecrets? clientSecrets = installedElement.Deserialize<ClientSecrets>();
 
-					if (string.IsNullOrEmpty(clientId))
+					if (clientSecrets == null)
 					{
 						return Results.Problem("Problem parsing the configuration JSON");
 					}
 
-					return Results.Ok(clientId);
+					return Results.Ok(clientSecrets);
 				}
 			}
 		}
