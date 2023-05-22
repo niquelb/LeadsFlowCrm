@@ -2,7 +2,7 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
     <!--Base styling for the components-->
     
-    <!--Buttons-->
+    <!--#region Buttons-->
     <Style x:Key="BaseBtnStyling" TargetType="Button">
         <Setter Property="Background" Value="Transparent" />
         <Setter Property="FocusVisualStyle" Value="{x:Null}" />
@@ -21,4 +21,6 @@
             </Trigger>
         </Style.Triggers>
     </Style>
+    <!--#endregion-->
+    
 </ResourceDictionary>

@@ -2,13 +2,14 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:Icon="http://metro.mahapps.com/winfx/xaml/iconpacks">
     <!--Sidebar Styles-->
-    <!--Main Styling-->
+    <!--#region Main Styling-->
     <Style x:Key="Sidebar" TargetType="Border">
         <Setter Property="Background" Value="{StaticResource AREghZyBrush.ColourfulGlyph.MouseOver}" />
         <Setter Property="CornerRadius" Value="0 15 0 0" />
     </Style>
+    <!--#endregion-->
 
-    <!--Menu Button-->
+    <!--#region Menu Button-->
     <Style x:Key="SidebarMenuBtn" TargetType="Button">
         <Setter Property="Background" Value="Transparent" />
         <Setter Property="Foreground" Value="White" />
@@ -30,8 +31,9 @@
             </Trigger>
         </Style.Triggers>
     </Style>
+    <!--#endregion-->
 
-    <!--Sidebar Buttons-->
+    <!--#region Sidebar Buttons-->
     <Style x:Key="SidebarBtn" TargetType="Button">
         <Setter Property="Background" Value="Transparent" />
         <Setter Property="Foreground" Value="White" />
@@ -56,8 +58,9 @@
             </Trigger>
         </Style.Triggers>
     </Style>
+    <!--#endregion-->
 
-    <!--Sidebar Icons-->
+    <!--#region Sidebar Icons-->
     <Style x:Key="SidebarIcon" TargetType="Icon:PackIconMaterial">
         <Setter Property="VerticalAlignment" Value="Center" />
         <Setter Property="HorizontalAlignment" Value="Center" />
@@ -65,8 +68,9 @@
         <Setter Property="Height" Value="25" />
         <Setter Property="Margin" Value="10 0 25 0" />
     </Style>
+    <!--#endregion-->
 
-    <!--Footer Buttons-->
+    <!--#region Footer Buttons-->
     <Style x:Key="SidebarFooterBtn" TargetType="Button">
         <Setter Property="Background" Value="Transparent" />
         <Setter Property="Foreground" Value="White" />
@@ -90,4 +94,5 @@
             </Trigger>
         </Style.Triggers>
     </Style>
+    <!--#endregion-->
 </ResourceDictionary>

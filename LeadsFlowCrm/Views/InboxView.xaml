@@ -16,33 +16,79 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="auto" />
             <RowDefinition Height="*" />
+            <RowDefinition Height="auto" />
         </Grid.RowDefinitions>
 
-        <StackPanel Orientation="Vertical" Grid.Column="1" Grid.Row="0" >
+        <!--#region SearchBox-->
+        <Border Grid.Column="1" Grid.Row="0" 
+                Background="{StaticResource AREghZyBrush.Foreground.Static}"
+                BorderBrush="{StaticResource AREghZyBrush.Foreground.Static}"
+                CornerRadius="10" BorderThickness="1" MinWidth="300" Padding="5">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="auto" />
+                </Grid.ColumnDefinitions>
+                <TextBox x:Name="SearchBox" Grid.Column="0" Style="{StaticResource InboxSearchBox}"/>
+                <Icon:PackIconMaterial Grid.Column="1" 
+                                       Kind="Magnify" Width="20" Height="20"
+                                       Panel.ZIndex="2" Margin="5 0"
+                                       VerticalAlignment="Center"
+                                       HorizontalAlignment="Right"
+                                       Foreground="{StaticResource AREghZyBrush.Glyph.Disabled}" />
+            </Grid>
+        </Border>
+        <!--#endregion-->
 
-            <!--#region SearchBox-->
-            <Border Background="{StaticResource AREghZyBrush.Foreground.Static}"
-                    BorderBrush="{StaticResource AREghZyBrush.Foreground.Static}"
-                    CornerRadius="10" BorderThickness="1" MinWidth="300" Padding="5">
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="auto" />
-                    </Grid.ColumnDefinitions>
-                    <TextBox x:Name="SearchBox" Grid.Column="0" Style="{StaticResource InboxSearchBox}"/>
-                    <Icon:PackIconMaterial Grid.Column="1" 
-                                           Kind="Magnify" Width="20" Height="20"
-                                           Panel.ZIndex="2" Margin="5 0"
-                                           VerticalAlignment="Center"
-                                           HorizontalAlignment="Right"
-                                           Foreground="{StaticResource AREghZyBrush.Glyph.Disabled}" />
-                </Grid>
-            </Border>
-            <!--#endregion-->
+        <Separator Margin="5" Height="0"/>
 
-            <Separator Margin="5" Height="0"/>
+        <!--#region Inbox DataGrid-->
 
-        </StackPanel>
+        <!--#region Paginator-->
+        <Border Grid.Column="1" Grid.ColumnSpan="2" Grid.Row="3" 
+                HorizontalAlignment="Right" 
+                BorderBrush="{StaticResource AREghZyBrush.Foreground.Static}"
+                BorderThickness="1" CornerRadius="5" Padding="5"
+                Background="{StaticResource AREghZyBrush.Foreground.Static}"
+                Margin="10">
+            <StackPanel Orientation="Horizontal">
+                <Button x:Name="FirstPage" Style="{StaticResource PaginatorBtn}">
+                    <Icon:PackIconMaterial Kind="ChevronDoubleLeft" Style="{StaticResource PaginatorBtnIcon}" />
+                </Button>
+                
+                <Rectangle Width="1" Fill="{StaticResource AREghZyBrush.Foreground.Deeper}"
+                           Margin="3 7" />
+                
+                <Button x:Name="PreviousPage" Style="{StaticResource PaginatorBtn}">
+                    <Icon:PackIconMaterial Kind="ChevronLeft" Style="{StaticResource PaginatorBtnIcon}" />
+                </Button>
+                
+                <Rectangle Width="1" Fill="{StaticResource AREghZyBrush.Foreground.Deeper}"
+                           Margin="3 7" />
+                
+                <Button x:Name="CurrentPage" Style="{StaticResource PaginatorBtn}">
+                    <TextBlock Text="1" Style="{StaticResource PaginatorCurrentPageText}" />
+                </Button>
+                
+                <Rectangle Width="1" Fill="{StaticResource AREghZyBrush.Foreground.Deeper}"
+                           Margin="3 7" />
+                
+                <Button x:Name="NextPage" Style="{StaticResource PaginatorBtn}">
+                    <Icon:PackIconMaterial Kind="ChevronRight" Style="{StaticResource PaginatorBtnIcon}" />
+                </Button>
+                
+                <Rectangle Width="1" Fill="{StaticResource AREghZyBrush.Foreground.Deeper}"
+                           Margin="3 7" />
+                
+                <Button x:Name="LastPage" Style="{StaticResource PaginatorBtn}">
+                    <Icon:PackIconMaterial Kind="ChevronDoubleRight" Style="{StaticResource PaginatorBtnIcon}" />
+                </Button>
+
+            </StackPanel>
+            
+        </Border>
+        <!--#endregion-->
+        <!--#endregion-->
 
     </Grid>
 </UserControl>
