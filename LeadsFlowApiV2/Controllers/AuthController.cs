@@ -8,25 +8,28 @@ namespace LeadsFlowApiV2.Controllers
 	[ApiController]
 	public class AuthController : ControllerBase
 	{
-		private readonly IAuthMethods _authFilter;
+		private readonly IAuthMethods _auth;
 
 		public AuthController(IAuthMethods authFilter)
         {
-			_authFilter = authFilter;
+			_auth = authFilter;
 		}
 
         [HttpPost("Login")]
-		public ActionResult Login(string OAuthToken, string UserName)
+		public async Task<ActionResult> Login(string OAuthToken, string UserName)
 		{
 			try
 			{
-				// TODO: check the OAuthToken validity
+				if (await _auth.CheckOauthToken(OAuthToken) == false)
+				{
+					return BadRequest("OAuth Token is not valid");
+				}
 
-				string token = _authFilter.GetToken(OAuthToken, UserName);
+				string token = _auth.GetToken(OAuthToken, UserName);
 
 				if (string.IsNullOrEmpty(token))
 				{
-					return ValidationProblem("There was an error generating the token");
+					return Problem("There was an error generating the token");
 				}
 
 				return Ok(token);

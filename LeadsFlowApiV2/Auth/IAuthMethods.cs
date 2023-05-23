@@ -4,6 +4,8 @@
 	{
 		bool CheckApiKey(string apiKey);
 
+		Task<bool> CheckOauthToken(string token);
+
 		string GetToken(string oauth, string username);
 	}
 }

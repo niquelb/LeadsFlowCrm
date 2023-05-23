@@ -1,5 +1,7 @@
-﻿using Microsoft.IdentityModel.Tokens;
+﻿using LeadsFlowApiV2.Models;
+using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
+using System.Net.Http.Headers;
 using System.Security.Claims;
 using System.Text;
 
@@ -11,10 +13,22 @@ namespace LeadsFlowApiV2.Auth;
 public class AuthMethods : IAuthMethods
 {
 	private readonly IConfiguration _configuration;
+	private const string tokenCheckUrl = "https://www.googleapis.com/oauth2/v1/tokeninfo?access_token=";
+	private HttpClient client;
 
 	public AuthMethods(IConfiguration configuration)
 	{
 		_configuration = configuration;
+
+		InitializeClient();
+	}
+
+	private void InitializeClient()
+	{
+		client = new HttpClient();
+		client.BaseAddress = new Uri(tokenCheckUrl);
+		client.DefaultRequestHeaders.Accept.Clear();
+		client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("*/*"));
 	}
 
 	/// <summary>
@@ -26,7 +40,7 @@ public class AuthMethods : IAuthMethods
 	{
 		if (string.IsNullOrWhiteSpace(apiKey))
 		{
-			return false;
+			throw new ArgumentNullException(nameof(apiKey));
 		}
 
 		var storedApiKey = _configuration.GetValue<string>(AuthConstants.ApiKeyRoute);
@@ -37,6 +51,26 @@ public class AuthMethods : IAuthMethods
 		}
 
 		return true;
+	}
+
+	/// <summary>
+	/// Method for checking if the supplied OAuth 2.0 token from Google is valid
+	/// </summary>
+	/// <param name="token">Token that will be checked</param>
+	/// <returns>TRUE -> Token is valid, FALSE -> Token is NOT valid.</returns>
+	public async Task<bool> CheckOauthToken(string token)
+	{
+		if (string.IsNullOrWhiteSpace(token))
+		{
+			throw new ArgumentNullException(nameof(token));
+		}
+
+		string url = $"{tokenCheckUrl}{token}";
+
+		using (HttpResponseMessage resp = await client.GetAsync(url))
+		{
+			return resp.IsSuccessStatusCode;
+		}
 	}
 
 	/// <summary>
