@@ -28,17 +28,20 @@ public class LoginViewModel : Screen
 		_apiHelper = apiHelper;
 	}
 
+	/// <summary>
+	/// Login method that handles the appropiate window redirections
+	/// </summary>
 	public async void Login()
 	{
 		bool isAuthenticated = await GoogleSignIn();
 
 		if (isAuthenticated)
 		{
-			// Close the login view
-			await TryCloseAsync();
-
 			// Open the shell view
 			await _windowManager.ShowWindowAsync(_shellViewModel);
+
+			// Close the login view
+			await TryCloseAsync();
 		}
 	}
 
