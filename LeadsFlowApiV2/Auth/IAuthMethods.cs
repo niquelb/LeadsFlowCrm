@@ -6,6 +6,6 @@
 
 		Task<bool> CheckOauthToken(string token);
 
-		string GetToken(string oauth, string username);
+		string GetToken(string oauth, string email, string id);
 	}
 }

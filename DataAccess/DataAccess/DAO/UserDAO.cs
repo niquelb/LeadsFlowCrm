@@ -22,6 +22,18 @@ public class UserDAO : IUserDAO
     }
 
     /// <summary>
+    /// Method for getting a specific User's ID with a given Email
+    /// </summary>
+    /// <param name="email">Email for the query</param>
+    /// <returns></returns>
+    public async Task<string?> GetUserByEmail(string email)
+    {
+        var result = await _db.LoadData<string, dynamic>("dbo.spUser_GetByEmail", new { email });
+
+        return result.FirstOrDefault();
+	}
+
+    /// <summary>
     /// Get all users
     /// </summary>
     /// <returns>All users</returns>

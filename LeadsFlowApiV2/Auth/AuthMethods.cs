@@ -14,7 +14,7 @@ public class AuthMethods : IAuthMethods
 {
 	private readonly IConfiguration _configuration;
 	private const string tokenCheckUrl = "https://www.googleapis.com/oauth2/v1/tokeninfo?access_token=";
-	private HttpClient client;
+	private HttpClient client = new();
 
 	public AuthMethods(IConfiguration configuration)
 	{
@@ -77,15 +77,16 @@ public class AuthMethods : IAuthMethods
 	/// Method for creating and returning a JWT token
 	/// </summary>
 	/// <param name="oauthToken">OAuth token used for the external APIs</param>
-	/// <param name="username">User name</param>
+	/// <param name="email">User name</param>
 	/// <returns>The token</returns>
-	public string GetToken(string oauthToken, string username)
+	public string GetToken(string oauthToken, string email, string id)
 	{
 		List<Claim> claims = new List<Claim>
 		{
-			new Claim(ClaimTypes.Name, username),
 			new Claim(ClaimTypes.Role, "base"),
-			new Claim("oauth_token", oauthToken)
+			new Claim(ClaimTypes.Email, email),
+			new Claim("id", id),
+			new Claim("oauth_token", oauthToken),
 		};
 
 		var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration.GetSection("Authentication:Token").Value));

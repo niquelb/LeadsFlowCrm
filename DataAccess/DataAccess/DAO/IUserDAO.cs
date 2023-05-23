@@ -6,6 +6,7 @@ namespace DataAccess.DataAccess.DAO
     {
         Task DeleteUser(string Id);
         Task<User?> GetUser(string Id);
+        Task<string?> GetUserByEmail(string Email);
         Task<IEnumerable<User>> GetUsers();
         Task InsertUser(User user);
         Task UpdateUser(User user);
