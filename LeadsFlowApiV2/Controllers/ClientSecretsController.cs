@@ -12,11 +12,11 @@ namespace LeadsFlowApiV2.Controllers
 	[ApiController]
 	public class ClientSecretsController : ControllerBase
 	{
-		private readonly IAuthFilter _authFilter;
+		private readonly IAuthMethods _authMethods;
 
-		public ClientSecretsController(IAuthFilter authFilter)
+		public ClientSecretsController(IAuthMethods authFilter)
         {
-			_authFilter = authFilter;
+			_authMethods = authFilter;
 		}
 
         // GET: api/<ClientSecretsController>
@@ -26,7 +26,7 @@ namespace LeadsFlowApiV2.Controllers
 			/*
 			 * We first check if the provided API key is valid for the request
 			 */
-			if (_authFilter.CheckApiKey(apiKey) == false)
+			if (_authMethods.CheckApiKey(apiKey) == false)
 			{
 				return Unauthorized("Invalid API Key");
 			}
