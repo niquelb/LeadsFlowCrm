@@ -1,5 +1,6 @@
 ﻿using Caliburn.Micro;
 using Google.Apis.Auth.OAuth2;
+using Google.Apis.Gmail.v1;
 using Google.Apis.Oauth2.v2;
 using Google.Apis.Services;
 using LeadsFlowCrm.Models;
@@ -22,7 +23,7 @@ public class LoginViewModel : Screen
 	private readonly IApiHelper _apiHelper;
 
 	public LoginViewModel(IWindowManager windowManager, ShellViewModel shellViewModel, IApiHelper apiHelper)
-    {
+	{
 		_windowManager = windowManager;
 		_shellViewModel = shellViewModel;
 		_apiHelper = apiHelper;
@@ -51,19 +52,33 @@ public class LoginViewModel : Screen
 	/// <returns></returns>
 	private async Task<bool> GoogleSignIn()
 	{
+		// We retrieve the client secrets
 		ClientSecrets? clientSecrets = await _apiHelper.GetGoogleClientSecrets();
+
+		// We specify the scopes
+		string[] scopes = {
+			Oauth2Service.Scope.UserinfoEmail,
+			Oauth2Service.Scope.UserinfoProfile,
+			GmailService.Scope.GmailReadonly,
+		};
 
 		if (clientSecrets == null)
 		{
 			throw new ArgumentNullException(nameof(clientSecrets));
 		}
 
+		// We get the credentials
 		UserCredential credential = await GoogleWebAuthorizationBroker.AuthorizeAsync(
 				clientSecrets,
-				new[] { "email", "profile" },
+				scopes,
 				"user",
 				CancellationToken.None
 			);
+
+		if (credential == null)
+		{
+			return false;
+		}
 
 		var oauthService = new Oauth2Service(new BaseClientService.Initializer
 		{
@@ -73,8 +88,11 @@ public class LoginViewModel : Screen
 
 		var userInfo = await oauthService.Userinfo.Get().ExecuteAsync();
 		string email = userInfo.Email;
-		string profileName = userInfo.Name;
 
-		return credential != null;
+		var token = await credential.GetAccessTokenForRequestAsync();
+
+		Trace.WriteLine(token, email);
+
+		return true;
 	}
 }
