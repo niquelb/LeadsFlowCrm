@@ -1,4 +1,5 @@
-﻿using LeadsFlowApiV2.Models;
+﻿using LeadsFlowApiV2.Auth;
+using LeadsFlowApiV2.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Reflection;
 using System.Text.Json;
@@ -11,10 +12,25 @@ namespace LeadsFlowApiV2.Controllers
 	[ApiController]
 	public class ClientSecretsController : ControllerBase
 	{
-		// GET: api/<ClientSecretsController>
-		[HttpGet]
-		public ActionResult Get()
+		private readonly IAuthFilter _authFilter;
+
+		public ClientSecretsController(IAuthFilter authFilter)
+        {
+			_authFilter = authFilter;
+		}
+
+        // GET: api/<ClientSecretsController>
+        [HttpGet]
+		public ActionResult Get(string apiKey)
 		{
+			/*
+			 * We first check if the provided API key is valid for the request
+			 */
+			if (_authFilter.CheckApiKey(apiKey) == false)
+			{
+				return Unauthorized("Invalid API Key");
+			}
+
 			try
 			{
 				/*

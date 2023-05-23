@@ -68,7 +68,6 @@
     <Folder Include="dbo\StoredProcedures\StageCRUD" />
     <Folder Include="dbo\StoredProcedures\FieldCRUD" />
     <Folder Include="dbo\StoredProcedures\OrganizationCRUD" />
-    <Folder Include="dbo\StoredProcedures\TableRelationships" />
   </ItemGroup>
   <ItemGroup>
     <None Include="PublishLocations\LeadsFlowDB.publish.xml" />
@@ -114,7 +113,6 @@
     <Build Include="dbo\StoredProcedures\OrganizationCRUD\spOrganization_Delete.sql" />
     <Build Include="dbo\StoredProcedures\OrganizationCRUD\spOrganization_Insert.sql" />
     <Build Include="dbo\StoredProcedures\OrganizationCRUD\spOrganization_Update.sql" />
-    <Build Include="dbo\StoredProcedures\TableRelationships\spUserOrganization_Relationship.sql" />
     <Build Include="dbo\StoredProcedures\StageCRUD\spStage_Update.sql" />
   </ItemGroup>
   <ItemGroup>

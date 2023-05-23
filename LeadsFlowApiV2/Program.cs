@@ -1,6 +1,7 @@
 using DataAccess.DataAccess;
 using DataAccess.DataAccess.DAO;
 using DataAccess.DbAccess;
+using LeadsFlowApiV2.Auth;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -8,6 +9,8 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+builder.Services.AddScoped<IAuthFilter, AuthFilter>();
 
 builder.Services.AddSingleton<ISqlDataAccess, SqlDataAccess>();
 builder.Services.AddSingleton<IUserDAO, UserDAO>();
