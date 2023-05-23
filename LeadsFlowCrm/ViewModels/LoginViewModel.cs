@@ -82,20 +82,22 @@ public class LoginViewModel : Screen
 			return false;
 		}
 
+		// We setup the login info
 		var oauthService = new Oauth2Service(new BaseClientService.Initializer
 		{
 			HttpClientInitializer = credential,
 			ApplicationName = "LeadsFlow CRM"
 		});
 
+		// We execute the login
 		var userInfo = await oauthService.Userinfo.Get().ExecuteAsync();
 
+		// We collect the user's info
 		string email = userInfo.Email;
 		string token = await credential.GetAccessTokenForRequestAsync();
 
+		// We authenticate in our API
 		await _apiHelper.Authenticate(token, email);
-
-
 
 		return true;
 	}

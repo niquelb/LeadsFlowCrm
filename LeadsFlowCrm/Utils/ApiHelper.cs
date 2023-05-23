@@ -48,13 +48,13 @@ public class ApiHelper : IDisposable, IApiHelper
 	/// Method for logging into the API and retrieving and storing the token in the LoggedInUser model
 	/// </summary>
 	/// <param name="OAuthToken">Google OAuth token from the Google sign in</param>
-	/// <param name="UserName">User's email</param>
+	/// <param name="Email">User's email</param>
 	/// <returns></returns>
 	/// <exception cref="UnauthorizedAccessException">If login call to API fails, most likely due to an invalid OAuth token</exception>
 	/// <see cref="LoggedInUser"/>
-	public async Task Authenticate(string OAuthToken, string UserName)
+	public async Task Authenticate(string OAuthToken, string Email)
 	{
-		string formattedUrl = $"Auth/Login?OAuthToken={OAuthToken}&UserName={UserName}";
+		string formattedUrl = $"Auth/Login?OAuthToken={OAuthToken}&Email={Email}";
 
 		using HttpResponseMessage resp = await _apiClient.PostAsync(formattedUrl, null);
 		if (resp.IsSuccessStatusCode == false)
@@ -62,9 +62,10 @@ public class ApiHelper : IDisposable, IApiHelper
 			throw new UnauthorizedAccessException(resp.ReasonPhrase);
 		}
 
-		var output = await resp.Content.ReadAsAsync<string>();
+		LoggedInUser output = await resp.Content.ReadAsAsync<LoggedInUser>();
 
-		_user.Token = output;
+		_user.Token = output.Token;
+		_user.Id = output.Id;
 	}
 
 	/// <summary>
