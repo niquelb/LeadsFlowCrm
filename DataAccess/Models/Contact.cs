@@ -2,9 +2,9 @@
 
 public class Contact
 {
-	public string Id { get; set; } = Guid.NewGuid().ToString();
-	public string Email { get; set; }
-    public string FirstName { get; set; }
+	public string? Id { get; set; } = Guid.NewGuid().ToString();
+	public string? Email { get; set; }
+    public string? FirstName { get; set; }
     public string? LastNames { get; set; }
     public string? Phone { get; set; }
     public string? Address { get; set; }
