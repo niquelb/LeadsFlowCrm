@@ -45,7 +45,7 @@ public class ApiHelper : IDisposable, IApiHelper
 
 	public async Task<ClientSecrets?> GetGoogleClientSecrets()
 	{
-		using (HttpResponseMessage resp = await apiClient.GetAsync("Google/ClientSecrets"))
+		using (HttpResponseMessage resp = await apiClient.GetAsync("api/ClientSecrets"))
 		{
 			if (resp.IsSuccessStatusCode)
 			{
