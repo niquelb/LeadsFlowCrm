@@ -50,6 +50,7 @@ public class AuthMethods : IAuthMethods
 		List<Claim> claims = new List<Claim>
 		{
 			new Claim(ClaimTypes.Name, username),
+			new Claim(ClaimTypes.Role, "base"),
 			new Claim("oauth_token", oauthToken)
 		};
 

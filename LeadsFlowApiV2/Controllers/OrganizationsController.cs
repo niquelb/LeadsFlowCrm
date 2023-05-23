@@ -1,6 +1,8 @@
 ﻿using DataAccess.DataAccess.DAO;
 using DataAccess.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Data;
 
 namespace LeadsFlowApiV2.Controllers;
 
@@ -9,6 +11,7 @@ namespace LeadsFlowApiV2.Controllers;
 /// </summary>
 [Route("api/[controller]")]
 [ApiController]
+[Authorize(Roles = "base")]
 public class OrganizationsController : ControllerBase
 {
 	private readonly IOrganizationDAO _organizationDAO;

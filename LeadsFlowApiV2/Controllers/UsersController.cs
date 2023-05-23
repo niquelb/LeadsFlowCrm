@@ -11,7 +11,7 @@ namespace LeadsFlowApiV2.Controllers;
 /// </summary>
 [Route("api/[controller]")]
 [ApiController]
-[Authorize]
+[Authorize(Roles = "base")]
 public class UsersController : ControllerBase
 {
 	private readonly IUserDAO _userDAO;

@@ -5,6 +5,8 @@ using LeadsFlowApiV2.Auth;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
+using Swashbuckle.AspNetCore.Filters;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -14,7 +16,20 @@ var builder = WebApplication.CreateBuilder(args);
  */
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+
+// Configure Swagger
+builder.Services.AddSwaggerGen(o =>
+{
+	// Add the parameter for the token
+	o.AddSecurityDefinition("oauth2", new OpenApiSecurityScheme
+	{
+		Description = "Standard auth header using a JWT Bearer token",
+		In = ParameterLocation.Header,
+		Name = "Authorization",
+		Type = SecuritySchemeType.ApiKey
+	});
+	o.OperationFilter<SecurityRequirementsOperationFilter>();
+});
 
 // Configure the Authentication
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
