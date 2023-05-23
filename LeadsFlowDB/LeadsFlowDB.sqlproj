@@ -104,7 +104,6 @@
     <Build Include="dbo\StoredProcedures\StageCRUD\spStage_Get.sql" />
     <Build Include="dbo\StoredProcedures\StageCRUD\spStage_Delete.sql" />
     <Build Include="dbo\StoredProcedures\StageCRUD\spStage_Insert.sql" />
-    <Build Include="dbo\StoredProcedures\StageCRUD\spStage_Update.sql" />
     <Build Include="dbo\StoredProcedures\FieldCRUD\spField_GetAll.sql" />
     <Build Include="dbo\StoredProcedures\FieldCRUD\spField_Get.sql" />
     <Build Include="dbo\StoredProcedures\FieldCRUD\spField_Delete.sql" />
@@ -116,6 +115,7 @@
     <Build Include="dbo\StoredProcedures\OrganizationCRUD\spOrganization_Insert.sql" />
     <Build Include="dbo\StoredProcedures\OrganizationCRUD\spOrganization_Update.sql" />
     <Build Include="dbo\StoredProcedures\TableRelationships\spUserOrganization_Relationship.sql" />
+    <Build Include="dbo\StoredProcedures\StageCRUD\spStage_Update.sql" />
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="LeadsFlowDB.refactorlog" />
