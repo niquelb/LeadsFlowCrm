@@ -68,7 +68,7 @@ public class LoginViewModel : Screen
 		var oauthService = new Oauth2Service(new BaseClientService.Initializer
 		{
 			HttpClientInitializer = credential,
-			ApplicationName = "LeadsFlowCRM"
+			ApplicationName = "LeadsFlow CRM"
 		});
 
 		var userInfo = await oauthService.Userinfo.Get().ExecuteAsync();

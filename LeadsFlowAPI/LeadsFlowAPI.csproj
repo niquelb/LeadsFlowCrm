@@ -7,11 +7,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Content Remove="Resources\google_client_secrets.json" />
+    <Content Remove="Resources\client_secrets.json" />
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Include="Resources\google_client_secrets.json">
+    <EmbeddedResource Include="Resources\client_secrets.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </EmbeddedResource>
   </ItemGroup>

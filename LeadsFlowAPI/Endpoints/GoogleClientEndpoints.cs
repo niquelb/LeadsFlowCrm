@@ -34,7 +34,7 @@ public static class GoogleClientEndpoints
 			 * We read and parse the contents of the JSON file that stores the client secrets for the Google API
 			 */
 			var assembly = Assembly.GetExecutingAssembly();
-			var resourceName = "LeadsFlowAPI.Resources.google_client_secrets.json";
+			var resourceName = "LeadsFlowAPI.Resources.client_secrets.json";
 
 			using (Stream? stream = assembly.GetManifestResourceStream(resourceName))
 			{
