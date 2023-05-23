@@ -119,36 +119,4 @@ public class UsersController : ControllerBase
 			return Problem(ex.Message);
 		}
 	}
-
-	// PUT api/<UsersController>/
-	[HttpPut("Organization")]
-	public async Task<ActionResult> PutOrgRelationship(string userId, string orgId)
-	{
-		try
-		{
-			/*
-			 * Before doing anything we will check if the IDs exist
-			 */
-			var user = await _userDAO.GetUser(userId);
-			var org = await _organizationDAO.GetOrganization(orgId);
-
-			if (user == null)
-			{
-				return NotFound($"User not found: {userId}");
-			}
-
-			if (org == null)
-			{
-				return NotFound($"Organization not found: {orgId}");
-			}
-
-			await _userDAO.SetupUserOrgRelationship(userId, orgId);
-			return Ok("Relationship created successfully");
-
-		}
-		catch (Exception ex)
-		{
-			return Problem(ex.Message);
-		}
-	}
 }
