@@ -22,7 +22,9 @@ public class LoginViewModel : Screen
 	private readonly ShellViewModel _shellViewModel;
 	private readonly IApiHelper _apiHelper;
 
-	public LoginViewModel(IWindowManager windowManager, ShellViewModel shellViewModel, IApiHelper apiHelper)
+	public LoginViewModel(IWindowManager windowManager,
+					   ShellViewModel shellViewModel,
+					   IApiHelper apiHelper)
 	{
 		_windowManager = windowManager;
 		_shellViewModel = shellViewModel;
@@ -87,11 +89,13 @@ public class LoginViewModel : Screen
 		});
 
 		var userInfo = await oauthService.Userinfo.Get().ExecuteAsync();
+
 		string email = userInfo.Email;
+		string token = await credential.GetAccessTokenForRequestAsync();
 
-		var token = await credential.GetAccessTokenForRequestAsync();
+		await _apiHelper.Authenticate(token, email);
 
-		Trace.WriteLine(token, email);
+
 
 		return true;
 	}

@@ -17,9 +17,14 @@ namespace LeadsFlowCrm.Utils;
 /// </summary>
 public class ApiHelper : IDisposable, IApiHelper
 {
-	private HttpClient apiClient;
+	private HttpClient _apiClient = new();
+	private readonly LoggedInUser _user;
 
-	public ApiHelper() => InitializeClient();
+	public ApiHelper(LoggedInUser user)
+	{
+		InitializeClient();
+		_user = user;
+	}
 
 	/// <summary>
 	/// Method for instanciating our HTTP client
@@ -33,17 +38,39 @@ public class ApiHelper : IDisposable, IApiHelper
 			throw new Exception("Failure to read AppSettings.json. -> Failure to get the API URL.");
 		}
 
-		apiClient = new HttpClient();
-		apiClient.BaseAddress = new Uri(apiUrl);
-		apiClient.DefaultRequestHeaders.Accept.Clear();
-		apiClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+		_apiClient = new HttpClient();
+		_apiClient.BaseAddress = new Uri(apiUrl);
+		_apiClient.DefaultRequestHeaders.Accept.Clear();
+		_apiClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 	}
 
-	public void Authenticate(string OauthToken)
+	/// <summary>
+	/// Method for logging into the API and retrieving and storing the token in the LoggedInUser model
+	/// </summary>
+	/// <param name="OAuthToken">Google OAuth token from the Google sign in</param>
+	/// <param name="UserName">User's email</param>
+	/// <returns></returns>
+	/// <exception cref="UnauthorizedAccessException">If login call to API fails, most likely due to an invalid OAuth token</exception>
+	/// <see cref="LoggedInUser"/>
+	public async Task Authenticate(string OAuthToken, string UserName)
 	{
+		string formattedUrl = $"Auth/Login?OAuthToken={OAuthToken}&UserName={UserName}";
 
+		using HttpResponseMessage resp = await _apiClient.PostAsync(formattedUrl, null);
+		if (resp.IsSuccessStatusCode == false)
+		{
+			throw new UnauthorizedAccessException(resp.ReasonPhrase);
+		}
+
+		var output = await resp.Content.ReadAsAsync<string>();
+
+		_user.Token = output;
 	}
 
+	/// <summary>
+	/// Method for retrieving the necessary client secrets from the API
+	/// </summary>
+	/// <returns>Client secrets for the Google sign in</returns>
 	public async Task<ClientSecrets?> GetGoogleClientSecrets()
 	{
 		var config = new ConfigurationBuilder()
@@ -57,24 +84,20 @@ public class ApiHelper : IDisposable, IApiHelper
 			return null;
 		}
 
-		Trace.WriteLine(apiKey);
-
 		string formattedPath = $"api/ClientSecrets?apiKey={apiKey}";
 
-		using (HttpResponseMessage resp = await apiClient.GetAsync(formattedPath))
+		using HttpResponseMessage resp = await _apiClient.GetAsync(formattedPath);
+		if (resp.IsSuccessStatusCode)
 		{
-			if (resp.IsSuccessStatusCode)
-			{
-				var output = await resp.Content.ReadAsAsync<ClientSecrets>();
-				return output;
-			}
-
-			return null;
+			var output = await resp.Content.ReadAsAsync<ClientSecrets>();
+			return output;
 		}
+
+		return null;
 	}
 
 	public void Dispose()
 	{
-		apiClient.Dispose();
+		_apiClient.Dispose();
 	}
 }
