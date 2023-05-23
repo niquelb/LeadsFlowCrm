@@ -2,14 +2,37 @@ using DataAccess.DataAccess;
 using DataAccess.DataAccess.DAO;
 using DataAccess.DbAccess;
 using LeadsFlowApiV2.Auth;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.Extensions.Configuration;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+/*
+ * Add services to the container.
+ */
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+// Configure the Authentication
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+	.AddJwtBearer(o =>
+	{
+		o.TokenValidationParameters = new TokenValidationParameters
+		{
+			ValidateIssuerSigningKey = true,
+			IssuerSigningKey = new SymmetricSecurityKey(
+				Encoding.UTF8.GetBytes(
+					builder.Configuration.GetSection("Authentication:Token").Value
+					)),
+			ValidateIssuer = false,
+			ValidateAudience = false,
+		};
+	});
+
+// Add our services
 builder.Services.AddScoped<IAuthMethods, AuthMethods>();
 
 builder.Services.AddSingleton<ISqlDataAccess, SqlDataAccess>();
@@ -29,6 +52,7 @@ app.UseSwaggerUI();
 
 app.UseHttpsRedirection();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
