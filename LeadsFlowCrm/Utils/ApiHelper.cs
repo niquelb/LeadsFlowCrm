@@ -1,8 +1,9 @@
 ﻿using Google.Apis.Auth.OAuth2;
 using LeadsFlowCrm.Models;
+using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
-using System.Configuration;
+using System.Diagnostics;
 using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
@@ -25,7 +26,7 @@ public class ApiHelper : IDisposable, IApiHelper
 	/// </summary>
 	private void InitializeClient()
 	{
-		string? apiUrl = ConfigurationManager.AppSettings["api"];
+		string? apiUrl = System.Configuration.ConfigurationManager.AppSettings["api"];
 
 		if (string.IsNullOrWhiteSpace(apiUrl))
 		{
@@ -45,7 +46,22 @@ public class ApiHelper : IDisposable, IApiHelper
 
 	public async Task<ClientSecrets?> GetGoogleClientSecrets()
 	{
-		using (HttpResponseMessage resp = await apiClient.GetAsync("api/ClientSecrets"))
+		var config = new ConfigurationBuilder()
+		.AddUserSecrets<ApiHelper>()
+		.Build();
+
+		string? apiKey = config["apiKey"];
+
+		if (string.IsNullOrWhiteSpace(apiKey))
+		{
+			return null;
+		}
+
+		Trace.WriteLine(apiKey);
+
+		string formattedPath = $"api/ClientSecrets?apiKey={apiKey}";
+
+		using (HttpResponseMessage resp = await apiClient.GetAsync(formattedPath))
 		{
 			if (resp.IsSuccessStatusCode)
 			{
