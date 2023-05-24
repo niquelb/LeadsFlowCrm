@@ -21,12 +21,12 @@ public class LoginViewModel : Screen
 {
 	private readonly IWindowManager _windowManager;
 	private readonly ShellViewModel _shellViewModel;
-	private readonly IGoogleService _auth;
+	private readonly IOAuthService _auth;
 	private readonly IApiHelper _api;
 
 	public LoginViewModel(IWindowManager windowManager,
 					   ShellViewModel shellViewModel,
-					   IGoogleService auth, IApiHelper api)
+					   IOAuthService auth, IApiHelper api)
 	{
 		_windowManager = windowManager;
 		_shellViewModel = shellViewModel;

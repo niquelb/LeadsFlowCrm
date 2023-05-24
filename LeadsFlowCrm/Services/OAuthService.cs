@@ -17,9 +17,7 @@ namespace LeadsFlowCrm.Services;
 /// Class containing methods related to the user's authentication
 /// </summary>
 public class OAuthService : IOAuthService
-{
-	private const string _appName = "LeadsFlow CRM";
-
+{ 
 	/// <summary> Credentials object </summary>
 	private UserCredential _credentials;
 
@@ -104,7 +102,7 @@ public class OAuthService : IOAuthService
 			_oauth2Service = new Oauth2Service(new BaseClientService.Initializer
 			{
 				HttpClientInitializer = await GetCredentialsAsync(),
-				ApplicationName = _appName
+				ApplicationName = GlobalVariables.appName
 			});
 		}
 
@@ -122,7 +120,7 @@ public class OAuthService : IOAuthService
 			_gmailService = new GmailService(new BaseClientService.Initializer()
 			{
 				HttpClientInitializer = await GetCredentialsAsync(),
-				ApplicationName = _appName,
+				ApplicationName = GlobalVariables.appName,
 			});
 		}
 
