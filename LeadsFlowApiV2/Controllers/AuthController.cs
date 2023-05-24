@@ -37,20 +37,20 @@ public class AuthController : ControllerBase
 	/// [Problem] if the token generation fails or there are any other problems
 	/// </returns>
 	[HttpPost("Login")]
-	public async Task<ActionResult> Login(string oAuthToken, string email)
+	public async Task<ActionResult> Login([FromBody] UserEmailOauth user)
 	{
 		try
 		{
 			/*
 			 * We check the validity of the OAuth token
 			 */
-			if (await _auth.CheckOauthToken(oAuthToken) == false)
+			if (await _auth.CheckOauthToken(user.OAuthToken) == false)
 			{
 				return BadRequest("OAuth Token is not valid");
 			}
 
 			// We retrieve the user ID
-			string? userId = await _userDAO.GetUserByEmail(email);
+			string? userId = await _userDAO.GetUserByEmail(user.Email);
 
 			/*
 			 * We check if the user exists in the BD
@@ -62,7 +62,7 @@ public class AuthController : ControllerBase
 			}
 
 			// We update the given user's record on the DB with the new OAuth token
-			await _auth.UpdateUser(userId, oAuthToken);
+			await _auth.UpdateUser(userId, user.OAuthToken);
 
 			// We generate the token
 			string token = _auth.GetToken(userId);
@@ -93,7 +93,7 @@ public class AuthController : ControllerBase
 	/// [Problem] if there is any other issue
 	/// </returns>
 	[HttpPut("RefreshOAuth")]
-	public async Task<ActionResult> RefreshOAuthToken(string UserId, string OAuthToken)
+	public async Task<ActionResult> RefreshOAuthToken(string UserId, [FromBody] string OAuthToken)
 	{
 		try
 		{

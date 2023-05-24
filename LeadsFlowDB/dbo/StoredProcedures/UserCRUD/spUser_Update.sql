@@ -1,6 +1,6 @@
 ﻿CREATE PROCEDURE [dbo].[spUser_Update]
 	@Id char(36),
-	@OauthToken NVARCHAR(50) = null,
+	@OauthToken NVARCHAR(MAX) = null,
     @Email NVARCHAR(256) = null,
     @DisplayName NVARCHAR(50) = null,
     @OrganizationId CHAR(36) = null

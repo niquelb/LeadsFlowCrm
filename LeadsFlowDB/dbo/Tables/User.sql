@@ -1,7 +1,7 @@
 ﻿CREATE TABLE [dbo].[User]
 (
 	[Id] CHAR(36) NOT NULL PRIMARY KEY, 
-    [OauthToken] NVARCHAR(50) NOT NULL, 
+    [OauthToken] NVARCHAR(MAX) NOT NULL, 
     [Email] NVARCHAR(256) NOT NULL, 
     [DisplayName] NVARCHAR(50) NOT NULL, 
     [OrganizationId] CHAR(36) NULL, 
