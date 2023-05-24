@@ -4,6 +4,7 @@ using Google.Apis.Gmail.v1;
 using Google.Apis.Oauth2.v2;
 using Google.Apis.Services;
 using LeadsFlowCrm.Models;
+using LeadsFlowCrm.Services;
 using LeadsFlowCrm.Utils;
 using System;
 using System.Collections.Generic;
@@ -20,15 +21,17 @@ public class LoginViewModel : Screen
 {
 	private readonly IWindowManager _windowManager;
 	private readonly ShellViewModel _shellViewModel;
-	private readonly IApiHelper _apiHelper;
+	private readonly IAuthService _auth;
+	private readonly IApiHelper _api;
 
 	public LoginViewModel(IWindowManager windowManager,
 					   ShellViewModel shellViewModel,
-					   IApiHelper apiHelper)
+					   IAuthService auth, IApiHelper api)
 	{
 		_windowManager = windowManager;
 		_shellViewModel = shellViewModel;
-		_apiHelper = apiHelper;
+		_auth = auth;
+		_api = api;
 	}
 
 	/// <summary>
@@ -54,30 +57,10 @@ public class LoginViewModel : Screen
 	/// <returns></returns>
 	private async Task<bool> GoogleSignIn()
 	{
-		// We retrieve the client secrets
-		ClientSecrets? clientSecrets = await _apiHelper.GetGoogleClientSecrets();
+		// We retrieve the credentials
+		var credentials = await _auth.GetCredentials();
 
-		// We specify the scopes
-		string[] scopes = {
-			Oauth2Service.Scope.UserinfoEmail,
-			Oauth2Service.Scope.UserinfoProfile,
-			GmailService.Scope.GmailReadonly,
-		};
-
-		if (clientSecrets == null)
-		{
-			throw new ArgumentNullException(nameof(clientSecrets));
-		}
-
-		// We get the credentials
-		UserCredential credential = await GoogleWebAuthorizationBroker.AuthorizeAsync(
-				clientSecrets,
-				scopes,
-				"user",
-				CancellationToken.None
-			);
-
-		if (credential == null)
+		if (credentials == null)
 		{
 			return false;
 		}
@@ -85,7 +68,7 @@ public class LoginViewModel : Screen
 		// We setup the login info
 		var oauthService = new Oauth2Service(new BaseClientService.Initializer
 		{
-			HttpClientInitializer = credential,
+			HttpClientInitializer = credentials,
 			ApplicationName = "LeadsFlow CRM"
 		});
 
@@ -94,10 +77,10 @@ public class LoginViewModel : Screen
 
 		// We collect the user's info
 		string email = userInfo.Email;
-		string token = await credential.GetAccessTokenForRequestAsync();
+		string token = await credentials.GetAccessTokenForRequestAsync();
 
 		// We authenticate in our API
-		await _apiHelper.Authenticate(token, email);
+		await _api.Authenticate(token, email);
 
 		return true;
 	}

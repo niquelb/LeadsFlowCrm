@@ -1,5 +1,6 @@
 ﻿using Caliburn.Micro;
 using LeadsFlowCrm.Models;
+using LeadsFlowCrm.Services;
 using LeadsFlowCrm.Utils;
 using LeadsFlowCrm.ViewModels;
 using System;
@@ -32,7 +33,8 @@ public class Bootstrapper : BootstrapperBase
 			.Singleton<IWindowManager, WindowManager>()
 			.Singleton<IEventAggregator, EventAggregator>()
 			.Singleton<IApiHelper, ApiHelper>()
-			.Singleton<LoggedInUser>();
+			.Singleton<LoggedInUser>()
+			.Singleton<IAuthService, AuthService>();
 
 		// Adds all of our ViewModels into Dependency Injection
 		GetType().Assembly.GetTypes()
