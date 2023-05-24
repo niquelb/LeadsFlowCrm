@@ -37,7 +37,7 @@ public class AuthController : ControllerBase
 	/// [Problem] if the token generation fails or there are any other problems
 	/// </returns>
 	[HttpPost("Login")]
-	public async Task<ActionResult> Login([FromBody] UserEmailOauth user)
+	public async Task<ActionResult> Login([FromBody] LoginUser user)
 	{
 		try
 		{

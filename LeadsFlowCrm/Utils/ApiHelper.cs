@@ -1,6 +1,7 @@
 ﻿using Google.Apis.Auth.OAuth2;
 using LeadsFlowCrm.Models;
 using Microsoft.Extensions.Configuration;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -8,6 +9,8 @@ using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
+using System.Text.Json;
+using System.Text.Json.Nodes;
 using System.Threading.Tasks;
 
 namespace LeadsFlowCrm.Utils;
@@ -54,15 +57,22 @@ public class ApiHelper : IApiHelper
 	/// <see cref="LoggedInUser"/>
 	public async Task Authenticate(string OAuthToken, string Email)
 	{
-		string formattedUrl = $"Auth/Login?OAuthToken={OAuthToken}&Email={Email}";
+		// We create the body
+		var body = new LoginUser()
+		{
+			Email = Email,
+			OAuthToken = OAuthToken,
+		};
 
-		using HttpResponseMessage resp = await _apiClient.PostAsync(formattedUrl, null);
+		// We encode the body
+		var encodedBody = new StringContent(JsonSerializer.Serialize<LoginUser>(body), Encoding.UTF8, "application/json");
+
+		// We make the request
+		using HttpResponseMessage resp = await _apiClient.PostAsync("Auth/Login", encodedBody);
 		if (resp.IsSuccessStatusCode == false)
 		{
 			throw new UnauthorizedAccessException(resp.ReasonPhrase);
 		}
-
-		Trace.WriteLine(OAuthToken, "OAUTH");
 
 		LoggedInUser output = await resp.Content.ReadAsAsync<LoggedInUser>();
 

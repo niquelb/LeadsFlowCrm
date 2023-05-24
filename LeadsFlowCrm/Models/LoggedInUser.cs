@@ -2,6 +2,9 @@
 
 namespace LeadsFlowCrm.Models;
 
+/// <summary>
+/// Model for the currently logged in user
+/// </summary>
 public class LoggedInUser
 {
 	[JsonPropertyName("id")]
