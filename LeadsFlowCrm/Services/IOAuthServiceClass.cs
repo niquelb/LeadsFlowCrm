@@ -5,12 +5,11 @@ using System.Threading.Tasks;
 
 namespace LeadsFlowCrm.Services
 {
-	public interface IOAuthService
+	public interface IOAuthServiceClass
 	{
 		Task<UserCredential> GetCredentialsAsync();
 
 		Task<Oauth2Service> GetOauthServiceAsync();
 
-		Task<GmailService> GetGmailServiceAsync();
 	}
 }

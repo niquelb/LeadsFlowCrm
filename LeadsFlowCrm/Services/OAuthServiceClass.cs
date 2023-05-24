@@ -16,16 +16,13 @@ namespace LeadsFlowCrm.Services;
 /// <summary>
 /// Class containing methods related to the user's authentication
 /// </summary>
-public class OAuthService : IOAuthService
+public class OAuthServiceClass : IOAuthServiceClass
 { 
 	/// <summary> Credentials object </summary>
 	private UserCredential _credentials;
 
 	/// <summary> OAuth 2 service </summary>
 	private Oauth2Service _oauth2Service;
-
-	/// <summary> Service object for the Gmail API </summary>
-	private GmailService _gmailService;
 
 	/// <summary> Scopes for the OAuth login </summary>
 	private static readonly string[] _scopes = {
@@ -36,7 +33,7 @@ public class OAuthService : IOAuthService
 
 	private readonly IApiHelper _apiHelper;
 
-	public OAuthService(IApiHelper apiHelper)
+	public OAuthServiceClass(IApiHelper apiHelper)
 	{
 		_apiHelper = apiHelper;
 	}
@@ -109,21 +106,4 @@ public class OAuthService : IOAuthService
 		return _oauth2Service;
 	}
 
-	/// <summary>
-	/// Method for retrieving the Gmail service object for the Gmail API
-	/// </summary>
-	/// <returns>GmailService object</returns>
-	public async Task<GmailService> GetGmailServiceAsync()
-	{
-		if ( _gmailService == null)
-		{
-			_gmailService = new GmailService(new BaseClientService.Initializer()
-			{
-				HttpClientInitializer = await GetCredentialsAsync(),
-				ApplicationName = GlobalVariables.appName,
-			});
-		}
-
-		return _gmailService;
-	}
 }
