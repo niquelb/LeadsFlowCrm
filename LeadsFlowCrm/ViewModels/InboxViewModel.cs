@@ -11,9 +11,9 @@ namespace LeadsFlowCrm.ViewModels;
 
 public class InboxViewModel : Screen
 {
-	private ObservableCollection<EmailModel> _emails = new();
+	private ObservableCollection<Email> _emails = new();
 
-	public ObservableCollection<EmailModel> Emails
+	public ObservableCollection<Email> Emails
 	{
 		get { return _emails; }
 		set {
@@ -24,7 +24,7 @@ public class InboxViewModel : Screen
 
 	public InboxViewModel()
 	{
-		Emails.Add(new EmailModel
+		Emails.Add(new Email
 		{
 			Sender = "Mike",
 			SubjectLine = "Business Oportunity",
