@@ -85,7 +85,7 @@ public class ApiHelper : IDisposable, IApiHelper
 			return null;
 		}
 
-		string formattedPath = $"api/ClientSecrets?apiKey={apiKey}";
+		string formattedPath = $"Auth/ClientSecrets?apiKey={apiKey}";
 
 		using HttpResponseMessage resp = await _apiClient.GetAsync(formattedPath);
 		if (resp.IsSuccessStatusCode)
