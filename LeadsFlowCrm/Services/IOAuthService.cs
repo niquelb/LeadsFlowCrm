@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace LeadsFlowCrm.Services
 {
-	public interface IGoogleService
+	public interface IOAuthService
 	{
 		Task<UserCredential> GetCredentialsAsync();
 
