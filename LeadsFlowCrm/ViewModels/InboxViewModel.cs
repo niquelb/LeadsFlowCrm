@@ -26,7 +26,7 @@ public class InboxViewModel : Screen
 	{
 		Emails.Add(new Email
 		{
-			Sender = "Mike",
+			From = "Mike",
 			SubjectLine = "Business Oportunity",
 			Body = "This is some really long text",
 			IsFavorite = true,

@@ -6,6 +6,6 @@ namespace LeadsFlowCrm.Models;
 /// </summary>
 public class LoginUser
 {
-	public string Email { get; set; } = string.Empty;
-	public string OAuthToken { get; set; } = string.Empty;
+	public string Email { get; set; }
+	public string OAuthToken { get; set; }
 }

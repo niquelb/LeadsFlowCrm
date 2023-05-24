@@ -34,7 +34,7 @@ public class Bootstrapper : BootstrapperBase
 			.Singleton<IEventAggregator, EventAggregator>()
 			.Singleton<IApiHelper, ApiHelper>()
 			.Singleton<LoggedInUser>()
-			.Singleton<IOAuthServiceClass, OauthService>();
+			.Singleton<IOAuthServiceClass, OAuthServiceClass>();
 
 		// Adds all of our ViewModels into Dependency Injection
 		GetType().Assembly.GetTypes()
