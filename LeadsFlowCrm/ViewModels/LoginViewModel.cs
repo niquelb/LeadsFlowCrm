@@ -58,21 +58,17 @@ public class LoginViewModel : Screen
 	private async Task<bool> GoogleSignIn()
 	{
 		// We retrieve the credentials
-		var credentials = await _auth.GetCredentials();
+		var credentials = await _auth.GetCredentialsAsync();
 
 		if (credentials == null)
 		{
 			return false;
 		}
 
-		// We setup the login info
-		var oauthService = new Oauth2Service(new BaseClientService.Initializer
-		{
-			HttpClientInitializer = credentials,
-			ApplicationName = "LeadsFlow CRM"
-		});
+		// We retrieve the OAuth service
+		var oauthService = await _auth.GetOauthServiceAsync();
 
-		// We execute the login
+		// We retrieve the user's profile information
 		var userInfo = await oauthService.Userinfo.Get().ExecuteAsync();
 
 		// We collect the user's info
