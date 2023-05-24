@@ -27,8 +27,8 @@ public class AuthController : ControllerBase
 	/// <summary>
 	/// Login method for the API
 	/// </summary>
-	/// <param name="OAuthToken">Google OAuth token</param>
-	/// <param name="Email">User's email</param>
+	/// <param name="oAuthToken">Google OAuth token</param>
+	/// <param name="email">User's email</param>
 	/// <returns>
 	/// [OK] if successful, 
 	/// [BadRequest] if the OAuth is invalid, 
@@ -36,23 +36,34 @@ public class AuthController : ControllerBase
 	/// [Problem] if the token generation fails or there are any other problems
 	/// </returns>
 	[HttpPost("Login")]
-	public async Task<ActionResult> Login(string OAuthToken, string Email)
+	public async Task<ActionResult> Login(string oAuthToken, string email)
 	{
 		try
 		{
-			if (await _auth.CheckOauthToken(OAuthToken) == false)
+			/*
+			 * We check the validity of the OAuth token
+			 */
+			if (await _auth.CheckOauthToken(oAuthToken) == false)
 			{
 				return BadRequest("OAuth Token is not valid");
 			}
 
-			string? userId = await _userDAO.GetUserByEmail(Email);
+			// We retrieve the user ID
+			string? userId = await _userDAO.GetUserByEmail(email);
 
+			/*
+			 * We check if the user exists in the BD
+			 */
 			if (string.IsNullOrWhiteSpace(userId))
 			{
 				// TODO: register the user if it doesn't exist
 				return NotFound("No user was found with the given email");
 			}
 
+			// We update the given user's record on the DB with the new OAuth token
+			await _auth.UpdateUser(userId, oAuthToken);
+
+			// We generate the token
 			string token = _auth.GetToken(userId);
 
 			if (string.IsNullOrEmpty(token))

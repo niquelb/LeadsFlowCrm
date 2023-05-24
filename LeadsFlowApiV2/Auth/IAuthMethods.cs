@@ -4,6 +4,8 @@
 	{
 		bool CheckApiKey(string apiKey);
 
+		Task UpdateUser(string id, string oAuthToken);
+
 		Task<bool> CheckOauthToken(string token);
 
 		string GetToken(string id);

@@ -1,4 +1,6 @@
-﻿using LeadsFlowApiV2.Models;
+﻿using DataAccess.DataAccess.DAO;
+using DataAccess.Models;
+using LeadsFlowApiV2.Models;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Net.Http.Headers;
@@ -13,22 +15,43 @@ namespace LeadsFlowApiV2.Auth;
 public class AuthMethods : IAuthMethods
 {
 	private readonly IConfiguration _configuration;
-	private const string tokenCheckUrl = "https://www.googleapis.com/oauth2/v1/tokeninfo?access_token=";
-	private HttpClient client = new();
+	private readonly IUserDAO _user;
+	private const string _tokenCheckUrl = "https://www.googleapis.com/oauth2/v1/tokeninfo?access_token=";
+	private HttpClient _client = new();
 
-	public AuthMethods(IConfiguration configuration)
+	public AuthMethods(IConfiguration configuration, IUserDAO user)
 	{
 		_configuration = configuration;
-
+		_user = user;
 		InitializeClient();
 	}
 
+	/// <summary>
+	/// Method for initializing the HttpClient
+	/// </summary>
 	private void InitializeClient()
 	{
-		client = new HttpClient();
-		client.BaseAddress = new Uri(tokenCheckUrl);
-		client.DefaultRequestHeaders.Accept.Clear();
-		client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("*/*"));
+		_client = new HttpClient();
+		_client.BaseAddress = new Uri(_tokenCheckUrl);
+		_client.DefaultRequestHeaders.Accept.Clear();
+		_client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("*/*"));
+	}
+
+	/// <summary>
+	/// Method for updating the OAuth token for a user in the DB
+	/// </summary>
+	/// <param name="id">ID of the user</param>
+	/// <param name="oAuthToken">New OAuth token</param>
+	/// <returns></returns>
+	public async Task UpdateUser(string id, string oAuthToken)
+	{
+		User user = new()
+		{
+			Id = id,
+			OAuthToken = oAuthToken
+		};
+
+		await _user.UpdateUser(user);
 	}
 
 	/// <summary>
@@ -65,9 +88,9 @@ public class AuthMethods : IAuthMethods
 			throw new ArgumentNullException(nameof(token));
 		}
 
-		string url = $"{tokenCheckUrl}{token}";
+		string url = $"{_tokenCheckUrl}{token}";
 
-		using (HttpResponseMessage resp = await client.GetAsync(url))
+		using (HttpResponseMessage resp = await _client.GetAsync(url))
 		{
 			return resp.IsSuccessStatusCode;
 		}
