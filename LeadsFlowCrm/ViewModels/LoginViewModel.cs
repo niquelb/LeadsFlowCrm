@@ -21,7 +21,7 @@ public class LoginViewModel : Screen
 {
 	private readonly IWindowManager _windowManager;
 	private readonly ShellViewModel _shellViewModel;
-	private readonly IOAuthServiceClass _auth;
+	private readonly IOAuthServiceClass _oAuthService;
 	private readonly IApiHelper _api;
 
 	public LoginViewModel(IWindowManager windowManager,
@@ -30,7 +30,7 @@ public class LoginViewModel : Screen
 	{
 		_windowManager = windowManager;
 		_shellViewModel = shellViewModel;
-		_auth = auth;
+		_oAuthService = auth;
 		_api = api;
 	}
 
@@ -58,7 +58,7 @@ public class LoginViewModel : Screen
 	private async Task<bool> GoogleSignIn()
 	{
 		// We retrieve the credentials
-		var credentials = await _auth.GetCredentialsAsync();
+		var credentials = await _oAuthService.GetCredentialsAsync();
 
 		if (credentials == null)
 		{
@@ -66,7 +66,7 @@ public class LoginViewModel : Screen
 		}
 
 		// We retrieve the OAuth service
-		var oauthService = await _auth.GetOauthServiceAsync();
+		var oauthService = await _oAuthService.GetOauthServiceAsync();
 
 		// We retrieve the user's profile information
 		var userInfo = await oauthService.Userinfo.Get().ExecuteAsync();
