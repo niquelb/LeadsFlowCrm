@@ -1,4 +1,5 @@
 ﻿using DataAccess.DataAccess.DAO;
+using DataAccess.Models;
 using LeadsFlowApiV2.Auth;
 using LeadsFlowApiV2.Models;
 using Microsoft.AspNetCore.Http;
@@ -73,6 +74,51 @@ public class AuthController : ControllerBase
 
 			return Ok(new LoggedInUser { Id = userId, Token = token });
 
+		}
+		catch (Exception ex)
+		{
+			return Problem(ex.Message);
+		}
+	}
+
+	/// <summary>
+	/// Method for replacing the OAuth token stored in the DB for a given user with a new one
+	/// </summary>
+	/// <param name="UserId">ID of the user</param>
+	/// <param name="OAuthToken">New OAuth token</param>
+	/// <returns>
+	/// [Ok] if successful,
+	/// [BadRequest] if the OAuth token is invalid,
+	/// [NotFound] if no user with the given ID is found,
+	/// [Problem] if there is any other issue
+	/// </returns>
+	[HttpPut("RefreshOAuth")]
+	public async Task<ActionResult> RefreshOAuthToken(string UserId, string OAuthToken)
+	{
+		try
+		{
+			/*
+			 * We check the validity of the OAuth token
+			 */
+			if (await _auth.CheckOauthToken(OAuthToken) == false)
+			{
+				return BadRequest("OAuth Token is not valid");
+			}
+
+			/*
+			 * We check if the ID is valid
+			 */
+			User? checkUser = await _userDAO.GetUser(UserId);
+
+			if (checkUser == null)
+			{
+				return NotFound($"No user was found with the given ID: { UserId }");
+			}
+
+			// We update the user
+			await _auth.UpdateUser(UserId, OAuthToken);
+
+			return Ok(UserId);
 		}
 		catch (Exception ex)
 		{
