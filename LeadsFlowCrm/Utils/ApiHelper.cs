@@ -15,7 +15,7 @@ namespace LeadsFlowCrm.Utils;
 /// <summary>
 /// Helper class for interacting with the proprietary API
 /// </summary>
-public class ApiHelper : IDisposable, IApiHelper
+public class ApiHelper : IApiHelper
 {
 	private HttpClient _apiClient = new();
 	private readonly LoggedInUser _user;
@@ -62,6 +62,8 @@ public class ApiHelper : IDisposable, IApiHelper
 			throw new UnauthorizedAccessException(resp.ReasonPhrase);
 		}
 
+		Trace.WriteLine(OAuthToken, "OAUTH");
+
 		LoggedInUser output = await resp.Content.ReadAsAsync<LoggedInUser>();
 
 		_user.Token = output.Token;
@@ -95,10 +97,5 @@ public class ApiHelper : IDisposable, IApiHelper
 		}
 
 		return null;
-	}
-
-	public void Dispose()
-	{
-		_apiClient.Dispose();
 	}
 }

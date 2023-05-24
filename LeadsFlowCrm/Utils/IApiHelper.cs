@@ -7,7 +7,6 @@ namespace LeadsFlowCrm.Utils
 	public interface IApiHelper
 	{
 		Task Authenticate(string OauthToken, string UserName);
-		void Dispose();
 		Task<ClientSecrets?> GetGoogleClientSecrets();
 	}
 }

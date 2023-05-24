@@ -53,7 +53,7 @@ public class AuthController : ControllerBase
 				return NotFound("No user was found with the given email");
 			}
 
-			string token = _auth.GetToken(OAuthToken, Email, userId);
+			string token = _auth.GetToken(userId);
 
 			if (string.IsNullOrEmpty(token))
 			{

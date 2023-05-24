@@ -79,14 +79,12 @@ public class AuthMethods : IAuthMethods
 	/// <param name="oauthToken">OAuth token used for the external APIs</param>
 	/// <param name="email">User name</param>
 	/// <returns>The token</returns>
-	public string GetToken(string oauthToken, string email, string id)
+	public string GetToken(string id)
 	{
 		List<Claim> claims = new List<Claim>
 		{
 			new Claim(ClaimTypes.Role, "base"),
-			new Claim(ClaimTypes.Email, email),
-			new Claim("id", id),
-			new Claim("oauth_token", oauthToken),
+			new Claim("id", id)
 		};
 
 		var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration.GetSection("Authentication:Token").Value));
