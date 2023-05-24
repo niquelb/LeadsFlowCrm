@@ -16,7 +16,7 @@ namespace LeadsFlowCrm.Services;
 /// <summary>
 /// Class containing methods related to the user's authentication
 /// </summary>
-public class AuthService : IAuthService
+public class GoogleService : IGoogleService
 {
 	private const string _appName = "LeadsFlow CRM";
 
@@ -38,7 +38,7 @@ public class AuthService : IAuthService
 
 	private readonly IApiHelper _apiHelper;
 
-	public AuthService(IApiHelper apiHelper)
+	public GoogleService(IApiHelper apiHelper)
 	{
 		_apiHelper = apiHelper;
 	}
