@@ -112,7 +112,7 @@ public class GmailServiceClass : IGmailServiceClass
 		// We process each email asynchronously
 		foreach (Message email in emailListResponse.Messages)
 		{
-			tasks.Add(ProcessEmail(email, gmailService)) ;
+			tasks.Add(ProcessEmailAsync(email, gmailService)) ;
 		}
 
 		/*
@@ -131,7 +131,7 @@ public class GmailServiceClass : IGmailServiceClass
 	/// <param name="gmailService">GmailService object</param>
 	/// <param name="userId">User's email</param>
 	/// <returns>Processed Email object</returns>
-	private static async Task<Email> ProcessEmail(Message email, GmailService gmailService)
+	private static async Task<Email> ProcessEmailAsync(Message email, GmailService gmailService)
 	{
 		Email output = new();
 

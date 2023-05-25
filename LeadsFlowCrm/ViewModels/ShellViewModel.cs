@@ -15,6 +15,6 @@ public class ShellViewModel : Conductor<object>
     {
 		_inboxViewModel = inboxViewModel;
 
-		ActivateItemAsync(inboxViewModel);
+		ActivateItemAsync(_inboxViewModel);
 	}
 }
