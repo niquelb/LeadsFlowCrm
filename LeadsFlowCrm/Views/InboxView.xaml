@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:LeadsFlowCrm.Views"
+             xmlns:LoadingSpinner="clr-namespace:LoadingSpinnerControl;assembly=LoadingSpinnerControl"
              mc:Ignorable="d" 
              xmlns:Icon="http://metro.mahapps.com/winfx/xaml/iconpacks"
              d:DesignHeight="450" d:DesignWidth="800">
@@ -41,42 +42,90 @@
         <!--#endregion-->
 
         <Separator Margin="5" Height="0"/>
+        
+        <!--#region Loading Spinner-->
+        <Grid x:Name="LoadingSpinnerIsVisible" Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="1">
+            <!--#region Loading grid visibility control-->
+            <Grid.Style>
+                <Style TargetType="Grid">
+                    <Setter Property="Visibility" Value="Visible" />
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding IsLoading}" Value="False">
+                            <Setter Property="Visibility" Value="Hidden" />
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </Grid.Style>
+            <!--#endregion-->
+            
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="auto" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
 
+            <LoadingSpinner:LoadingSpinner Grid.Column="1" Grid.Row="1" 
+                                           IsLoading="{Binding IsLoading}"
+                                           Margin="15" Thickness="5" Color="white"/>
+            <TextBlock Grid.Column="1" Grid.Row="2" Text="Loading  inbox, please hang tight..." />
+        </Grid>
+        <!--#endregion-->
+        
         <!--#region Inbox-->
         
         <!--#region ListView-->
-        <ListView x:Name="InboxLV" Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="1" 
-                  ItemsSource="{Binding Inbox}" Margin="0 15" FontSize="14" >
-            <ListView.View>
-                <GridView>
-                    <GridViewColumn Width="40" Header="👁">
-                        <GridViewColumn.CellTemplate>
-                            <DataTemplate>
-                                <CheckBox IsChecked="{Binding IsRead}" IsEnabled="False"/>
-                            </DataTemplate>
-                        </GridViewColumn.CellTemplate>
-                    </GridViewColumn>
-                    <GridViewColumn Width="40" Header="⭐">
-                        <GridViewColumn.CellTemplate>
-                            <DataTemplate>
-                                <CheckBox IsChecked="{Binding IsFavorite}" IsEnabled="False"/>
-                            </DataTemplate>
-                        </GridViewColumn.CellTemplate>
-                    </GridViewColumn>
-                    <GridViewColumn Header="Sender" 
+        <Grid Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="1">
+            <!--#region Inbox grid visibility control-->
+            <Grid.Style>
+                <Style TargetType="Grid">
+                    <Setter Property="Visibility" Value="Hidden" />
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding IsLoading}" Value="False">
+                            <Setter Property="Visibility" Value="Visible" />
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </Grid.Style>
+            <!--#endregion-->
+
+            <ListView ItemsSource="{Binding Inbox}" Margin="0 15" FontSize="14" >
+                <ListView.View>
+                    <GridView>
+                        <GridViewColumn Width="40" Header="👁">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <CheckBox IsChecked="{Binding IsRead}" IsEnabled="False"/>
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+                        <GridViewColumn Width="40" Header="⭐">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <CheckBox IsChecked="{Binding IsFavorite}" IsEnabled="False"/>
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+                        <GridViewColumn Header="Sender" 
                                     DisplayMemberBinding="{Binding From}"
                                     Width="auto" />
-                    <GridViewColumn Header="Subject Line" 
+                        <GridViewColumn Header="Subject Line" 
                                     DisplayMemberBinding="{Binding SubjectLine}"
                                     Width="auto" />
-                    <GridViewColumn Header="Body" 
+                        <GridViewColumn Header="Body" 
                                     DisplayMemberBinding="{Binding Snippet}"
                                     Width="500" />
-                    <GridViewColumn DisplayMemberBinding="{Binding Date}"
+                        <GridViewColumn DisplayMemberBinding="{Binding Date}"
                                     Width="auto" />
-                </GridView>
-            </ListView.View>
-        </ListView>
+                    </GridView>
+                </ListView.View>
+            </ListView>
+        </Grid>
         <!--#endregion-->
 
         <!--#region Paginator-->
