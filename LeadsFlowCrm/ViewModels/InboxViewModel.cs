@@ -81,6 +81,7 @@ public class InboxViewModel : Screen
 	/// <returns></returns>
 	private async Task NotifyOfSelectedEmailAsync(Email email)
 	{
+		// TODO: modify logic such that the selected email resides in the Gmail service class
 		await _event.PublishOnUIThreadAsync(new EmailSelectedEvent() { SelectedEmail = email });
 	}
 }

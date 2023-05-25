@@ -33,7 +33,7 @@ public class Bootstrapper : BootstrapperBase
 			.Singleton<IWindowManager, WindowManager>()
 			.Singleton<IEventAggregator, EventAggregator>()
 			.Singleton<IApiHelper, ApiHelper>()
-			.Singleton<LoggedInUser>()
+			.Singleton<LoggedInUser>() //TODO: implement an interface
 			.Singleton<IBaseGoogleServiceClass, BaseGoogleServiceClass>()
 			.Singleton<IOAuthServiceClass, OAuthServiceClass>()
 			.Singleton<IGmailServiceClass, GmailServiceClass>();
