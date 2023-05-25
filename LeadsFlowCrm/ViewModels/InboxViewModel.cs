@@ -1,4 +1,5 @@
 ﻿using Caliburn.Micro;
+using LeadsFlowCrm.EventModels;
 using LeadsFlowCrm.Models;
 using LeadsFlowCrm.Services;
 using System;
@@ -55,6 +56,9 @@ public class InboxViewModel : Screen
 		set { 
 			_selectedEmail = value; 
 			NotifyOfPropertyChange();
+
+			// We shouldn't need to await this
+			NotifyOfSelectedEmailAsync(_selectedEmail);
 		}
 	}
 
@@ -68,5 +72,15 @@ public class InboxViewModel : Screen
 			_inbox = value;
 			NotifyOfPropertyChange();
 		}
+	}
+
+	/// <summary>
+	/// Method for notifying the UI that the user has selected an email
+	/// </summary>
+	/// <param name="email">Selected email</param>
+	/// <returns></returns>
+	private async Task NotifyOfSelectedEmailAsync(Email email)
+	{
+		await _event.PublishOnUIThreadAsync(new EmailSelectedEvent() { SelectedEmail = email });
 	}
 }
