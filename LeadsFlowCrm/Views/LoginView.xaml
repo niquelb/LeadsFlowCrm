@@ -3,6 +3,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:LoadingSpinner="clr-namespace:LoadingSpinnerControl;assembly=LoadingSpinnerControl"
         mc:Ignorable="d" FontSize="18"
         Title="Login - Leads Flow CRM" Height="700" Width="900"
         Style="{DynamicResource CustomWindowStyle}"
@@ -22,37 +23,87 @@
               Grid.Column="1"
               Grid.RowSpan="3"
               Background="#2300FF">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="auto" />
-                <ColumnDefinition Width="*" />
-            </Grid.ColumnDefinitions>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="*" />
-                <RowDefinition Height="auto" />
-                <RowDefinition Height="auto" />
-                <RowDefinition Height="auto" />
-                <RowDefinition Height="*" />
-            </Grid.RowDefinitions>
-            <TextBlock Grid.Row="1"
+            <!--#region Loading Spinner-->
+            <Grid>
+                <!--#region Loading grid visibility control-->
+                <Grid.Style>
+                    <Style TargetType="Grid">
+                        <Setter Property="Visibility" Value="Hidden" />
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding IsLoading}" Value="True">
+                                <Setter Property="Visibility" Value="Visible" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Grid.Style>
+                <!--#endregion-->
+
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="auto" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="auto" />
+                    <RowDefinition Height="auto" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+
+                <LoadingSpinner:LoadingSpinner Grid.Column="1" Grid.Row="1" 
+                                           IsLoading="{Binding IsLoading}"
+                                           Margin="15" Thickness="5" Color="white"/>
+                <TextBlock x:Name="LoadingText" Grid.Column="1" Grid.Row="2" />
+            </Grid>
+            <!--#endregion-->
+            
+            <!--#region Login form-->
+            <Grid>
+                <!--#region Login form grid visibility control-->
+                <Grid.Style>
+                    <Style TargetType="Grid">
+                        <Setter Property="Visibility" Value="Visible" />
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding IsLoading}" Value="True">
+                                <Setter Property="Visibility" Value="Hidden" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Grid.Style>
+                <!--#endregion-->
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="auto" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="auto" />
+                    <RowDefinition Height="auto" />
+                    <RowDefinition Height="auto" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+                <TextBlock Grid.Row="1"
                        Grid.Column="1"
                        FontSize="24"
                        VerticalAlignment="Center"
                        HorizontalAlignment="Center"
                        Text="Log In"/>
-            <Button x:Name="Login"
+                <Button x:Name="Login"
                     Grid.Column="1"
                     Grid.Row="2"
                     Content="Please log in to your Google account."
                     Margin="10"
                     Padding="10"/>
-            <TextBlock Grid.Row="3"
+                <TextBlock Grid.Row="3"
                        Grid.Column="1"
                        FontWeight="Light"
                        VerticalAlignment="Center"
                        HorizontalAlignment="Center"
                        Text="Trouble logging in? Contact support here."/>
 
+            </Grid>
+            <!--#endregion-->
         </Grid>
     </Grid>
 </Window>

@@ -44,7 +44,7 @@
         <Separator Margin="5" Height="0"/>
         
         <!--#region Loading Spinner-->
-        <Grid x:Name="LoadingSpinnerIsVisible" Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="1">
+        <Grid Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="1">
             <!--#region Loading grid visibility control-->
             <Grid.Style>
                 <Style TargetType="Grid">

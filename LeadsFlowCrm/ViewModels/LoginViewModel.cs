@@ -39,21 +39,55 @@ public class LoginViewModel : Screen
 		_api = api;
 	}
 
+	/*
+	 * These properties are used to control the visibility of the loading spinner and the login form
+	 */
+	private bool _isLoading = false;
+	private string _loadingText;
+
+	public bool IsLoading
+	{
+		get { return _isLoading; }
+		set
+		{
+			_isLoading = value;
+			NotifyOfPropertyChange();
+		}
+	}
+
+	public string LoadingText
+	{
+		get { return _loadingText; }
+		set { 
+			_loadingText = value;
+			NotifyOfPropertyChange();
+		}
+	}
+
+
 	/// <summary>
 	/// Login method that handles the appropiate window redirections
 	/// </summary>
 	public async void Login()
 	{
+		IsLoading = true;
+		LoadingText = "Please wait while we authenticate you...";
+
 		bool isAuthenticated = await GoogleSignInAsync();
 
 		if (isAuthenticated)
 		{
+			LoadingText = "Authentication successful...";
+
 			// Open the shell view
 			await _windowManager.ShowWindowAsync(_shellViewModel);
 
 			// Close the login view
 			await TryCloseAsync();
 		}
+
+		IsLoading = false;
+		LoadingText = string.Empty;
 	}
 
 	/// <summary>
