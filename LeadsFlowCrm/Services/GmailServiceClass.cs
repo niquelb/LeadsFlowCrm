@@ -120,6 +120,11 @@ public class GmailServiceClass : IGmailServiceClass
 		output.IsFavorite = emailContent.LabelIds.Contains("STARRED");
 
 		/*
+		 * We check if the email is read or unread
+		 */
+		output.IsRead = !(emailContent.LabelIds.Contains("UNREAD"));
+
+		/*
 		 * We parse the snippet, this is the part of the body visible in the inbox
 		 */
 		output.Snippet = emailContent.Snippet;
@@ -175,24 +180,6 @@ public class GmailServiceClass : IGmailServiceClass
 					break;
 			}
 		}
-
-		/*
-		 * Read the body
-		 */
-		if (emailContent.Payload.Parts == null && emailContent.Payload.Body != null)
-		{
-			output.EncodedBody = emailContent.Payload.Body.Data;
-		}
-		else
-		{
-			// TODO: deal with threads
-		}
-
-		// TODO: parse the body
-
-		//output.Body = Utilities.Base64Decode(output.EncodedBody);
-
-		// TODO: Get the attachments
 
 		return output;
 	}

@@ -49,7 +49,14 @@
                   ItemsSource="{Binding Emails}" Margin="0 15" FontSize="14">
             <ListView.View>
                 <GridView>
-                    <GridViewColumn Width="40">
+                    <GridViewColumn Width="40" Header="👁">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <CheckBox IsChecked="{Binding IsRead}" IsEnabled="False"/>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                    <GridViewColumn Width="40" Header="⭐">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
                                 <CheckBox IsChecked="{Binding IsFavorite}" IsEnabled="False"/>
