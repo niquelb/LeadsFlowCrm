@@ -46,7 +46,7 @@
         
         <!--#region ListView-->
         <ListView x:Name="InboxLV" Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="1" 
-                  ItemsSource="{Binding Emails}" Margin="0 15">
+                  ItemsSource="{Binding Emails}" Margin="0 15" FontSize="14">
             <ListView.View>
                 <GridView>
                     <GridViewColumn Width="40">
@@ -57,13 +57,13 @@
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
                     <GridViewColumn Header="Sender" 
-                                    DisplayMemberBinding="{Binding Sender}"
+                                    DisplayMemberBinding="{Binding From}"
                                     Width="100" />
                     <GridViewColumn Header="Subject Line" 
                                     DisplayMemberBinding="{Binding SubjectLine}"
                                     Width="auto" />
                     <GridViewColumn Header="Body" 
-                                    DisplayMemberBinding="{Binding Body}"
+                                    DisplayMemberBinding="{Binding Snippet}"
                                     Width="auto" />
                 </GridView>
             </ListView.View>

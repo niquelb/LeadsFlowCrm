@@ -17,6 +17,8 @@ public class GmailServiceClass : IGmailServiceClass
 {
 	private readonly IOAuthServiceClass _oAuthService;
 	private readonly IBaseGoogleServiceClass _baseGoogleService;
+	/// <summary> Special keyword reserved for referencing the logged in user </summary>
+	private const string me = "me";
 
 	/// <summary> Service object for the Gmail API </summary>
 	private GmailService _gmailService;
@@ -65,7 +67,7 @@ public class GmailServiceClass : IGmailServiceClass
 
 		// We get the service and the user's email
 		GmailService gmailService = await GetGmailServiceAsync();
-		string userId = await GetUserEmailAsync();
+		string userId = me;
 
 		// We define the request to retrieve email list
 		var emailListRequest = gmailService.Users.Messages.List(userId);
