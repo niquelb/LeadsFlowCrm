@@ -12,15 +12,17 @@ using LeadsFlowCrm.Utils;
 
 namespace LeadsFlowCrm.Services;
 
-public class GmailServiceClass
+public class GmailServiceClass : IGmailServiceClass
 {
 	private readonly IOAuthServiceClass _oAuthService;
+	private readonly IBaseGoogleServiceClass _baseGoogleService;
 
 	/// <summary> Service object for the Gmail API </summary>
 	private GmailService _gmailService;
 
-	public GmailServiceClass(IOAuthServiceClass oAuthService)
+	public GmailServiceClass(IBaseGoogleServiceClass baseGoogleService, IOAuthServiceClass oAuthService)
 	{
+		_baseGoogleService = baseGoogleService;
 		_oAuthService = oAuthService;
 	}
 
@@ -28,7 +30,7 @@ public class GmailServiceClass
 	/// Method for retrieving the logged in user's email through the OAuth service
 	/// </summary>
 	/// <returns>Logged in user's email</returns>
-	private async Task<string> GetUserEmail()
+	private async Task<string> GetUserEmailAsync()
 	{
 		// We retrieve the OAuth service
 		var oauthService = await _oAuthService.GetOauthServiceAsync();
@@ -50,11 +52,7 @@ public class GmailServiceClass
 	{
 		if (_gmailService == null)
 		{
-			_gmailService = new GmailService(new BaseClientService.Initializer()
-			{
-				HttpClientInitializer = await _oAuthService.GetCredentialsAsync(),
-				ApplicationName = GlobalVariables.appName,
-			});
+			_gmailService = new GmailService(await _baseGoogleService.GetServiceAsync());
 		}
 
 		return _gmailService;
@@ -66,7 +64,7 @@ public class GmailServiceClass
 
 		// We get the service and the user's email
 		GmailService gmailService = await GetGmailServiceAsync();
-		string userId = await GetUserEmail();
+		string userId = await GetUserEmailAsync();
 
 		// We define the request to retrieve email list
 		var emailListRequest = gmailService.Users.Messages.List(userId);

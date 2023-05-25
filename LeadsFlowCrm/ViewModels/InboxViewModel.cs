@@ -1,5 +1,6 @@
 ﻿using Caliburn.Micro;
 using LeadsFlowCrm.Models;
+using LeadsFlowCrm.Services;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -11,7 +12,20 @@ namespace LeadsFlowCrm.ViewModels;
 
 public class InboxViewModel : Screen
 {
-	private ObservableCollection<Email> _emails = new();
+	private readonly IGmailServiceClass _gmailService;
+	private ObservableCollection<Email> _emails;
+
+    public InboxViewModel(IGmailServiceClass gmailService)
+    {
+		_gmailService = gmailService;
+	}
+
+	protected override async void OnViewLoaded(object view)
+	{
+		base.OnViewLoaded(view);
+
+		Emails = new ObservableCollection<Email>(await _gmailService.GetEmailsFromInboxAsync());
+	}
 
 	public ObservableCollection<Email> Emails
 	{
@@ -20,18 +34,6 @@ public class InboxViewModel : Screen
 			_emails = value;
 			NotifyOfPropertyChange();
 		}
-	}
-
-	public InboxViewModel()
-	{
-		Emails.Add(new Email
-		{
-			From = "Mike",
-			SubjectLine = "Business Oportunity",
-			Body = "This is some really long text",
-			IsFavorite = true,
-			IsRead = true,
-		});
 	}
 
 }

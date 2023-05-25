@@ -7,8 +7,6 @@ namespace LeadsFlowCrm.Services
 {
 	public interface IOAuthServiceClass
 	{
-		Task<UserCredential> GetCredentialsAsync();
-
 		Task<Oauth2Service> GetOauthServiceAsync();
 
 	}

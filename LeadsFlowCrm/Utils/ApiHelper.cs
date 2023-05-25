@@ -55,7 +55,7 @@ public class ApiHelper : IApiHelper
 	/// <returns></returns>
 	/// <exception cref="UnauthorizedAccessException">If login call to API fails, most likely due to an invalid OAuth token</exception>
 	/// <see cref="LoggedInUser"/>
-	public async Task Authenticate(string OAuthToken, string Email)
+	public async Task AuthenticateAsync(string OAuthToken, string Email)
 	{
 		// We create the body
 		var body = new LoginUser()
@@ -84,7 +84,7 @@ public class ApiHelper : IApiHelper
 	/// Method for retrieving the necessary client secrets from the API
 	/// </summary>
 	/// <returns>Client secrets for the Google sign in</returns>
-	public async Task<ClientSecrets?> GetGoogleClientSecrets()
+	public async Task<ClientSecrets?> GetGoogleClientSecretsAsync()
 	{
 		var config = new ConfigurationBuilder()
 		.AddUserSecrets<ApiHelper>()

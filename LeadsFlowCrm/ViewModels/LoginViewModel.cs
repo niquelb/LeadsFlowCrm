@@ -1,5 +1,6 @@
 ﻿using Caliburn.Micro;
 using Google.Apis.Auth.OAuth2;
+using Google.Apis.Auth.OAuth2.Flows;
 using Google.Apis.Gmail.v1;
 using Google.Apis.Oauth2.v2;
 using Google.Apis.Services;
@@ -21,16 +22,20 @@ public class LoginViewModel : Screen
 {
 	private readonly IWindowManager _windowManager;
 	private readonly ShellViewModel _shellViewModel;
+	private readonly IBaseGoogleServiceClass _baseService;
 	private readonly IOAuthServiceClass _oAuthService;
 	private readonly IApiHelper _api;
 
 	public LoginViewModel(IWindowManager windowManager,
 					   ShellViewModel shellViewModel,
-					   IOAuthServiceClass auth, IApiHelper api)
+					   IBaseGoogleServiceClass baseService, 
+					   IOAuthServiceClass oAuthService,
+					   IApiHelper api)
 	{
 		_windowManager = windowManager;
 		_shellViewModel = shellViewModel;
-		_oAuthService = auth;
+		_baseService = baseService;
+		_oAuthService = oAuthService;
 		_api = api;
 	}
 
@@ -39,7 +44,7 @@ public class LoginViewModel : Screen
 	/// </summary>
 	public async void Login()
 	{
-		bool isAuthenticated = await GoogleSignIn();
+		bool isAuthenticated = await GoogleSignInAsync();
 
 		if (isAuthenticated)
 		{
@@ -55,10 +60,10 @@ public class LoginViewModel : Screen
 	/// Google Sign-In method
 	/// </summary>
 	/// <returns></returns>
-	private async Task<bool> GoogleSignIn()
+	private async Task<bool> GoogleSignInAsync()
 	{
 		// We retrieve the credentials
-		var credentials = await _oAuthService.GetCredentialsAsync();
+		var credentials = await _baseService.GetCredentialsAsync();
 
 		if (credentials == null)
 		{
@@ -75,8 +80,10 @@ public class LoginViewModel : Screen
 		string email = userInfo.Email;
 		string token = await credentials.GetAccessTokenForRequestAsync();
 
+		Trace.WriteLine(token, nameof(token));		
+
 		// We authenticate in our API
-		await _api.Authenticate(token, email);
+		await _api.AuthenticateAsync(token, email);
 
 		return true;
 	}

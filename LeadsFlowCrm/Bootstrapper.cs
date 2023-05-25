@@ -34,7 +34,9 @@ public class Bootstrapper : BootstrapperBase
 			.Singleton<IEventAggregator, EventAggregator>()
 			.Singleton<IApiHelper, ApiHelper>()
 			.Singleton<LoggedInUser>()
-			.Singleton<IOAuthServiceClass, OAuthServiceClass>();
+			.Singleton<IBaseGoogleServiceClass, BaseGoogleServiceClass>()
+			.Singleton<IOAuthServiceClass, OAuthServiceClass>()
+			.Singleton<IGmailServiceClass, GmailServiceClass>();
 
 		// Adds all of our ViewModels into Dependency Injection
 		GetType().Assembly.GetTypes()
