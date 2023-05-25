@@ -18,8 +18,8 @@ public static class Utilities
 	/// <returns>Encoded string</returns>
 	public static string Base64Encode(string plainText)
 	{
-		var plainTextBytes = Encoding.UTF8.GetBytes(plainText);
-		return Convert.ToBase64String(plainTextBytes);
+		var output = Encoding.UTF8.GetBytes(plainText);
+		return Convert.ToBase64String(output);
 	}
 
 	/// <summary>
@@ -29,7 +29,28 @@ public static class Utilities
 	/// <returns>Plain text string</returns>
 	public static string Base64Decode(string base64EncodedData)
 	{
-		var base64EncodedBytes = Convert.FromBase64String(base64EncodedData);
-		return Encoding.UTF8.GetString(base64EncodedBytes);
+		// We first remove illegal characters
+		StringBuilder sb = new StringBuilder();
+		sb.Append(base64EncodedData.Replace("-", "+"));
+		sb.Append(base64EncodedData.Replace("_", "/"));
+		sb.Append(base64EncodedData.Replace(" ", "+"));
+		sb.Append(base64EncodedData.Replace("=", "+"));
+
+		base64EncodedData = sb.ToString();
+
+		// We standardize the lenght
+		if (base64EncodedData.Length % 4 > 0) 
+		{
+			base64EncodedData += new string('=', 4 - base64EncodedData.Length % 4); 
+		}
+		else if (base64EncodedData.Length % 4 == 0)
+		{
+			base64EncodedData = base64EncodedData.Substring(0, base64EncodedData.Length - 1);
+			if (base64EncodedData.Length % 4 > 0) { base64EncodedData += new string('+', 4 - base64EncodedData.Length % 4); }
+		}
+
+		// We convert it and return it
+		var output = Convert.FromBase64String(base64EncodedData);
+		return Encoding.UTF8.GetString(output);
 	}
 }

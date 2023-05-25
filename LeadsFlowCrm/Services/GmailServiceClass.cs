@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 
 using LeadsFlowCrm.Models;
 using LeadsFlowCrm.Utils;
+using System.Globalization;
 
 namespace LeadsFlowCrm.Services;
 
@@ -124,7 +125,14 @@ public class GmailServiceClass : IGmailServiceClass
 					output.From = header.Value;
 					break;
 				case "Date":
-					output.Date = Convert.ToDateTime(header.Value);
+					string dateString = header.Value;
+					string[] format = { "ddd, dd MMM yyyy HH:mm:ss zzz '('zzz')'" };
+					try
+					{
+						DateTimeOffset dateTimeOffset = DateTimeOffset.ParseExact(dateString, format, CultureInfo.InvariantCulture);
+						output.Date = dateTimeOffset.DateTime;
+					}
+					catch (Exception) {}
 					break;
 				case "Subject":
 					output.SubjectLine = header.Value;
@@ -146,7 +154,7 @@ public class GmailServiceClass : IGmailServiceClass
 			// TODO: deal with threads
 		}
 
-		output.Body = Utilities.Base64Decode(output.EncodedBody);
+		//output.Body = Utilities.Base64Decode(output.EncodedBody);
 
 		// TODO: Get the attachments
 
