@@ -13,6 +13,11 @@ public class Email
     public string From { get; set; }
 
     /// <summary>
+    /// Sender's email address
+    /// </summary>
+    public string FromEmail { get; set; }
+
+    /// <summary>
     /// Reciever
     /// </summary>
     public string To { get; set; }
@@ -36,6 +41,11 @@ public class Email
     /// Email's body encoded in Base64
     /// </summary>
     public string EncodedBody { get; set; }
+
+    /// <summary>
+    /// Internal (and more accurate) date of the email
+    /// </summary>
+    public DateTime InternalDate { get; set; }
 
     /// <summary>
     /// Email date

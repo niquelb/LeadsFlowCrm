@@ -67,10 +67,9 @@ public class GmailServiceClass : IGmailServiceClass
 
 		// We get the service and the user's email
 		GmailService gmailService = await GetGmailServiceAsync();
-		string userId = me;
 
 		// We define the request to retrieve email list
-		var emailListRequest = gmailService.Users.Messages.List(userId);
+		var emailListRequest = gmailService.Users.Messages.List(me);
 
 		// Only get emails labeled as 'INBOX':
 		emailListRequest.LabelIds = new[] { "INBOX" };
@@ -89,7 +88,7 @@ public class GmailServiceClass : IGmailServiceClass
 
 		foreach (Message email in emailListResponse.Messages)
 		{
-			output.Add(ProcessEmail(email, gmailService, userId));
+			output.Add(ProcessEmail(email, gmailService));
 		}
 
 		return output;
@@ -102,19 +101,36 @@ public class GmailServiceClass : IGmailServiceClass
 	/// <param name="gmailService">GmailService object</param>
 	/// <param name="userId">User's email</param>
 	/// <returns>Processed Email object</returns>
-	private static Email ProcessEmail(Message email, GmailService gmailService, string userId)
+	private static Email ProcessEmail(Message email, GmailService gmailService)
 	{
 		Email output = new();
 
 		/*
 		 * Retrieve the email details, this will create another "Message" object with the whole email with all the details
 		 */
-		var emailDetailsRequest = gmailService.Users.Messages.Get(userId, email.Id);
-		emailDetailsRequest.Format = UsersResource.MessagesResource.GetRequest.FormatEnum.Full;
+		var request = gmailService.Users.Messages.Get(me, email.Id);
+		request.Format = UsersResource.MessagesResource.GetRequest.FormatEnum.Full;
+		request.MetadataHeaders = new string[] { "labelIds" };
 
-		Message emailContent = emailDetailsRequest.Execute();
+		Message emailContent = request.Execute();
 
+		/*
+		 * If the email is "starred" we mark it as favorite
+		 */
+		output.IsFavorite = emailContent.LabelIds.Contains("STARRED");
+
+		/*
+		 * We parse the snippet, this is the part of the body visible in the inbox
+		 */
 		output.Snippet = emailContent.Snippet;
+
+		/*
+		 * We parse the internal date, if for some reason it is null the current date is parsed
+		 */
+		DateTimeOffset dtfInternal = DateTimeOffset.FromUnixTimeMilliseconds(
+			emailContent.InternalDate ?? DateTimeOffset.Now.ToUnixTimeMilliseconds());
+
+		output.InternalDate = dtfInternal.DateTime;
 
 		/*
 		 * Read the headers
@@ -123,19 +139,35 @@ public class GmailServiceClass : IGmailServiceClass
 		{
 			switch (header.Name)
 			{
+				/*
+				 * Sender, the standard format is "name <email>" which we break down into "From" and "FromEmail"
+				 */
 				case "From":
-					output.From = header.Value;
+					string fromHeader = header.Value;
+
+					// Extracting the name and email from the "From" header
+					int nameStartIndex = fromHeader.IndexOf('<');
+					int nameEndIndex = nameStartIndex > 0 ? nameStartIndex - 1 : -1;
+
+					output.From = nameEndIndex >= 0 ? fromHeader.Substring(0, nameEndIndex).Trim() : string.Empty;
+					output.FromEmail = fromHeader.Substring(nameStartIndex + 1, fromHeader.Length - nameStartIndex - 2).Trim();
 					break;
+				/*
+				 * Date of the email that will be displayed, can difer from the internal date
+				 */
 				case "Date":
 					string dateString = header.Value;
 					string[] format = { "ddd, dd MMM yyyy HH:mm:ss zzz '('zzz')'" };
 					try
 					{
-						DateTimeOffset dateTimeOffset = DateTimeOffset.ParseExact(dateString, format, CultureInfo.InvariantCulture);
-						output.Date = dateTimeOffset.DateTime;
+						DateTimeOffset dtf = DateTimeOffset.ParseExact(dateString, format, CultureInfo.InvariantCulture);
+						output.Date = dtf.DateTime;
 					}
 					catch (Exception) {}
 					break;
+				/*
+				 * Subject line
+				 */
 				case "Subject":
 					output.SubjectLine = header.Value;
 					break;
@@ -155,6 +187,8 @@ public class GmailServiceClass : IGmailServiceClass
 		{
 			// TODO: deal with threads
 		}
+
+		// TODO: parse the body
 
 		//output.Body = Utilities.Base64Decode(output.EncodedBody);
 

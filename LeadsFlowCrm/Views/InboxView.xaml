@@ -58,13 +58,13 @@
                     </GridViewColumn>
                     <GridViewColumn Header="Sender" 
                                     DisplayMemberBinding="{Binding From}"
-                                    Width="100" />
+                                    Width="auto" />
                     <GridViewColumn Header="Subject Line" 
                                     DisplayMemberBinding="{Binding SubjectLine}"
                                     Width="auto" />
                     <GridViewColumn Header="Body" 
                                     DisplayMemberBinding="{Binding Snippet}"
-                                    Width="auto" />
+                                    Width="500" />
                 </GridView>
             </ListView.View>
         </ListView>
