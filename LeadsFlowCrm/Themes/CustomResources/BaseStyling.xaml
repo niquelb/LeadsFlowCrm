@@ -24,28 +24,4 @@
     </Style>
     <!--#endregion-->
 
-    <!--#region DataGrid-->
-    <Style x:Key="BaseDatagridStyling" TargetType="DataGrid">
-        <Setter Property="Margin" Value="15" />
-        <Setter Property="GridLinesVisibility" Value="Horizontal" />
-        <Setter Property="AlternatingRowBackground" Value="{StaticResource AREghZyBrush.Foreground.Deeper}" />
-    </Style>
-
-    <Style TargetType="{x:Type DataGrid:GridViewColumnHeader}">
-        <Setter Property="Background" Value="Transparent" />
-        <Setter Property="Foreground" Value="White" />
-    </Style>
-
-    <Style TargetType="{x:Type DataGrid:DataGridCell}">
-        <Setter Property="Background" Value="Transparent" />
-        <Setter Property="Foreground" Value="White" />
-    </Style>
-
-    <Style TargetType="{x:Type DataGrid:DataGridRow}">
-        <Setter Property="Background" Value="Transparent" />
-        <Setter Property="Foreground" Value="White" />
-    </Style>
-
-    <!--#endregion-->
-
 </ResourceDictionary>
