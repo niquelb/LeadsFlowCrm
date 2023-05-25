@@ -13,12 +13,15 @@ namespace LeadsFlowCrm.ViewModels;
 public class InboxViewModel : Screen
 {
 	private readonly IGmailServiceClass _gmailService;
+	private readonly IEventAggregator _event;
 
 	private ObservableCollection<Email> _inbox = new();
+	private Email _selectedEmail;
 
-    public InboxViewModel(IGmailServiceClass gmailService)
+	public InboxViewModel(IGmailServiceClass gmailService, IEventAggregator @event)
     {
 		_gmailService = gmailService;
+		_event = @event;
 	}
 
 	protected async override void OnViewLoaded(object view)
@@ -43,6 +46,21 @@ public class InboxViewModel : Screen
 		}
 	}
 
+	/// <summary>
+	/// Selected email
+	/// </summary>
+	public Email SelectedEmail
+	{
+		get { return _selectedEmail; }
+		set { 
+			_selectedEmail = value; 
+			NotifyOfPropertyChange();
+		}
+	}
+
+	/// <summary>
+	/// List of emails from the user's inbox that will be displayed
+	/// </summary>
 	public ObservableCollection<Email> Inbox
 	{
 		get { return _inbox; }

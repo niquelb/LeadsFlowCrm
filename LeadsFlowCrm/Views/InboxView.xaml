@@ -94,7 +94,9 @@
             </Grid.Style>
             <!--#endregion-->
 
-            <ListView ItemsSource="{Binding Inbox}" Margin="0 15" FontSize="14" >
+            <ListView ItemsSource="{Binding Inbox}" 
+                      Margin="0 15" FontSize="14" 
+                      SelectedItem="{Binding SelectedEmail}" >
                 <ListView.View>
                     <GridView>
                         <GridViewColumn Width="40" Header="👁">
