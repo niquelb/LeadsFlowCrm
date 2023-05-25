@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using LeadsFlowCrm.Models;
 using LeadsFlowCrm.Utils;
 using System.Globalization;
+using System.Diagnostics;
 
 namespace LeadsFlowCrm.Services;
 
@@ -85,7 +86,7 @@ public class GmailServiceClass : IGmailServiceClass
 	/// <returns>List of Email objects from the user's inbox</returns>
 	private async Task<List<Email>> GetEmailsFromInboxAsync()
 	{
-		List<Email> output = new();
+		List<Task<Email>> tasks = new();
 
 		// We get the service and the user's email
 		GmailService gmailService = await GetGmailServiceAsync();
@@ -105,15 +106,22 @@ public class GmailServiceClass : IGmailServiceClass
 		// If there are no emails in the inbox or there was an error
 		if (emailListResponse == null || emailListResponse.Messages == null)
 		{
-			return output;
+			return new List<Email>();
 		}
 
+		// We process each email asynchronously
 		foreach (Message email in emailListResponse.Messages)
 		{
-			output.Add(ProcessEmail(email, gmailService));
+			tasks.Add(ProcessEmail(email, gmailService)) ;
 		}
 
-		return output;
+		/*
+		 * We end up with list of tasks that will be executing in parallel, we await them.
+		 * This will return an array of emails.
+		 */
+		var output = await Task.WhenAll(tasks);
+
+		return new List<Email>(output);
 	}
 
 	/// <summary>
@@ -123,7 +131,7 @@ public class GmailServiceClass : IGmailServiceClass
 	/// <param name="gmailService">GmailService object</param>
 	/// <param name="userId">User's email</param>
 	/// <returns>Processed Email object</returns>
-	private static Email ProcessEmail(Message email, GmailService gmailService)
+	private static async Task<Email> ProcessEmail(Message email, GmailService gmailService)
 	{
 		Email output = new();
 
@@ -134,7 +142,7 @@ public class GmailServiceClass : IGmailServiceClass
 		request.Format = UsersResource.MessagesResource.GetRequest.FormatEnum.Full;
 		request.MetadataHeaders = new string[] { "labelIds" };
 
-		Message emailContent = request.Execute();
+		Message emailContent = await request.ExecuteAsync();
 
 		/*
 		 * We associate this email with the Email model
