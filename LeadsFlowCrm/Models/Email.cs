@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Google.Apis.Gmail.v1.Data;
+using System;
 
 namespace LeadsFlowCrm.Models;
 
@@ -7,6 +8,11 @@ namespace LeadsFlowCrm.Models;
 /// </summary>
 public class Email
 {
+    /// <summary>
+    /// Message object from the Gmail API
+    /// </summary>
+    public Message Message { get; set; }
+
     /// <summary>
     /// Sender
     /// </summary>

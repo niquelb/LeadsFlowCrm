@@ -115,6 +115,11 @@ public class GmailServiceClass : IGmailServiceClass
 		Message emailContent = request.Execute();
 
 		/*
+		 * We associate this email with the Email model
+		 */
+		output.Message = emailContent;
+
+		/*
 		 * If the email is "starred" we mark it as favorite
 		 */
 		output.IsFavorite = emailContent.LabelIds.Contains("STARRED");
