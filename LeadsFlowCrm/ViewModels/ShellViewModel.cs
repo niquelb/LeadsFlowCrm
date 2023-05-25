@@ -12,11 +12,15 @@ namespace LeadsFlowCrm.ViewModels;
 public class ShellViewModel : Conductor<object>, IHandle<EmailSelectedEvent>
 {
 	private readonly InboxViewModel _inboxViewModel;
+	private readonly SelectedEmailViewModel _selectedEmailViewModel;
 	private readonly IEventAggregator _event;
 
-	public ShellViewModel(InboxViewModel inboxViewModel, IEventAggregator @event)
+	public ShellViewModel(InboxViewModel inboxViewModel,
+					   SelectedEmailViewModel selectedEmailViewModel,
+					   IEventAggregator @event)
     {
 		_inboxViewModel = inboxViewModel;
+		_selectedEmailViewModel = selectedEmailViewModel;
 		_event = @event;
 		_event.SubscribeOnUIThread(this);
 
@@ -25,5 +29,6 @@ public class ShellViewModel : Conductor<object>, IHandle<EmailSelectedEvent>
 
 	public async Task HandleAsync(EmailSelectedEvent e, CancellationToken cancellationToken)
 	{
+		await ActivateItemAsync(_selectedEmailViewModel);
 	}
 }
