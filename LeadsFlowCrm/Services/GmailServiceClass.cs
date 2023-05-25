@@ -17,6 +17,10 @@ public class GmailServiceClass : IGmailServiceClass
 {
 	private readonly IOAuthServiceClass _oAuthService;
 	private readonly IBaseGoogleServiceClass _baseGoogleService;
+
+	/// <summary> List of the emails in the user's inbox </summary>
+	private List<Email> _inbox;
+
 	/// <summary> Special keyword reserved for referencing the logged in user </summary>
 	private const string me = "me";
 
@@ -27,6 +31,34 @@ public class GmailServiceClass : IGmailServiceClass
 	{
 		_baseGoogleService = baseGoogleService;
 		_oAuthService = oAuthService;
+	}
+
+	/// <summary>
+	/// Method for retrieving the Gmail service object for the Gmail API
+	/// </summary>
+	/// <returns>GmailService object</returns>
+	public async Task<GmailService> GetGmailServiceAsync()
+	{
+		if (_gmailService == null)
+		{
+			_gmailService = new GmailService(await _baseGoogleService.GetServiceAsync());
+		}
+
+		return _gmailService;
+	}
+
+	/// <summary>
+	/// Method for retrieving the emails from the user's inbox
+	/// </summary>
+	/// <returns>List of the emails in the user's inbox</returns>
+	public async Task<List<Email>> GetInboxAsync()
+	{
+		if (_inbox == null)
+		{
+			_inbox = await GetEmailsFromInboxAsync();
+		}
+
+		return _inbox;
 	}
 
 	/// <summary>
@@ -48,20 +80,10 @@ public class GmailServiceClass : IGmailServiceClass
 	}
 
 	/// <summary>
-	/// Method for retrieving the Gmail service object for the Gmail API
+	/// Method for getting the emails from the user's inbox
 	/// </summary>
-	/// <returns>GmailService object</returns>
-	public async Task<GmailService> GetGmailServiceAsync()
-	{
-		if (_gmailService == null)
-		{
-			_gmailService = new GmailService(await _baseGoogleService.GetServiceAsync());
-		}
-
-		return _gmailService;
-	}
-
-	public async Task<List<Email>> GetEmailsFromInboxAsync()
+	/// <returns>List of Email objects from the user's inbox</returns>
+	private async Task<List<Email>> GetEmailsFromInboxAsync()
 	{
 		List<Email> output = new();
 
@@ -83,7 +105,7 @@ public class GmailServiceClass : IGmailServiceClass
 		// If there are no emails in the inbox or there was an error
 		if (emailListResponse == null || emailListResponse.Messages == null)
 		{
-			throw new Exception("Error parsing the emails");
+			return output;
 		}
 
 		foreach (Message email in emailListResponse.Messages)
@@ -167,13 +189,15 @@ public class GmailServiceClass : IGmailServiceClass
 				 */
 				case "Date":
 					string dateString = header.Value;
-					string[] format = { "ddd, dd MMM yyyy HH:mm:ss zzz '('zzz')'" };
+					string[] format = { "ddd, dd MMM yyyy HH:mm:ss zzzz" };
 					try
 					{
 						DateTimeOffset dtf = DateTimeOffset.ParseExact(dateString, format, CultureInfo.InvariantCulture);
 						output.Date = dtf.DateTime;
 					}
-					catch (Exception) {}
+					catch (Exception) {
+						output.Date = DateTime.Now;
+					}
 					break;
 				/*
 				 * Subject line

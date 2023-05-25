@@ -7,7 +7,7 @@ namespace LeadsFlowCrm.Services
 {
 	public interface IGmailServiceClass
 	{
-		Task<List<Email>> GetEmailsFromInboxAsync();
+		Task<List<Email>> GetInboxAsync();
 		Task<GmailService> GetGmailServiceAsync();
 	}
 }

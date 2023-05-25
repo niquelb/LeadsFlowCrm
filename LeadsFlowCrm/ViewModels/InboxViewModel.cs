@@ -13,27 +13,32 @@ namespace LeadsFlowCrm.ViewModels;
 public class InboxViewModel : Screen
 {
 	private readonly IGmailServiceClass _gmailService;
-	private ObservableCollection<Email> _emails;
+	private ObservableCollection<Email> _inbox;
 
     public InboxViewModel(IGmailServiceClass gmailService)
     {
 		_gmailService = gmailService;
+		Inbox = new ObservableCollection<Email>();
 	}
 
-	protected override async void OnViewLoaded(object view)
+	protected override void OnViewLoaded(object view)
 	{
 		base.OnViewLoaded(view);
 
-		Emails = new ObservableCollection<Email>(await _gmailService.GetEmailsFromInboxAsync());
+		PopulateInboxAsync();
 	}
 
-	public ObservableCollection<Email> Emails
+	public ObservableCollection<Email> Inbox
 	{
-		get { return _emails; }
+		get { return _inbox; }
 		set {
-			_emails = value;
+			_inbox = value;
 			NotifyOfPropertyChange();
 		}
 	}
 
+	private async Task PopulateInboxAsync()
+	{
+		Inbox = new ObservableCollection<Email>(await _gmailService.GetInboxAsync());
+	}
 }

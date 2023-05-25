@@ -46,7 +46,7 @@
         
         <!--#region ListView-->
         <ListView x:Name="InboxLV" Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="1" 
-                  ItemsSource="{Binding Emails}" Margin="0 15" FontSize="14">
+                  ItemsSource="{Binding Inbox}" Margin="0 15" FontSize="14" >
             <ListView.View>
                 <GridView>
                     <GridViewColumn Width="40" Header="👁">
@@ -72,6 +72,8 @@
                     <GridViewColumn Header="Body" 
                                     DisplayMemberBinding="{Binding Snippet}"
                                     Width="500" />
+                    <GridViewColumn DisplayMemberBinding="{Binding Date}"
+                                    Width="auto" />
                 </GridView>
             </ListView.View>
         </ListView>
