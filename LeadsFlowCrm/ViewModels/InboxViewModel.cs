@@ -57,8 +57,10 @@ public class InboxViewModel : Screen
 			_selectedEmail = value; 
 			NotifyOfPropertyChange();
 
-			// We shouldn't need to await this
-			NotifyOfSelectedEmailAsync(_selectedEmail);
+			/*
+			 * We notify the UI that the user has selected an email.
+			 */
+			_event.PublishOnUIThreadAsync(new EmailSelectedEvent() { SelectedEmail = _selectedEmail });
 		}
 	}
 
@@ -72,16 +74,5 @@ public class InboxViewModel : Screen
 			_inbox = value;
 			NotifyOfPropertyChange();
 		}
-	}
-
-	/// <summary>
-	/// Method for notifying the UI that the user has selected an email
-	/// </summary>
-	/// <param name="email">Selected email</param>
-	/// <returns></returns>
-	private async Task NotifyOfSelectedEmailAsync(Email email)
-	{
-		// TODO: modify logic such that the selected email resides in the Gmail service class
-		await _event.PublishOnUIThreadAsync(new EmailSelectedEvent() { SelectedEmail = email });
 	}
 }
