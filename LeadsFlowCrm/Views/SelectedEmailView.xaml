@@ -68,14 +68,14 @@
                 <!--#region Sender info + date-->
                 <StackPanel Grid.Column="0" Orientation="Vertical">
                     <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="Sender name" FontSize="24" 
+                        <TextBlock x:Name="SelectedEmail_From" FontSize="24" 
                                    HorizontalAlignment="Center"
                                    Margin="5"/>
-                        <TextBlock Text="25/05/2023 18:54"
+                        <TextBlock x:Name="SelectedEmail_Date"
                                    VerticalAlignment="Bottom"
                                    Margin="5"/>
                     </StackPanel>
-                    <TextBlock Text="sender@email.com" 
+                    <TextBlock x:Name="SelectedEmail_FromEmail" 
                                HorizontalAlignment="Left"
                                Margin="5"/>
                 </StackPanel>
@@ -111,7 +111,7 @@
                     <RowDefinition Height="*" />
                 </Grid.RowDefinitions>
 
-                <TextBlock Text="A decently long subject line" 
+                <TextBlock x:Name="SelectedEmail_SubjectLine" 
                            Grid.Row="0" Margin="5" />
 
                 <TextBlock Grid.Row="1" Margin="5"

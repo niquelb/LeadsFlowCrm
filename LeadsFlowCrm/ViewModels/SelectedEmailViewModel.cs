@@ -16,13 +16,13 @@ public class SelectedEmailViewModel : Screen
 	public SelectedEmailViewModel(IGmailServiceClass gmailServiceClass)
     {
 		_gmailServiceClass = gmailServiceClass;
-
-		SelectedEmail = _gmailServiceClass.SelectedEmail ?? new();
 	}
 
     protected async override void OnViewLoaded(object view)
 	{
 		base.OnViewLoaded(view);
+
+		SelectedEmail = _gmailServiceClass.SelectedEmail ?? new();
 
 		//TODO: load email body
 		await Task.Delay(2000);
@@ -30,7 +30,17 @@ public class SelectedEmailViewModel : Screen
 		IsLoading = false;
 	}
 
-	public Email SelectedEmail { get; set; }
+	private Email _selectedEmail;
+
+	public Email SelectedEmail
+	{
+		get { return _selectedEmail; }
+		set { 
+			_selectedEmail = value;
+			NotifyOfPropertyChange();
+		}
+	}
+
 
 	/*
 	 * This property is used to control the visibility of the loading spinner and the actual email
