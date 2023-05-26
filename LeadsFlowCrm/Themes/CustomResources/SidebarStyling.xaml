@@ -9,30 +9,6 @@
     </Style>
     <!--#endregion-->
 
-    <!--#region Menu Button-->
-    <Style x:Key="SidebarMenuBtn" TargetType="Button">
-        <Setter Property="Background" Value="Transparent" />
-        <Setter Property="Foreground" Value="White" />
-        <Setter Property="BorderThickness" Value="0" />
-        <Setter Property="HorizontalAlignment" Value="Left" />
-        <Setter Property="FocusVisualStyle" Value="{x:Null}" />
-        <Setter Property="Template">
-            <Setter.Value>
-                <ControlTemplate TargetType="Button">
-                    <Border Background="{TemplateBinding Background}" CornerRadius="25">
-                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
-                    </Border>
-                </ControlTemplate>
-            </Setter.Value>
-        </Setter>
-        <Style.Triggers>
-            <Trigger Property="IsMouseOver" Value="True">
-                <Setter Property="Background" Value="{StaticResource AREghZyBrush.Deep.1.Border.Static}" />
-            </Trigger>
-        </Style.Triggers>
-    </Style>
-    <!--#endregion-->
-
     <!--#region Sidebar Buttons-->
     <Style x:Key="SidebarBtn" TargetType="Button">
         <Setter Property="Background" Value="Transparent" />

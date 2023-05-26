@@ -73,17 +73,14 @@
                     <StackPanel Orientation="Horizontal">
                         <Button x:Name="Back"
                                 Grid.Column="0"
-                                Margin="5"
-                                Background="Transparent">
-                            <Icon:PackIconMaterial Width="15" Height="15" Kind="ArrowLeft"
-                                           VerticalAlignment="Center" HorizontalAlignment="Center"
-                                           Foreground="White" Margin="5"/>
+                                Style="{StaticResource IconButton}">
+                            <Icon:PackIconMaterial Width="20" Height="20" Margin="10" Kind="ArrowLeft" />
                         </Button>
                         <TextBlock x:Name="SelectedEmail_From" FontSize="24" 
                                    HorizontalAlignment="Center"
                                    Margin="5"/>
                         <TextBlock x:Name="SelectedEmail_Date"
-                                   VerticalAlignment="Bottom"
+                                   VerticalAlignment="Center"
                                    Margin="5"/>
                     </StackPanel>
                     <TextBlock x:Name="SelectedEmail_FromEmail" 
@@ -95,21 +92,36 @@
                 <!--#region Toolbar-->
                 <StackPanel Orientation="Horizontal"
                             Grid.Column="3" Margin="10">
-                    <Icon:PackIconMaterial Width="15" Height="15" Kind="Label"
-                                           VerticalAlignment="Center" HorizontalAlignment="Center"
-                                           Foreground="White" Margin="5"/>
-                    <Icon:PackIconMaterial Width="15" Height="15" Kind="EmailMarkAsUnread"
-                                           VerticalAlignment="Center" HorizontalAlignment="Center"
-                                           Foreground="White" Margin="5"/>
-                    <Icon:PackIconMaterial Width="15" Height="15" Kind="Star"
-                                           VerticalAlignment="Center" HorizontalAlignment="Center"
-                                           Foreground="White" Margin="5"/>
-                    <Icon:PackIconMaterial Width="15" Height="15" Kind="Archive"
-                                           VerticalAlignment="Center" HorizontalAlignment="Center"
-                                           Foreground="White" Margin="5"/>
-                    <Icon:PackIconMaterial Width="15" Height="15" Kind="TrashCan"
-                                           VerticalAlignment="Center" HorizontalAlignment="Center"
-                                           Foreground="White" Margin="5"/>
+                    <Button x:Name="Reply"
+                                Grid.Column="0"
+                                Style="{StaticResource IconButton}">
+                        <Icon:PackIconMaterial Width="20" Height="20" Margin="15" Kind="Reply" />
+                    </Button>
+                    <Button x:Name="Label"
+                                Grid.Column="0"
+                                Style="{StaticResource IconButton}">
+                        <Icon:PackIconMaterial Width="20" Height="20" Margin="15" Kind="Label" />
+                    </Button>
+                    <Button x:Name="MarkUnread"
+                                Grid.Column="0"
+                                Style="{StaticResource IconButton}">
+                        <Icon:PackIconMaterial Width="20" Height="20" Margin="15" Kind="EmailMarkAsUnread" />
+                    </Button>
+                    <Button x:Name="MarkFavorite"
+                                Grid.Column="0"
+                                Style="{StaticResource IconButton}">
+                        <Icon:PackIconMaterial Width="20" Height="20" Margin="15" Kind="Star" />
+                    </Button>
+                    <Button x:Name="Archive"
+                                Grid.Column="0"
+                                Style="{StaticResource IconButton}">
+                        <Icon:PackIconMaterial Width="20" Height="20" Margin="15" Kind="ArchiveArrowDown" />
+                    </Button>
+                    <Button x:Name="Delete"
+                                Grid.Column="0"
+                                Style="{StaticResource IconButton}">
+                        <Icon:PackIconMaterial Width="20" Height="20" Margin="15" Kind="TrashCan" />
+                    </Button>
                 </StackPanel>
                 <!--#endregion-->
             </Grid>
