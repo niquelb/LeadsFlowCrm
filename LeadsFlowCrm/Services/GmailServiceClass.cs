@@ -69,6 +69,25 @@ public class GmailServiceClass : IGmailServiceClass
 	}
 
 	/// <summary>
+	/// Method for refreshing the inbox object
+	/// </summary>
+	/// <returns></returns>
+	public async Task RefreshInboxAsync()
+	{
+		_inbox = await GetInboxAsync();
+	}
+
+	/// <summary>
+	/// Method for refreshing and then retrieving the inbox object
+	/// </summary>
+	/// <returns>List of the emails in the user's inbox</returns>
+	public async Task<List<Email>> RefreshAndGetInboxAsync()
+	{
+		await RefreshInboxAsync();
+		return await GetInboxAsync();
+	}
+
+	/// <summary>
 	/// Method for marking a specific email as read both in the model and through the Gmail API
 	/// </summary>
 	/// <param name="email">Email object</param>

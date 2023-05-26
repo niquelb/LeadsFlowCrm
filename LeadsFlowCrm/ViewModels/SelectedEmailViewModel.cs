@@ -103,10 +103,14 @@ public class SelectedEmailViewModel : Screen
 		await _gmailServiceClass.MarkEmailAsFavoriteAsync(SelectedEmail);
 	}
 
-	/*
+	public bool CanReply { get; set; } = false;
+
+	public bool CanLabel { get; set; } = false;
+
+    /*
 	 * Property backing fields
 	 */
-	private Email _selectedEmail = new();
+    private Email _selectedEmail = new();
 	private string _body = "Loading email body...";
 	private string _loadingText;
 	private bool _isLoading = true;

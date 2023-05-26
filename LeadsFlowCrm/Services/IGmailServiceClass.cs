@@ -9,11 +9,8 @@ namespace LeadsFlowCrm.Services
 	public interface IGmailServiceClass
 	{
 		Email? SelectedEmail { get; set; }
-
 		Task<List<Email>> GetInboxAsync();
-
 		Task<GmailService> GetGmailServiceAsync();
-
 		string GetProcessedBody(Email email);
 		Task MarkEmailAsReadAsync(Email email);
 		Task MarkEmailAsUnreadAsync(Email email);
@@ -21,5 +18,7 @@ namespace LeadsFlowCrm.Services
 		Task MarkEmailAsTrashAsync(Email email);
 		Task MarkEmailAsFavoriteAsync(Email email);
 		Task MarkEmailAsNotFavoriteAsync(Email email);
+		Task RefreshInboxAsync();
+		Task<List<Email>> RefreshAndGetInboxAsync();
 	}
 }
