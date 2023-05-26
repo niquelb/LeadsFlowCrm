@@ -17,7 +17,7 @@ public class InboxViewModel : Screen
 	private readonly IEventAggregator _event;
 
 	public InboxViewModel(IGmailServiceClass gmailService, IEventAggregator @event)
-    {
+	{
 		_gmailService = gmailService;
 		_event = @event;
 	}
@@ -69,7 +69,8 @@ public class InboxViewModel : Screen
 	public bool IsLoading
 	{
 		get { return _isLoading; }
-		set { 
+		set
+		{
 			_isLoading = value;
 			NotifyOfPropertyChange();
 		}
@@ -81,7 +82,8 @@ public class InboxViewModel : Screen
 	public bool CanRefreshInbox
 	{
 		get { return _canRefreshInbox; }
-		set { 
+		set
+		{
 			_canRefreshInbox = value;
 			NotifyOfPropertyChange();
 		}
@@ -94,8 +96,9 @@ public class InboxViewModel : Screen
 	public Email SelectedEmail
 	{
 		get { return _selectedEmail; }
-		set { 
-			_selectedEmail = value; 
+		set
+		{
+			_selectedEmail = value;
 			NotifyOfPropertyChange();
 
 			/*
@@ -117,7 +120,8 @@ public class InboxViewModel : Screen
 	public ObservableCollection<Email> Inbox
 	{
 		get { return _inbox; }
-		set {
+		set
+		{
 			_inbox = value;
 			NotifyOfPropertyChange();
 		}
