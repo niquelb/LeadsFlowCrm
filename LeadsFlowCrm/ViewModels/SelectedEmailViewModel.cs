@@ -22,10 +22,11 @@ public class SelectedEmailViewModel : Screen
 	{
 		base.OnViewLoaded(view);
 
-		SelectedEmail = _gmailServiceClass.SelectedEmail ?? new();
+		Email email = _gmailServiceClass.SelectedEmail ?? new();
 
-		//TODO: load email body
-		await Task.Delay(500);
+		email.Body = await Task.FromResult(_gmailServiceClass.GetProcessedBody(email));
+
+		SelectedEmail = email;
 
 		IsLoading = false;
 	}

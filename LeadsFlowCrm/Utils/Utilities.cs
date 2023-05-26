@@ -30,24 +30,14 @@ public static class Utilities
 	public static string Base64Decode(string base64EncodedData)
 	{
 		// We first remove illegal characters
-		StringBuilder sb = new StringBuilder();
-		sb.Append(base64EncodedData.Replace("-", "+"));
-		sb.Append(base64EncodedData.Replace("_", "/"));
-		sb.Append(base64EncodedData.Replace(" ", "+"));
-		sb.Append(base64EncodedData.Replace("=", "+"));
+		StringBuilder sb = new(base64EncodedData);
+		sb.Replace("-", "+");
+		sb.Replace("_", "/");
+		sb.Replace(" ", "+");
+		sb.Replace("=", "+");
+
 
 		base64EncodedData = sb.ToString();
-
-		// We standardize the lenght
-		if (base64EncodedData.Length % 4 > 0) 
-		{
-			base64EncodedData += new string('=', 4 - base64EncodedData.Length % 4); 
-		}
-		else if (base64EncodedData.Length % 4 == 0)
-		{
-			base64EncodedData = base64EncodedData.Substring(0, base64EncodedData.Length - 1);
-			if (base64EncodedData.Length % 4 > 0) { base64EncodedData += new string('+', 4 - base64EncodedData.Length % 4); }
-		}
 
 		// We convert it and return it
 		var output = Convert.FromBase64String(base64EncodedData);

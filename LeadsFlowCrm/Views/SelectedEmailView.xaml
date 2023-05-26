@@ -115,7 +115,7 @@
                 <TextBlock x:Name="SelectedEmail_SubjectLine" 
                            Grid.Row="0" Margin="5" />
 
-                <TextBlock x:Name="SelectedEmail_EncodedBody"
+                <TextBlock x:Name="SelectedEmail_Body"
                            Grid.Row="1" Margin="5"
                            TextWrapping="WrapWithOverflow"/>
 

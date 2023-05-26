@@ -28,7 +28,7 @@ public class GmailServiceClass : IGmailServiceClass
 	/// <summary> Service object for the Gmail API </summary>
 	private GmailService _gmailService;
 
-    public GmailServiceClass(IBaseGoogleServiceClass baseGoogleService, IOAuthServiceClass oAuthService)
+	public GmailServiceClass(IBaseGoogleServiceClass baseGoogleService, IOAuthServiceClass oAuthService)
 	{
 		_baseGoogleService = baseGoogleService;
 		_oAuthService = oAuthService;
@@ -65,6 +65,31 @@ public class GmailServiceClass : IGmailServiceClass
 		}
 
 		return _inbox;
+	}
+
+	/// <summary>
+	/// Method for getting the processed and unencoded body of the selected email
+	/// </summary>
+	/// <returns></returns>
+	public string GetProcessedBody(Email email)
+	{
+		if (email == null)
+		{
+			return string.Empty;
+		}
+
+		// We save the encoded body to the object in case we need it in the future
+		email.EncodedBody = GetEncodedBody(email.Message);
+
+		try
+		{
+			return Utilities.Base64Decode(email.EncodedBody);
+		}
+		catch (Exception ex)
+		{
+			Trace.TraceError(ex.Message);
+			return string.Empty;
+		}
 	}
 
 	/// <summary>
@@ -117,7 +142,7 @@ public class GmailServiceClass : IGmailServiceClass
 		// We process each email asynchronously
 		foreach (Message email in emailListResponse.Messages)
 		{
-			tasks.Add(ProcessEmailAsync(email, gmailService)) ;
+			tasks.Add(ProcessEmailAsync(email, gmailService));
 		}
 
 		/*
@@ -208,7 +233,8 @@ public class GmailServiceClass : IGmailServiceClass
 						DateTimeOffset dtf = DateTimeOffset.ParseExact(dateString, format, CultureInfo.InvariantCulture);
 						output.Date = dtf.DateTime;
 					}
-					catch (Exception) {
+					catch (Exception)
+					{
 						output.Date = DateTime.Now;
 					}
 					break;
@@ -231,8 +257,13 @@ public class GmailServiceClass : IGmailServiceClass
 	/// </summary>
 	/// <param name="email">Message object</param>
 	/// <returns>Email body encoded in base 64</returns>
-	private async Task<string> ProcessEmailBodyAsync(Message email)
+	private static string GetEncodedBody(Message email)
 	{
+		if (email == null)
+		{
+			return string.Empty;
+		}
+
 		string output = string.Empty;
 
 		/*
