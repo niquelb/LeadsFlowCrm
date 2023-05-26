@@ -17,8 +17,7 @@ public class SelectedEmailViewModel : Screen
 	private readonly IGmailServiceClass _gmailServiceClass;
 	private readonly IEventAggregator _event;
 
-	public SelectedEmailViewModel(IGmailServiceClass gmailServiceClass,
-							   IEventAggregator @event)
+	public SelectedEmailViewModel(IGmailServiceClass gmailServiceClass, IEventAggregator @event)
     {
 		_gmailServiceClass = gmailServiceClass;
 		_event = @event;
@@ -28,8 +27,7 @@ public class SelectedEmailViewModel : Screen
 	{
 		base.OnViewLoaded(view);
 
-		LoadingText = "Fetching requested email...";
-		IsLoading = true;
+		ShowLoadingScreen("Fetching requested email...");
 
 		// We retrieve the selected email
 		Email email = _gmailServiceClass.SelectedEmail ?? new();
@@ -37,9 +35,10 @@ public class SelectedEmailViewModel : Screen
 		// We parse and decode the body, this also populates the "EncodedBody" field
 		email.Body = await Task.FromResult(_gmailServiceClass.GetProcessedBody(email));
 
+		// We mark the email as read
 		await _gmailServiceClass.MarkEmailAsReadAsync(email);
 
-		await Task.Delay(500);
+		await Task.Delay(200);
 
 		SelectedEmail = email;
 
@@ -54,11 +53,20 @@ public class SelectedEmailViewModel : Screen
 		await base.OnDeactivateAsync(close, cancellationToken);
 
 		// This is just to avoid a weird UI glitch
-		LoadingText = "Loading inbox...";
-		IsLoading = true;
+		ShowLoadingScreen("");
 		await Task.Delay(50);
 
 		_gmailServiceClass.SelectedEmail = null;
+	}
+
+	/// <summary>
+	/// Method for displaying the loading screen in the view
+	/// </summary>
+	/// <param name="loadingText">Text that will appear below the loading screen</param>
+	private void ShowLoadingScreen(string loadingText)
+	{
+		LoadingText = loadingText;
+		IsLoading = true;
 	}
 
 	/// <summary>
@@ -70,10 +78,16 @@ public class SelectedEmailViewModel : Screen
 	}
 
 	/*
-	 * Selected email
+	 * Property backing fields
 	 */
 	private Email _selectedEmail = new();
+	private string _body = "Loading email body...";
+	private string _loadingText;
+	private bool _isLoading = true;
 
+	/// <summary>
+	/// Selected email
+	/// </summary>
 	public Email SelectedEmail
 	{
 		get { return _selectedEmail; }
@@ -83,11 +97,9 @@ public class SelectedEmailViewModel : Screen
 		}
 	}
 
-	/*
-	 * Email body to be rendered by the WebBrowser control
-	 */
-	private string _body = "Loading email body...";
-
+	/// <summary>
+	/// Email body to be rendered by the WebBrowser control
+	/// </summary>
 	public string Body
 	{
 		get { return _body; }
@@ -97,11 +109,9 @@ public class SelectedEmailViewModel : Screen
 		}
 	}
 
-	/*
-	 * This property represents the text displayed during the loading screen
-	 */
-	private string _loadingText;
-
+	/// <summary>
+	/// Represents the text displayed during the loading screen
+	/// </summary>
 	public string LoadingText
 	{
 		get { return _loadingText; }
@@ -111,11 +121,9 @@ public class SelectedEmailViewModel : Screen
 		}
 	}
 
-	/*
-	 * This property is used to control the visibility of the loading spinner
-	 */
-	private bool _isLoading = true;
-
+	/// <summary>
+	/// This property is used to control the visibility of the loading spinner
+	/// </summary>
 	public bool IsLoading
 	{
 		get { return _isLoading; }
