@@ -40,7 +40,7 @@
             <LoadingSpinner:LoadingSpinner Grid.Column="1" Grid.Row="1" 
                                            IsLoading="{Binding IsLoading}"
                                            Margin="15" Thickness="5" Color="white"/>
-            <TextBlock Grid.Column="1" Grid.Row="2" Text="Fetching the requested email..." />
+            <TextBlock x:Name="LoadingText" Grid.Column="1" Grid.Row="2" />
         </Grid>
         <!--#endregion-->
 
@@ -122,7 +122,9 @@
                     <RowDefinition Height="*" />
                 </Grid.RowDefinitions>
 
-                <TextBlock x:Name="SelectedEmail_SubjectLine" 
+                <TextBlock x:Name="SelectedEmail_SubjectLine"
+                           FontSize="26" FontWeight="Medium"
+                           HorizontalAlignment="Center"
                            Grid.Row="0" Margin="5" />
 
                 <WebBrowser x:Name="BodyRenderer"

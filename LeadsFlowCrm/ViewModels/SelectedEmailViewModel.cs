@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Controls;
 
@@ -27,6 +28,9 @@ public class SelectedEmailViewModel : Screen
 	{
 		base.OnViewLoaded(view);
 
+		LoadingText = "Fetching requested email...";
+		IsLoading = true;
+
 		// We retrieve the selected email
 		Email email = _gmailServiceClass.SelectedEmail ?? new();
 
@@ -43,15 +47,23 @@ public class SelectedEmailViewModel : Screen
 		IsLoading = false;
 	}
 
+	protected async override Task OnDeactivateAsync(bool close, CancellationToken cancellationToken)
+	{
+		await base.OnDeactivateAsync(close, cancellationToken);
+
+		// This is just to avoid a weird UI glitch
+		LoadingText = "Loading inbox...";
+		IsLoading = true;
+		await Task.Delay(50);
+
+		_gmailServiceClass.SelectedEmail = null;
+	}
+
 	/// <summary>
 	/// Method that will redirect to the inbox
 	/// </summary>
 	public async void Back()
 	{
-		IsLoading = true;
-
-		_gmailServiceClass.SelectedEmail = null;
-
 		await _event.PublishOnUIThreadAsync(new NavigationEvent(NavigationEvent.NavigationRoutes.Inbox));
 	}
 
@@ -83,6 +95,19 @@ public class SelectedEmailViewModel : Screen
 		}
 	}
 
+	/*
+	 * This property represents the text displayed during the loading screen
+	 */
+	private string _loadingText;
+
+	public string LoadingText
+	{
+		get { return _loadingText; }
+		set { 
+			_loadingText = value;
+			NotifyOfPropertyChange();
+		}
+	}
 
 	/*
 	 * This property is used to control the visibility of the loading spinner
