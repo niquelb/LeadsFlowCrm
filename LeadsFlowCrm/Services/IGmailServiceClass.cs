@@ -15,5 +15,6 @@ namespace LeadsFlowCrm.Services
 		Task<GmailService> GetGmailServiceAsync();
 
 		string GetProcessedBody(Email email);
+		Task MarkEmailAsReadAsync(Email email);
 	}
 }

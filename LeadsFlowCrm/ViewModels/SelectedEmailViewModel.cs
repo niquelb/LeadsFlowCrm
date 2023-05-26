@@ -37,6 +37,8 @@ public class SelectedEmailViewModel : Screen
 		// We parse and decode the body, this also populates the "EncodedBody" field
 		email.Body = await Task.FromResult(_gmailServiceClass.GetProcessedBody(email));
 
+		await _gmailServiceClass.MarkEmailAsReadAsync(email);
+
 		await Task.Delay(500);
 
 		SelectedEmail = email;

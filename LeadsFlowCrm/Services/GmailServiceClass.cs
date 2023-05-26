@@ -68,6 +68,37 @@ public class GmailServiceClass : IGmailServiceClass
 	}
 
 	/// <summary>
+	/// Method for marking a specific email as read both in the model and through the Gmail API
+	/// </summary>
+	/// <param name="email">Email object</param>
+	/// <returns></returns>
+	public async Task MarkEmailAsReadAsync(Email email)
+	{
+		if (email == null)
+		{
+			return;
+		}
+
+		GmailService service = await GetGmailServiceAsync();
+		Message msg = email.Message;
+
+		/*
+		 * We create a messageRequest in which we specify the labels we'll add and substract from the Message
+		 * In this case we only remove the "UNREAD" label
+		 */
+		ModifyMessageRequest messageRequest = new()
+		{
+			AddLabelIds = null,
+			RemoveLabelIds = new List<string> { "UNREAD" }
+		};
+
+		await service.Users.Messages.Modify(messageRequest, me, msg.Id).ExecuteAsync();
+
+		// We mark the model as read too
+		email.IsRead = true;
+	}
+
+	/// <summary>
 	/// Method for getting the processed and unencoded body of the selected email
 	/// </summary>
 	/// <returns></returns>
