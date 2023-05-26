@@ -1,4 +1,5 @@
 ﻿using Caliburn.Micro;
+using LeadsFlowCrm.EventModels;
 using LeadsFlowCrm.Models;
 using LeadsFlowCrm.Services;
 using System;
@@ -13,10 +14,13 @@ namespace LeadsFlowCrm.ViewModels;
 public class SelectedEmailViewModel : Screen
 {
 	private readonly IGmailServiceClass _gmailServiceClass;
+	private readonly IEventAggregator _event;
 
-	public SelectedEmailViewModel(IGmailServiceClass gmailServiceClass)
+	public SelectedEmailViewModel(IGmailServiceClass gmailServiceClass,
+							   IEventAggregator @event)
     {
 		_gmailServiceClass = gmailServiceClass;
+		_event = @event;
 	}
 
     protected async override void OnViewLoaded(object view)
@@ -35,6 +39,16 @@ public class SelectedEmailViewModel : Screen
 		await Task.Delay(500).ContinueWith((_) => { Body = email.Body; });
 
 		IsLoading = false;
+	}
+
+	/// <summary>
+	/// Method that will redirect to the inbox
+	/// </summary>
+	public async void Back()
+	{
+		_gmailServiceClass.SelectedEmail = null;
+
+		await _event.PublishOnUIThreadAsync(new NavigationEvent(NavigationEvent.NavigationRoutes.Inbox));
 	}
 
 	/*
