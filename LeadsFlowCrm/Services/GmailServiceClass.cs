@@ -82,7 +82,7 @@ public class GmailServiceClass : IGmailServiceClass
 
 		Message msg = email.Message;
 
-		// We remove the "UNREAD label
+		// We remove the "UNREAD" label
 		await ModifyEmailTagsAsync(msg, new List<string> { }, new List<string> { "UNREAD" });
 
 		// We mark the model as read too
@@ -103,11 +103,29 @@ public class GmailServiceClass : IGmailServiceClass
 
 		Message msg = email.Message;
 
-		// We remove the "UNREAD label
+		// We add the "UNREAD" label
 		await ModifyEmailTagsAsync(msg, new List<string> { "UNREAD" }, new List<string> { });
 
 		// We mark the model as read too
 		email.IsRead = false;
+	}
+
+	/// <summary>
+	/// Method for marking a specific email as archived through the Gmail API
+	/// </summary>
+	/// <param name="email">Email object</param>
+	/// <returns></returns>
+	public async Task MarkEmailAsArchivedAsync(Email email)
+	{
+		if (email == null) 
+		{ 
+			return;
+		}
+
+		Message msg = email.Message;
+
+		// We remove the "INBOX" label, this will archive the message
+		await ModifyEmailTagsAsync(msg, new List<string> { }, new List<string> { "INBOX" });
 	}
 
 	/// <summary>

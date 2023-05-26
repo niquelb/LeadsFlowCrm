@@ -79,6 +79,11 @@ public class SelectedEmailViewModel : Screen
 	/// </summary>
 	public async void MarkUnread() => await _gmailServiceClass.MarkEmailAsUnreadAsync(SelectedEmail);
 
+	/// <summary>
+	/// Method for marking the email as archived
+	/// </summary>
+	public async void Archive() => await _gmailServiceClass.MarkEmailAsArchivedAsync(SelectedEmail);
+
 	/*
 	 * Property backing fields
 	 */
