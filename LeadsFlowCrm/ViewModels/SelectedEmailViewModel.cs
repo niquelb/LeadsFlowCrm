@@ -25,7 +25,7 @@ public class SelectedEmailViewModel : Screen
 		SelectedEmail = _gmailServiceClass.SelectedEmail ?? new();
 
 		//TODO: load email body
-		await Task.Delay(2000);
+		await Task.Delay(500);
 
 		IsLoading = false;
 	}
