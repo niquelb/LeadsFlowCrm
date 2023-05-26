@@ -17,15 +17,19 @@ public class ShellViewModel : Conductor<object>, IHandle<EmailSelectedEvent>, IH
 
 	public ShellViewModel(InboxViewModel inboxViewModel,
 					   SelectedEmailViewModel selectedEmailViewModel,
+					   SidebarViewModel sidebarViewModel,
 					   IEventAggregator @event)
     {
 		_inboxViewModel = inboxViewModel;
 		_selectedEmailViewModel = selectedEmailViewModel;
+		Sidebar = sidebarViewModel;
 		_event = @event;
 		_event.SubscribeOnUIThread(this);
 
 		ActivateItemAsync(_inboxViewModel);
 	}
+
+	public SidebarViewModel Sidebar { get; }
 
 	/// <summary>
 	/// Event that gets triggered when the user clicks (or opens) an email from their inbox

@@ -41,19 +41,19 @@
                             <TextBlock Text="Inbox"/>
                         </StackPanel>
                     </Button>
-                    <Button x:Name="Pipelines" Style="{StaticResource SidebarBtn}">
+                    <Button x:Name="Pipelines" Style="{StaticResource SidebarBtn}" IsEnabled="False">
                         <StackPanel Orientation="Horizontal">
                             <Icon:PackIconMaterial Kind="Pipe" Style="{StaticResource SidebarIcon}"/>
                             <TextBlock Text="Pipelines"/>
                         </StackPanel>
                     </Button>
-                    <Button x:Name="Contacts" Style="{StaticResource SidebarBtn}">
+                    <Button x:Name="Contacts" Style="{StaticResource SidebarBtn}" IsEnabled="False">
                         <StackPanel Orientation="Horizontal">
                             <Icon:PackIconMaterial Kind="Contacts" Style="{StaticResource SidebarIcon}"/>
                             <TextBlock Text="Contacts"/>
                         </StackPanel>
                     </Button>
-                    <Button x:Name="Utils" Style="{StaticResource SidebarBtn}">
+                    <Button x:Name="Utils" Style="{StaticResource SidebarBtn}" IsEnabled="False">
                         <StackPanel Orientation="Horizontal">
                             <Icon:PackIconMaterial Kind="Tools" Style="{StaticResource SidebarIcon}"/>
                             <TextBlock Text="Utils"/>
@@ -74,7 +74,8 @@
                     <Button x:Name="NewCorrespondence" 
                             Grid.Row="1"
                             Style="{StaticResource BaseBtnStyling}" 
-                            Content="New Correspondence" />
+                            Content="New Correspondence" 
+                            IsEnabled="False" />
 
                     <Separator Grid.Row="2" Margin="25" Width="0"/>
 

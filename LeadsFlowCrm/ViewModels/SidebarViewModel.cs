@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace LeadsFlowCrm.ViewModels;
 
-public class SidebarViewModel : Screen
+public class SidebarViewModel
 {
 	private readonly IEventAggregator _event;
 

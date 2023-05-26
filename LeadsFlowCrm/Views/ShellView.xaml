@@ -36,7 +36,7 @@
 
             </MenuItem>
         </Menu>
-        <local:SidebarView x:Name="Sidebar"
+        <ContentControl x:Name="Sidebar"
                            DockPanel.Dock="Left"/>
         <Grid DockPanel.Dock="Bottom">
             <ContentControl x:Name="ActiveItem"
