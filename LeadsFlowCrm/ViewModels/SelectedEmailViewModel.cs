@@ -33,10 +33,12 @@ public class SelectedEmailViewModel : Screen
 		// We parse and decode the body, this also populates the "EncodedBody" field
 		email.Body = await Task.FromResult(_gmailServiceClass.GetProcessedBody(email));
 
+		await Task.Delay(500);
+
 		SelectedEmail = email;
 
 		// We render the body
-		await Task.Delay(500).ContinueWith((_) => { Body = email.Body; });
+		Body = email.Body;
 
 		IsLoading = false;
 	}
@@ -46,6 +48,8 @@ public class SelectedEmailViewModel : Screen
 	/// </summary>
 	public async void Back()
 	{
+		IsLoading = true;
+
 		_gmailServiceClass.SelectedEmail = null;
 
 		await _event.PublishOnUIThreadAsync(new NavigationEvent(NavigationEvent.NavigationRoutes.Inbox));

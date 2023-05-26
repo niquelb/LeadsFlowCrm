@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace LeadsFlowCrm.ViewModels;
 
-public class ShellViewModel : Conductor<object>, IHandle<EmailSelectedEvent>
+public class ShellViewModel : Conductor<object>, IHandle<EmailSelectedEvent>, IHandle<NavigationEvent>
 {
 	private readonly InboxViewModel _inboxViewModel;
 	private readonly SelectedEmailViewModel _selectedEmailViewModel;
@@ -28,7 +28,7 @@ public class ShellViewModel : Conductor<object>, IHandle<EmailSelectedEvent>
 	}
 
 	/// <summary>
-	/// Method that gets executed when the user clicks (or opens) an email from their inbox
+	/// Event that gets triggered when the user clicks (or opens) an email from their inbox
 	/// </summary>
 	/// <param name="e">Event model</param>
 	/// <param name="cancellationToken"></param>
@@ -36,5 +36,23 @@ public class ShellViewModel : Conductor<object>, IHandle<EmailSelectedEvent>
 	public async Task HandleAsync(EmailSelectedEvent e, CancellationToken cancellationToken)
 	{
 		await ActivateItemAsync(_selectedEmailViewModel);
+	}
+
+	/// <summary>
+	/// Event for navigation in the application
+	/// </summary>
+	/// <param name="e">Event model</param>
+	/// <param name="cancellationToken"></param>
+	/// <returns></returns>
+	public async Task HandleAsync(NavigationEvent e, CancellationToken cancellationToken)
+	{
+		switch (e.Route)
+		{
+			case NavigationEvent.NavigationRoutes.Inbox:
+				await ActivateItemAsync(_inboxViewModel);
+				break;
+			default:
+				throw new ArgumentException($"{nameof(e.Route)} is not a valid navigation object or is not yet implemented");
+		}
 	}
 }
