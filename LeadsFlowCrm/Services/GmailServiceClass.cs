@@ -11,6 +11,7 @@ using LeadsFlowCrm.Models;
 using LeadsFlowCrm.Utils;
 using System.Globalization;
 using System.Diagnostics;
+using System.Windows.Interop;
 
 namespace LeadsFlowCrm.Services;
 
@@ -79,20 +80,10 @@ public class GmailServiceClass : IGmailServiceClass
 			return;
 		}
 
-		GmailService service = await GetGmailServiceAsync();
 		Message msg = email.Message;
 
-		/*
-		 * We create a messageRequest in which we specify the labels we'll add and substract from the Message
-		 * In this case we only remove the "UNREAD" label
-		 */
-		ModifyMessageRequest messageRequest = new()
-		{
-			AddLabelIds = null,
-			RemoveLabelIds = new List<string> { "UNREAD" }
-		};
-
-		await service.Users.Messages.Modify(messageRequest, me, msg.Id).ExecuteAsync();
+		// We remove the "UNREAD label
+		await ModifyEmailTagsAsync(msg, new List<string> { }, new List<string> { "UNREAD" });
 
 		// We mark the model as read too
 		email.IsRead = true;
@@ -121,6 +112,29 @@ public class GmailServiceClass : IGmailServiceClass
 			Trace.TraceError(ex.Message);
 			return string.Empty;
 		}
+	}
+
+	/// <summary>
+	/// Method for adding or removing specified labels to a given email
+	/// </summary>
+	/// <param name="email">Message object</param>
+	/// <param name="addLabels">Labels that will be added</param>
+	/// <param name="removeLabels">Labels that will be subtracted</param>
+	/// <returns></returns>
+	private async Task ModifyEmailTagsAsync(Message email, List<string> addLabels, List<string> removeLabels)
+	{
+		/*
+		 * We create a messageRequest in which we specify the labels we'll add and substract from the Message
+		 */
+		ModifyMessageRequest messageRequest = new()
+		{
+			AddLabelIds = addLabels,
+			RemoveLabelIds = removeLabels
+		};
+
+		GmailService service = await GetGmailServiceAsync();
+
+		await service.Users.Messages.Modify(messageRequest, me, email.Id).ExecuteAsync();
 	}
 
 	/// <summary>
