@@ -147,6 +147,46 @@ public class GmailServiceClass : IGmailServiceClass
 	}
 
 	/// <summary>
+	/// Method for marking a specific email as favorite or "starred" through the Gmail API
+	/// </summary>
+	/// <param name="email">Email object</param>
+	/// <returns></returns>
+	public async Task MarkEmailAsFavoriteAsync(Email email)
+	{
+		if (email == null)
+		{
+			return;
+		}
+
+		Message msg = email.Message;
+
+		// We add the "STARRED" label
+		await ModifyEmailTagsAsync(msg, new List<string> { "STARRED" }, new List<string> { });
+
+		email.IsFavorite = true;
+	}
+
+	/// <summary>
+	/// Method for removing the tag of "starred" or favorite from a specific email through the Gmail API
+	/// </summary>
+	/// <param name="email">Email object</param>
+	/// <returns></returns>
+	public async Task MarkEmailAsNotFavoriteAsync(Email email)
+	{
+		if (email == null)
+		{
+			return;
+		}
+
+		Message msg = email.Message;
+
+		// We add the "STARRED" label
+		await ModifyEmailTagsAsync(msg, new List<string> { }, new List<string> { "STARRED" });
+
+		email.IsFavorite = false;
+	}
+
+	/// <summary>
 	/// Method for getting the processed and unencoded body of the selected email
 	/// </summary>
 	/// <returns></returns>

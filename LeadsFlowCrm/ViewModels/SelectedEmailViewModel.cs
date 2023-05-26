@@ -89,6 +89,20 @@ public class SelectedEmailViewModel : Screen
 	/// </summary>
 	public async void Delete() => await _gmailServiceClass.MarkEmailAsTrashAsync(SelectedEmail);
 
+	/// <summary>
+	/// Method for either marking or removing the label of favorite from the email depending on if the email is already marked as favorite
+	/// </summary>
+	public async void MarkFavorite()
+	{
+		if (SelectedEmail.IsFavorite)
+		{
+			await _gmailServiceClass.MarkEmailAsNotFavoriteAsync(SelectedEmail);
+			return;
+		}
+
+		await _gmailServiceClass.MarkEmailAsFavoriteAsync(SelectedEmail);
+	}
+
 	/*
 	 * Property backing fields
 	 */

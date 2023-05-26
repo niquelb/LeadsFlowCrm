@@ -19,5 +19,7 @@ namespace LeadsFlowCrm.Services
 		Task MarkEmailAsUnreadAsync(Email email);
 		Task MarkEmailAsArchivedAsync(Email email);
 		Task MarkEmailAsTrashAsync(Email email);
+		Task MarkEmailAsFavoriteAsync(Email email);
+		Task MarkEmailAsNotFavoriteAsync(Email email);
 	}
 }
