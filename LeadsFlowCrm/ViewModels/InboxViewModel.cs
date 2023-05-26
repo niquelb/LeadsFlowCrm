@@ -16,9 +16,6 @@ public class InboxViewModel : Screen
 	private readonly IGmailServiceClass _gmailService;
 	private readonly IEventAggregator _event;
 
-	private ObservableCollection<Email> _inbox = new();
-	private Email _selectedEmail;
-
 	public InboxViewModel(IGmailServiceClass gmailService, IEventAggregator @event)
     {
 		_gmailService = gmailService;
@@ -34,10 +31,28 @@ public class InboxViewModel : Screen
 		IsLoading = false;
 	}
 
+	/// <summary>
+	/// Event that gets triggered when the user selects an email
+	/// </summary>
+	/// <param name="email">Selected email</param>
+	/// <returns></returns>
+	private async Task PublishSelectedEmailAsync(Email email)
+	{
+		_gmailService.SelectedEmail = email;
+
+		await _event.PublishOnUIThreadAsync(new EmailSelectedEvent());
+	}
+
 	/*
-	 * This property is used to control the visibility of the loading spinner and the inbox ListView
+	 * Property backing fields
 	 */
 	private bool _isLoading = true;
+	private Email _selectedEmail;
+	private ObservableCollection<Email> _inbox = new();
+
+	/// <summary>
+	/// This property is used to control the visibility of the loading spinner
+	/// </summary>
 	public bool IsLoading
 	{
 		get { return _isLoading; }
@@ -62,13 +77,6 @@ public class InboxViewModel : Screen
 			 */
 			PublishSelectedEmailAsync(_selectedEmail);
 		}
-	}
-
-	private async Task PublishSelectedEmailAsync(Email email)
-	{
-		_gmailService.SelectedEmail = email;
-
-		await _event.PublishOnUIThreadAsync(new EmailSelectedEvent());
 	}
 
 	/// <summary>
