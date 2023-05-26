@@ -12,5 +12,4 @@ namespace LeadsFlowCrm.EventModels;
 /// </summary>
 public class EmailSelectedEvent
 {
-	public Email SelectedEmail { get; set; }
 }

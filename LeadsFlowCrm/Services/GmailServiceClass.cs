@@ -28,7 +28,12 @@ public class GmailServiceClass : IGmailServiceClass
 	/// <summary> Service object for the Gmail API </summary>
 	private GmailService _gmailService;
 
-	public GmailServiceClass(IBaseGoogleServiceClass baseGoogleService, IOAuthServiceClass oAuthService)
+	/// <summary>
+	/// Currently selected email
+	/// </summary>
+    public Email? SelectedEmail { get; set; }
+
+    public GmailServiceClass(IBaseGoogleServiceClass baseGoogleService, IOAuthServiceClass oAuthService)
 	{
 		_baseGoogleService = baseGoogleService;
 		_oAuthService = oAuthService;

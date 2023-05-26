@@ -60,8 +60,15 @@ public class InboxViewModel : Screen
 			/*
 			 * We notify the UI that the user has selected an email.
 			 */
-			_event.PublishOnUIThreadAsync(new EmailSelectedEvent() { SelectedEmail = _selectedEmail });
+			PublishSelectedEmailAsync(_selectedEmail);
 		}
+	}
+
+	private async Task PublishSelectedEmailAsync(Email email)
+	{
+		_gmailService.SelectedEmail = email;
+
+		await _event.PublishOnUIThreadAsync(new EmailSelectedEvent());
 	}
 
 	/// <summary>
