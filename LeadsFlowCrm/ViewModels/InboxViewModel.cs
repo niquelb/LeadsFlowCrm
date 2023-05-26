@@ -29,6 +29,18 @@ public class InboxViewModel : Screen
 		Inbox = new ObservableCollection<Email>(await _gmailService.GetInboxAsync());
 
 		IsLoading = false;
+		CanRefreshInbox = true;
+	}
+
+	public async void RefreshInbox()
+	{
+		IsLoading = true;
+		CanRefreshInbox = false;
+
+		Inbox = new ObservableCollection<Email>(await _gmailService.RefreshAndGetInboxAsync());
+
+		IsLoading = false;
+		CanRefreshInbox = true;
 	}
 
 	/// <summary>
@@ -47,6 +59,7 @@ public class InboxViewModel : Screen
 	 * Property backing fields
 	 */
 	private bool _isLoading = true;
+	private bool _canRefreshInbox = false;
 	private Email _selectedEmail;
 	private ObservableCollection<Email> _inbox = new();
 
@@ -63,6 +76,19 @@ public class InboxViewModel : Screen
 	}
 
 	/// <summary>
+	/// Property to control if the refresh button is enabled or not
+	/// </summary>
+	public bool CanRefreshInbox
+	{
+		get { return _canRefreshInbox; }
+		set { 
+			_canRefreshInbox = value;
+			NotifyOfPropertyChange();
+		}
+	}
+
+
+	/// <summary>
 	/// Selected email
 	/// </summary>
 	public Email SelectedEmail
@@ -74,8 +100,14 @@ public class InboxViewModel : Screen
 
 			/*
 			 * We notify the UI that the user has selected an email.
+			 * 
+			 * We have to wrap this in an if because when the user refreshes the inbox this also gets triggered
+			 * with a null value, breaking the app.
 			 */
-			PublishSelectedEmailAsync(_selectedEmail);
+			if (_selectedEmail != null)
+			{
+				PublishSelectedEmailAsync(_selectedEmail);
+			}
 		}
 	}
 

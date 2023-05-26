@@ -74,7 +74,7 @@ public class GmailServiceClass : IGmailServiceClass
 	/// <returns></returns>
 	public async Task RefreshInboxAsync()
 	{
-		_inbox = await GetInboxAsync();
+		_inbox = await GetEmailsFromInboxAsync();
 	}
 
 	/// <summary>

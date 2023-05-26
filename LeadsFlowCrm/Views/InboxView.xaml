@@ -13,6 +13,7 @@
             <ColumnDefinition Width="*" />
             <ColumnDefinition Width="auto" />
             <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="auto" />
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="auto" />
@@ -41,10 +42,20 @@
         </Border>
         <!--#endregion-->
 
+        <!--#region Refresh button-->
+
+        <Button x:Name="RefreshInbox"
+                Grid.Column="4" Grid.Row="0"
+                Style="{StaticResource IconButton}">
+            <Icon:PackIconMaterial Width="20" Height="20" Margin="10" Kind="Refresh" />
+        </Button>
+
+        <!--#endregion-->
+
         <Separator Margin="5" Height="0"/>
-        
+
         <!--#region Loading Spinner-->
-        <Grid Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="1">
+        <Grid Grid.Column="0" Grid.ColumnSpan="4" Grid.Row="1">
             <!--#region Loading grid visibility control-->
             <Grid.Style>
                 <Style TargetType="Grid">
@@ -57,7 +68,7 @@
                 </Style>
             </Grid.Style>
             <!--#endregion-->
-            
+
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="auto" />
@@ -76,11 +87,11 @@
             <TextBlock Grid.Column="1" Grid.Row="2" Text="Loading  inbox, please hang tight..." />
         </Grid>
         <!--#endregion-->
-        
+
         <!--#region Inbox-->
-        
+
         <!--#region ListView-->
-        <Grid Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="1">
+        <Grid Grid.Column="0" Grid.ColumnSpan="4" Grid.Row="1">
             <!--#region Inbox grid visibility control-->
             <Grid.Style>
                 <Style TargetType="Grid">
@@ -131,7 +142,7 @@
         <!--#endregion-->
 
         <!--#region Paginator-->
-        <Border Grid.Column="1" Grid.ColumnSpan="2" Grid.Row="3" 
+        <Border Grid.Column="1" Grid.ColumnSpan="3" Grid.Row="3" 
                 HorizontalAlignment="Right" 
                 BorderBrush="{StaticResource AREghZyBrush.Foreground.Static}"
                 BorderThickness="1" CornerRadius="5" Padding="5"
