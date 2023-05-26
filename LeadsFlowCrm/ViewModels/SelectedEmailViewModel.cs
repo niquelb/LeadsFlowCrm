@@ -72,10 +72,12 @@ public class SelectedEmailViewModel : Screen
 	/// <summary>
 	/// Method that will redirect to the inbox
 	/// </summary>
-	public async void Back()
-	{
-		await _event.PublishOnUIThreadAsync(new NavigationEvent(NavigationEvent.NavigationRoutes.Inbox));
-	}
+	public async void Back() => await _event.PublishOnUIThreadAsync(new NavigationEvent(NavigationEvent.NavigationRoutes.Inbox));
+
+	/// <summary>
+	/// Method for marking the email as unread
+	/// </summary>
+	public async void MarkUnread() => await _gmailServiceClass.MarkEmailAsUnreadAsync(SelectedEmail);
 
 	/*
 	 * Property backing fields

@@ -16,5 +16,6 @@ namespace LeadsFlowCrm.Services
 
 		string GetProcessedBody(Email email);
 		Task MarkEmailAsReadAsync(Email email);
+		Task MarkEmailAsUnreadAsync(Email email);
 	}
 }
