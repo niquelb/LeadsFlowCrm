@@ -27,6 +27,12 @@ public class ShellViewModel : Conductor<object>, IHandle<EmailSelectedEvent>
 		ActivateItemAsync(_inboxViewModel);
 	}
 
+	/// <summary>
+	/// Method that gets executed when the user clicks (or opens) an email from their inbox
+	/// </summary>
+	/// <param name="e">Event model</param>
+	/// <param name="cancellationToken"></param>
+	/// <returns></returns>
 	public async Task HandleAsync(EmailSelectedEvent e, CancellationToken cancellationToken)
 	{
 		await ActivateItemAsync(_selectedEmailViewModel);
