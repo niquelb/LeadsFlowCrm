@@ -225,4 +225,64 @@ public class GmailServiceClass : IGmailServiceClass
 
 		return output;
 	}
+
+	/// <summary>
+	/// Method for processing the body of a given Message object and return the email body STILL ENCODED IN BASE 64
+	/// </summary>
+	/// <param name="email">Message object</param>
+	/// <returns>Email body encoded in base 64</returns>
+	private async Task<string> ProcessEmailBodyAsync(Message email)
+	{
+		string output = string.Empty;
+
+		/*
+		 * Email bodies can follow 2 very different structures:
+		 * 
+		 *	- The body can be in the Payload itself, Email->Payload->Body
+		 *	- Or the body can be inside the "Parts", Email->Parts[]->Body
+		 */
+		if (email.Payload.Parts == null)
+		{
+			// If the body is not inside the parts
+			output = email.Payload.Body.Data;
+		}
+		else
+		{
+			// If the body is inside the parts
+			foreach (var part in email.Payload.Parts)
+			{
+
+				/*
+				 * The parts also include things like attachments, so we need to
+				 * iterate through them to find the one with the body.
+				 * 
+				 * Not only that but parts can also have parts inside them.
+				 * 
+				 * Thanks Google for making this so complicated.
+				 */
+
+				if (part.Body != null && part.Body.Data != null)
+				{
+					// If the part contains the body
+					output = part.Body.Data;
+
+					break;
+				}
+				else if (part.Parts != null)
+				{
+					// If the part contains more parts
+					foreach (var nestedPart in part.Parts)
+					{
+						if (nestedPart.Body != null && nestedPart.Body.Data != null)
+						{
+							output = nestedPart.Body.Data;
+						}
+					}
+				}
+			}
+
+		}
+
+		return output;
+	}
 }
