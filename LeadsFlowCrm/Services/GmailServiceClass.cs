@@ -129,6 +129,24 @@ public class GmailServiceClass : IGmailServiceClass
 	}
 
 	/// <summary>
+	/// Method for marking a specific email as trash through the Gmail API
+	/// </summary>
+	/// <param name="email">Email object</param>
+	/// <returns></returns>
+	public async Task MarkEmailAsTrashAsync(Email email)
+	{
+		if (email == null)
+		{
+			return;
+		}
+
+		Message msg = email.Message;
+
+		// We remove the "INBOX" label and add the "TRASH" label
+		await ModifyEmailTagsAsync(msg, new List<string> { "TRASH" }, new List<string> { "INBOX" });
+	}
+
+	/// <summary>
 	/// Method for getting the processed and unencoded body of the selected email
 	/// </summary>
 	/// <returns></returns>

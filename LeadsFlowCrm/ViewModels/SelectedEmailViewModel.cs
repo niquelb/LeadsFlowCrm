@@ -84,6 +84,11 @@ public class SelectedEmailViewModel : Screen
 	/// </summary>
 	public async void Archive() => await _gmailServiceClass.MarkEmailAsArchivedAsync(SelectedEmail);
 
+	/// <summary>
+	/// Method for marking the email as trash
+	/// </summary>
+	public async void Delete() => await _gmailServiceClass.MarkEmailAsTrashAsync(SelectedEmail);
+
 	/*
 	 * Property backing fields
 	 */
