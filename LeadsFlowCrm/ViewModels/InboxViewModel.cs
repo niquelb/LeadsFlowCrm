@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace LeadsFlowCrm.ViewModels;
@@ -20,6 +21,17 @@ public class InboxViewModel : Screen
 	{
 		_gmailService = gmailService;
 		_event = @event;
+	}
+
+	protected async override Task OnActivateAsync(CancellationToken cancellationToken)
+	{
+		await base.OnActivateAsync(cancellationToken);
+
+		/*
+		 * We clear the selected item so that the same email can be opened twice in a row.
+		 * We don't use the property because that fires an event, instead we modify the backing field.
+		 */
+		_selectedEmail = new();
 	}
 
 	protected async override void OnViewLoaded(object view)
