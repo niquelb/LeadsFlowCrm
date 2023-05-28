@@ -32,6 +32,9 @@ public class InboxViewModel : Screen
 		CanRefreshInbox = true;
 	}
 
+	/// <summary>
+	/// Method for refreshing the inbox
+	/// </summary>
 	public async void RefreshInbox()
 	{
 		IsLoading = true;
