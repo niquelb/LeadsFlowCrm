@@ -79,7 +79,9 @@
                     <Border x:Name="border" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" SnapsToDevicePixels="True">
                         <Grid>
                             <ScrollViewer x:Name="PART_ContentHost" Focusable="false" HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Hidden" />
-                            <TextBlock Text="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=(Utils:TextBoxHelper.Hint)}" Margin="5 0" Foreground="{StaticResource AREghZyBrush.Foreground.Disabled}">
+                            <TextBlock Text="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=(Utils:TextBoxHelper.Hint)}" 
+                                       Margin="5 0" VerticalAlignment="Center"
+                                       Foreground="{StaticResource AREghZyBrush.Foreground.Disabled}">
                                 <TextBlock.Visibility>
                                     <MultiBinding Converter="{StaticResource InputVisibility}">
                                         <Binding RelativeSource="{RelativeSource TemplatedParent}" Path="Text.IsEmpty" />

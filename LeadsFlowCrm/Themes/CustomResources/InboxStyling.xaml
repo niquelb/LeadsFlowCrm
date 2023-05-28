@@ -4,9 +4,9 @@
     <!--Inbox Styles-->
     
     <!--#region Search Box-->
-    <Style x:Key="InboxSearchBox" TargetType="TextBox">
+    <Style x:Key="InboxSearchBox" TargetType="TextBox" BasedOn="{StaticResource HintedTextBox}">
         <Setter Property="BorderThickness" Value="0" />
-        <Setter Property="Padding" Value="15 5" />
+        <Setter Property="Padding" Value="5" />
         <Setter Property="Background" Value="{StaticResource AREghZyBrush.Foreground.Static}" />
         <Setter Property="Foreground" Value="{StaticResource AREghZyBrush.Deep.1.Background.Static}" />
         <Setter Property="VerticalAlignment" Value="Center" />

@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:LeadsFlowCrm.Views"
+             xmlns:Utils="clr-namespace:LeadsFlowCrm.Utils"
              xmlns:LoadingSpinner="clr-namespace:LoadingSpinnerControl;assembly=LoadingSpinnerControl"
              xmlns:Icon="http://metro.mahapps.com/winfx/xaml/iconpacks"
              mc:Ignorable="d" 
@@ -31,7 +32,10 @@
                     <ColumnDefinition Width="*" />
                     <ColumnDefinition Width="auto" />
                 </Grid.ColumnDefinitions>
-                <TextBox x:Name="SearchBox" Grid.Column="0" Style="{StaticResource InboxSearchBox}"/>
+                <TextBox x:Name="SearchBox" 
+                         Grid.Column="0" 
+                         Style="{StaticResource InboxSearchBox}"
+                         Utils:TextBoxHelper.Hint="Search inbox..." />
                 <Icon:PackIconMaterial Grid.Column="1" 
                                        Kind="Magnify" Width="20" Height="20"
                                        Panel.ZIndex="2" Margin="5 0"
