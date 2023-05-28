@@ -5,13 +5,14 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:LeadsFlowCrm.ViewModels"
         xmlns:Icon="http://metro.mahapps.com/winfx/xaml/iconpacks" 
+        xmlns:Utils="clr-namespace:LeadsFlowCrm.Utils"
         mc:Ignorable="d" FontSize="18"
         WindowStartupLocation="CenterScreen"
         Title="Create Draft" Height="600" Width="700" 
         ResizeMode="CanResizeWithGrip" 
         WindowStyle="None" 
         AllowsTransparency="True" 
-        Background="{x:Null}">
+        Background="{x:Null}" MouseDown="Window_MouseDown">
     <Border CornerRadius="10" 
             Background="{StaticResource AREghZyBrush.Deep.1.Background.Static}">
         <Grid Margin="10">
@@ -47,12 +48,16 @@
                         <Rectangle Width="2" Fill="{StaticResource AREghZyBrush.Foreground.Deeper}"
                            Margin="3 7" />
                         <Button x:Name="Minimize"
-                                Style="{StaticResource IconButton}">
+                                Style="{StaticResource IconButton}" Click="Minimize_Click">
                             <Icon:PackIconMaterial Width="15" Height="15" Margin="15"  Kind="WindowMinimize" />
                         </Button>
-                        <Button x:Name="Close"
+                        <Button x:Name="Maximize"
+                                Style="{StaticResource IconButton}" Click="Maximize_Click">
+                            <Icon:PackIconMaterial Width="15" Height="15" Margin="15"  Kind="WindowMaximize" />
+                        </Button>
+                        <Button x:Name="Exit"
                                 Style="{StaticResource IconButton}">
-                            <Icon:PackIconMaterial Width="15" Height="15" Margin="15"  Kind="Close" />
+                            <Icon:PackIconMaterial Width="15" Height="15" Margin="15"  Kind="WindowClose" />
                         </Button>
                     </StackPanel>
                     <!--#endregion-->
@@ -62,13 +67,15 @@
                          Grid.Column="0"
                          Grid.Row="1"
                          Grid.ColumnSpan="3"
-                         Style="{StaticResource HintedTextBoxTo}"
+                         Style="{StaticResource HintedTextBox}"
+                         Utils:TextBoxHelper.Hint="To" 
                          Margin="0, 5" />
 
                     <TextBox x:Name="SubjectLine"
                          Grid.Column="0"
                          Grid.Row="2"
-                         Style="{StaticResource HintedTextBoxSubjectLine}"
+                         Style="{StaticResource HintedTextBox}"
+                         Utils:TextBoxHelper.Hint="Subject line" 
                          Grid.ColumnSpan="3"/>
                     <!--#endregion-->
                     

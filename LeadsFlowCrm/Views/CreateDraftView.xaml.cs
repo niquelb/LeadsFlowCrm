@@ -22,6 +22,30 @@ namespace LeadsFlowCrm.ViewModels
 		public CreateDraftView()
 		{
 			InitializeComponent();
+
+			this.MaxHeight = SystemParameters.MaximizedPrimaryScreenHeight;
+		}
+
+		private void Window_MouseDown(object sender, MouseButtonEventArgs e)
+		{
+			this.WindowState = WindowState.Normal;
+			this.DragMove();
+		}
+
+		private void Maximize_Click(object sender, RoutedEventArgs e)
+		{
+			if (this.WindowState == WindowState.Normal)
+			{
+				this.WindowState = WindowState.Maximized;
+				return;
+			}
+
+			this.WindowState = WindowState.Normal;
+		}
+
+		private void Minimize_Click(object sender, RoutedEventArgs e)
+		{
+			this.WindowState = WindowState.Minimized;
 		}
 	}
 }
