@@ -3,7 +3,8 @@
                     xmlns:DataGrid="clr-namespace:System.Windows.Controls;assembly=PresentationFramework" >
     <!--Base styling for the components-->
     
-    <!--#region Button-->
+    <!--#region Buttons-->
+    <!--#region Base Button-->
     <Style x:Key="BaseBtnStyling" TargetType="Button">
         <Setter Property="Background" Value="Transparent" />
         <Setter Property="FocusVisualStyle" Value="{x:Null}" />
@@ -21,6 +22,21 @@
                 <Setter Property="Background" Value="{StaticResource AREghZyBrush.ColourfulGlyph.MouseDown}" />
             </Trigger>
         </Style.Triggers>
+    </Style>
+    <!--#endregion-->
+
+    <!--#region Small Button-->
+    <Style x:Key="SmallBtnStyling" TargetType="Button" BasedOn="{StaticResource BaseBtnStyling}">
+        <Setter Property="Background" Value="{StaticResource AREghZyBrush.Deep.1.Border.Static}" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Border Background="{TemplateBinding Background}" BorderThickness="1" Padding="5" CornerRadius="10">
+                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
     </Style>
     <!--#endregion-->
 
@@ -46,6 +62,8 @@
             </Trigger>
         </Style.Triggers>
     </Style>
+    <!--#endregion-->
+    
     <!--#endregion-->
 
 </ResourceDictionary>

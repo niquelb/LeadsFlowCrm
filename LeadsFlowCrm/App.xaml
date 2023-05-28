@@ -14,6 +14,7 @@
                 <ResourceDictionary Source="Themes/CustomResources/BaseStyling.xaml"/>
                 <ResourceDictionary Source="Themes/CustomResources/SidebarStyling.xaml"/>
                 <ResourceDictionary Source="Themes/CustomResources/InboxStyling.xaml"/>
+                <ResourceDictionary Source="Themes/CustomResources/CreateDraftStyling.xaml"/>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Application.Resources>

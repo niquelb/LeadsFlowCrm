@@ -8,10 +8,19 @@ namespace LeadsFlowCrm.ViewModels;
 public class SidebarViewModel
 {
 	private readonly IEventAggregator _event;
+	private readonly IWindowManager _windowManager;
+	private readonly CreateDraftViewModel _createDraftViewModel;
 
-	public SidebarViewModel(IEventAggregator @event)
+	public SidebarViewModel(IEventAggregator @event, IWindowManager windowManager, CreateDraftViewModel createDraftViewModel)
     {
 		_event = @event;
+		_windowManager = windowManager;
+		_createDraftViewModel = createDraftViewModel;
+	}
+
+	public async void NewCorrespondence()
+	{
+		await _windowManager.ShowWindowAsync(_createDraftViewModel);
 	}
 
     public async void Inbox()

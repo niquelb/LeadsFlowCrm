@@ -1,0 +1,84 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:local="clr-namespace:LeadsFlowCrm.Utils"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <local:BoolToVisibilityConverter x:Key="InputVisibility" />
+
+    <!--#region Hinted Textboxes-->
+
+    <!--#region Hinted Textbox "To"-->
+    <Style x:Key="HintedTextBoxTo" TargetType="TextBox" BasedOn="{StaticResource {x:Type TextBox}}">
+        <Setter Property="Focusable" Value="False" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type TextBox}">
+                    <Border x:Name="border" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" SnapsToDevicePixels="True">
+                        <Grid>
+                            <ScrollViewer x:Name="PART_ContentHost" Focusable="false" HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Hidden" />
+                            <TextBlock Text="To" Margin="5 0" Foreground="{StaticResource AREghZyBrush.Foreground.Disabled}">
+                                <TextBlock.Visibility>
+                                    <MultiBinding Converter="{StaticResource InputVisibility}">
+                                        <Binding ElementName="InputHintTo" Path="Text.IsEmpty" />
+                                        <Binding ElementName="InputHintTo" Path="IsFocused" />
+                                    </MultiBinding>
+                                </TextBlock.Visibility>
+                            </TextBlock>
+                            <TextBox x:Name="InputHintTo" Background="Transparent"/>
+                        </Grid>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsEnabled" Value="false">
+                            <Setter Property="Opacity" TargetName="border" Value="0.56" />
+                        </Trigger>
+                        <Trigger Property="IsMouseOver" Value="true">
+                            <Setter Property="BorderBrush" TargetName="border" Value="{DynamicResource TextBox.MouseOver.Border}" />
+                        </Trigger>
+                        <Trigger Property="IsKeyboardFocused" Value="true">
+                            <Setter Property="BorderBrush" TargetName="border" Value="{DynamicResource TextBox.Focus.Border}" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    <!--#endregion-->
+
+    <!--#region Hinted Textbox "Subject Line"-->
+    <Style x:Key="HintedTextBoxSubjectLine" TargetType="TextBox" BasedOn="{StaticResource {x:Type TextBox}}">
+        <Setter Property="Focusable" Value="False" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type TextBox}">
+                    <Border x:Name="border" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" SnapsToDevicePixels="True">
+                        <Grid>
+                            <ScrollViewer x:Name="PART_ContentHost" Focusable="false" HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Hidden" />
+                            <TextBlock Text="Subject line" Margin="5 0" Foreground="{StaticResource AREghZyBrush.Foreground.Disabled}">
+                                <TextBlock.Visibility>
+                                    <MultiBinding Converter="{StaticResource InputVisibility}">
+                                        <Binding ElementName="InputHintSL" Path="Text.IsEmpty" />
+                                        <Binding ElementName="InputHintSL" Path="IsFocused" />
+                                    </MultiBinding>
+                                </TextBlock.Visibility>
+                            </TextBlock>
+                            <TextBox x:Name="InputHintSL" Background="Transparent"/>
+                        </Grid>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsEnabled" Value="false">
+                            <Setter Property="Opacity" TargetName="border" Value="0.56" />
+                        </Trigger>
+                        <Trigger Property="IsMouseOver" Value="true">
+                            <Setter Property="BorderBrush" TargetName="border" Value="{DynamicResource TextBox.MouseOver.Border}" />
+                        </Trigger>
+                        <Trigger Property="IsKeyboardFocused" Value="true">
+                            <Setter Property="BorderBrush" TargetName="border" Value="{DynamicResource TextBox.Focus.Border}" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    <!--#endregion-->
+
+    <!--#endregion-->
+
+</ResourceDictionary>
