@@ -20,5 +20,6 @@ namespace LeadsFlowCrm.Services
 		Task MarkEmailAsNotFavoriteAsync(Email email);
 		Task RefreshInboxAsync();
 		Task<List<Email>> RefreshAndGetInboxAsync();
+		Task SendEmailAsync(Email email);
 	}
 }

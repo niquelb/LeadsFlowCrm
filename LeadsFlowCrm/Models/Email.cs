@@ -23,10 +23,10 @@ public class Email
     /// </summary>
     public string FromEmail { get; set; }
 
-    /// <summary>
-    /// Reciever
-    /// </summary>
-    public string To { get; set; }
+	/// <summary>
+	/// Reciever (used for sending or drafting emails)
+	/// </summary>
+	public string To { get; set; }
 
     /// <summary>
     /// Subject line

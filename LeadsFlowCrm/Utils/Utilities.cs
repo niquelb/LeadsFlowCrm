@@ -1,6 +1,9 @@
-﻿using System;
+﻿using MimeKit;
+using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Net.Mail;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -12,18 +15,7 @@ namespace LeadsFlowCrm.Utils;
 public static class Utilities
 {
 	/// <summary>
-	/// Method for encoding a given string to Base 64
-	/// </summary>
-	/// <param name="plainText">Plain text string</param>
-	/// <returns>Encoded string</returns>
-	public static string Base64Encode(string plainText)
-	{
-		var output = Encoding.UTF8.GetBytes(plainText);
-		return Convert.ToBase64String(output);
-	}
-
-	/// <summary>
-	/// Method for decoding a given Base 64 string to plain text
+	/// Method for decoding a Base 64 string with special characters from the Gmail API to plain text
 	/// </summary>
 	/// <param name="base64EncodedData">Encoded string</param>
 	/// <returns>Plain text string</returns>
@@ -42,5 +34,39 @@ public static class Utilities
 		// We convert it and return it
 		var output = Convert.FromBase64String(base64EncodedData);
 		return Encoding.UTF8.GetString(output);
+	}
+
+	/// <summary>
+	/// Method that creates a MIME message that then gets encoded in Base 64 for use with the Gmail API
+	/// </summary>
+	/// <param name="to">Reciever</param>
+	/// <param name="from">Sender</param>
+	/// <param name="subject">Subject line</param>
+	/// <param name="body">Email body</param>
+	/// <returns>Encoded email</returns>
+	/// <seealso cref="MimeMessage"/>
+	public static string ConstructEmail(string to, string from, string subject, string body)
+	{
+		// We create the MIME message using MimeKit
+		var message = new MimeMessage();
+		message.From.Add(new MailboxAddress("", from));
+		message.To.Add(new MailboxAddress("", to));
+		message.Subject = subject;
+
+		BodyBuilder bodyBuilder = new()
+		{
+			TextBody = body
+		};
+
+		message.Body = bodyBuilder.ToMessageBody();
+
+		/*
+		 * We then write the message to a MemoryStream, this is done so we can
+		 * then cast that stream to an array of bytes and decode it to Base 64
+		 */
+		using var memoryStream = new MemoryStream();
+
+		message.WriteTo(memoryStream);
+		return Convert.ToBase64String(memoryStream.ToArray());
 	}
 }
