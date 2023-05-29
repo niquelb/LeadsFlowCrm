@@ -58,14 +58,14 @@ public class ApiHelper : IApiHelper
 	public async Task AuthenticateAsync(string OAuthToken, string Email)
 	{
 		// We create the body
-		var body = new LoginUser()
+		var body = new
 		{
-			Email = Email,
-			OAuthToken = OAuthToken,
+			Email,
+			OAuthToken,
 		};
 
 		// We encode the body
-		var encodedBody = new StringContent(JsonSerializer.Serialize<LoginUser>(body), Encoding.UTF8, "application/json");
+		var encodedBody = new StringContent(JsonSerializer.Serialize<object>(body), Encoding.UTF8, "application/json");
 
 		// We make the request
 		using HttpResponseMessage resp = await _apiClient.PostAsync("Auth/Login", encodedBody);
