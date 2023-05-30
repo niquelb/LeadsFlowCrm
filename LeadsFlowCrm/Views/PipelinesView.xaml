@@ -26,6 +26,8 @@
                     <RowDefinition Height="*" />
                     <RowDefinition Height="*" />
                 </Grid.RowDefinitions>
+                
+                <!--#region Stage btns-->
                 <UniformGrid x:Name="Stages"
                              Grid.Row="0"
                              Rows="1" >
@@ -50,19 +52,18 @@
                         </ItemsControl.ItemTemplate>
                     </ItemsControl>
                 </UniformGrid>
+                
+                <!--#endregion-->
 
+                <!--#region Search box-->
                 <Grid Grid.Row="1" Margin="0 5">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*" />
                         <ColumnDefinition Width="auto" />
                         <ColumnDefinition Width="*" />
                     </Grid.ColumnDefinitions>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="*" />
-                        <RowDefinition Height="*" />
-                    </Grid.RowDefinitions>
 
-                    <Border Grid.Column="1" Grid.Row="0" 
+                    <Border Grid.Column="1" 
                         Background="{StaticResource AREghZyBrush.Foreground.Static}"
                         BorderBrush="{StaticResource AREghZyBrush.Foreground.Static}"
                         CornerRadius="10" BorderThickness="1" MinWidth="400" Padding="5">
@@ -85,6 +86,7 @@
                     </Border>
 
                 </Grid>
+                <!--#endregion-->
             </Grid>
         </Border>
         <!--#endregion-->
