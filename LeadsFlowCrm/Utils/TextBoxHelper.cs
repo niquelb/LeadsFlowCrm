@@ -2,6 +2,9 @@
 
 namespace LeadsFlowCrm.Utils;
 
+/// <summary>
+/// Class responsible for allowing a textbox to contain a "hint" text
+/// </summary>
 public static class TextBoxHelper
 {
 	public static readonly DependencyProperty HintProperty =

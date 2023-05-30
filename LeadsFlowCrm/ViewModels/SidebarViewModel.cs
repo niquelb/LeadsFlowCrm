@@ -29,7 +29,7 @@ public class SidebarViewModel
 	}
 	public async void Pipelines()
 	{
-		throw new NotImplementedException();
+		await _event.PublishOnUIThreadAsync(new NavigationEvent(NavigationEvent.NavigationRoutes.Pipelines));
 	}
 	public async void Contacts()
 	{

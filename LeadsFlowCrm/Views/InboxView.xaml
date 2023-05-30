@@ -56,8 +56,6 @@
 
         <!--#endregion-->
 
-        <Separator Margin="5" Height="0"/>
-
         <!--#region Loading Spinner-->
         <Grid Grid.Column="0" Grid.ColumnSpan="4" Grid.Row="1">
             <!--#region Loading grid visibility control-->

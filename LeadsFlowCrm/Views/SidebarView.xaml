@@ -42,7 +42,7 @@
                             <TextBlock Text="Inbox"/>
                         </StackPanel>
                     </Button>
-                    <Button x:Name="Pipelines" Style="{StaticResource SidebarBtn}" IsEnabled="False">
+                    <Button x:Name="Pipelines" Style="{StaticResource SidebarBtn}">
                         <StackPanel Orientation="Horizontal">
                             <Icon:PackIconMaterial Kind="Pipe" Style="{StaticResource SidebarIcon}"/>
                             <TextBlock Text="Pipelines"/>

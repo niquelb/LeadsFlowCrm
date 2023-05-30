@@ -12,15 +12,18 @@ namespace LeadsFlowCrm.ViewModels;
 public class ShellViewModel : Conductor<object>, IHandle<EmailSelectedEvent>, IHandle<NavigationEvent>
 {
 	private readonly InboxViewModel _inboxViewModel;
+	private readonly PipelinesViewModel _pipelinesViewModel;
 	private readonly SelectedEmailViewModel _selectedEmailViewModel;
 	private readonly IEventAggregator _event;
 
 	public ShellViewModel(InboxViewModel inboxViewModel,
+					   PipelinesViewModel pipelinesViewModel,
 					   SelectedEmailViewModel selectedEmailViewModel,
 					   SidebarViewModel sidebarViewModel,
 					   IEventAggregator @event)
     {
 		_inboxViewModel = inboxViewModel;
+		_pipelinesViewModel = pipelinesViewModel;
 		_selectedEmailViewModel = selectedEmailViewModel;
 		Sidebar = sidebarViewModel;
 		_event = @event;
@@ -53,7 +56,10 @@ public class ShellViewModel : Conductor<object>, IHandle<EmailSelectedEvent>, IH
 		switch (e.Route)
 		{
 			case NavigationEvent.NavigationRoutes.Inbox:
-				await ActivateItemAsync(_inboxViewModel);
+				await ActivateItemAsync(_inboxViewModel, cancellationToken);
+				break;
+			case NavigationEvent.NavigationRoutes.Pipelines:
+				await ActivateItemAsync(_pipelinesViewModel, cancellationToken);
 				break;
 			default:
 				throw new ArgumentException($"{nameof(e.Route)} is not a valid navigation object or is not yet implemented");

@@ -17,6 +17,7 @@ public class NavigationEvent
 	public enum NavigationRoutes
 	{
 		Inbox,
+		Pipelines
 	}
 
 	/// <summary>
