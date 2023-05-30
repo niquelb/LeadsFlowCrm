@@ -7,6 +7,9 @@ using System.Text;
 using System.Threading.Tasks;
 using LeadsFlowCrm.Services;
 using LeadsFlowCrm.Models;
+using System.Diagnostics;
+using System.Windows.Documents;
+using System.Windows.Controls;
 
 namespace LeadsFlowCrm.ViewModels;
 
@@ -22,15 +25,27 @@ public class CreateDraftViewModel : Screen
 
 	public async void Send()
 	{
-		// TEST CODE
-		var email = new Email()
+		if (string.IsNullOrWhiteSpace(To) || string.IsNullOrWhiteSpace(SubjectLine) || string.IsNullOrWhiteSpace(Body))
 		{
-			To = "nicolas.palaorocort03@gmail.com",
-			SubjectLine = "Test email",
-			Body = "Lorem ipsum or summ like that"
-		};
+			return;
+		}
 
-		await _gmailService.SendEmailAsync(email);
+
+		try
+		{
+			Email email = new()
+			{
+				To = To,
+				SubjectLine = SubjectLine,
+				Body = Body,
+			};
+
+			await _gmailService.SendEmailAsync(email);
+		}
+		catch (Exception ex)
+		{
+			Trace.TraceError(ex.Message);
+		}
 	}
 
     public async void Exit()
@@ -43,7 +58,8 @@ public class CreateDraftViewModel : Screen
 	 */
 	private string _to = string.Empty;
 	private string _subjectLine = string.Empty;
-	private string _body = string.Empty;
+	private string _body;
+
 
 	/// <summary> Message that will be sent/drafted </summary>
 	public GmailApi.Message Msg { get; set; } = new();
@@ -83,5 +99,6 @@ public class CreateDraftViewModel : Screen
 			NotifyOfPropertyChange();
 		}
 	}
+
 
 }

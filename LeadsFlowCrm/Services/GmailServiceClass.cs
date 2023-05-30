@@ -208,7 +208,7 @@ public class GmailServiceClass : IGmailServiceClass
 	/// <summary>
 	/// Method for sending an email through the Gmail API with the logged in user's email as the sender
 	/// </summary>
-	/// <param name="email">Email to be sent</param>
+	/// <param name="email">Email to be sent, the necessary properties are "To", "SubjectLine" and "Body"</param>
 	/// <returns></returns>
 	public async Task SendEmailAsync(Email email)
 	{

@@ -24,6 +24,13 @@ namespace LeadsFlowCrm.ViewModels
 			InitializeComponent();
 
 			this.MaxHeight = SystemParameters.MaximizedPrimaryScreenHeight;
+			hiddenTextBox.TextChanged += HiddenTextBox_TextChanged;
+		}
+
+		private void HiddenTextBox_TextChanged(object sender, TextChangedEventArgs e)
+		{
+			BodyContainer.Document.Blocks.Clear();
+			BodyContainer.Document.Blocks.Add(new Paragraph(new Run(hiddenTextBox.Text)));
 		}
 
 		private void Window_MouseDown(object sender, MouseButtonEventArgs e)
