@@ -7,7 +7,8 @@ namespace LeadsFlowCrm.Models;
 /// </summary>
 public class LoggedInUser
 {
-	[JsonPropertyName("id")]
+    public User AssignedUser { get; set; }
+    [JsonPropertyName("id")]
 	public string Id { get; set; }
 	[JsonPropertyName("token")]
 	public string Token { get; set; }

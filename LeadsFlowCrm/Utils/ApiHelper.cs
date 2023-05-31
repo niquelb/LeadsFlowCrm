@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
@@ -41,8 +42,11 @@ public class ApiHelper : IApiHelper
 			throw new Exception("Failure to read AppSettings.json. -> Failure to get the API URL.");
 		}
 
-		_apiClient = new HttpClient();
-		_apiClient.BaseAddress = new Uri(apiUrl);
+		_apiClient = new HttpClient
+		{
+			BaseAddress = new Uri(apiUrl)
+		};
+
 		_apiClient.DefaultRequestHeaders.Accept.Clear();
 		_apiClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 	}
@@ -78,6 +82,7 @@ public class ApiHelper : IApiHelper
 
 		_user.Token = output.Token;
 		_user.Id = output.Id;
+		_user.AssignedUser = await GetUserAsync(output.Id, output.Token);
 	}
 
 	/// <summary>
@@ -107,5 +112,39 @@ public class ApiHelper : IApiHelper
 		}
 
 		return null;
+	}
+
+	/// <summary>
+	/// Method for generating a User model with the ID provided
+	/// </summary>
+	/// <param name="id">User ID</param>
+	/// <param name="token">Auth token</param>
+	/// <returns>User model</returns>
+	/// <exception cref="UnauthorizedAccessException">If the token is invalid</exception>
+	/// <exception cref="ArgumentException">If there isn't a user with the given ID</exception>
+	/// <exception cref="Exception">Any other error</exception>
+	public async Task<User> GetUserAsync(string id, string token)
+	{
+		_apiClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
+		using HttpResponseMessage resp = await _apiClient.GetAsync($"api/Users/{id}");
+		if (resp.IsSuccessStatusCode == false)
+		{
+            if (resp.StatusCode == HttpStatusCode.Unauthorized)
+            {
+				throw new UnauthorizedAccessException(resp.ReasonPhrase);
+			}
+
+			if (resp.StatusCode == HttpStatusCode.Unauthorized)
+			{
+				throw new ArgumentException(resp.ReasonPhrase);
+			}
+
+			throw new Exception(resp.ReasonPhrase);
+		}
+
+		var output = await resp.Content.ReadAsAsync<User>();
+
+		return output;
 	}
 }
