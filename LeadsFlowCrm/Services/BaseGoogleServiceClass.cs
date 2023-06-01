@@ -2,6 +2,7 @@
 using Google.Apis.Gmail.v1;
 using Google.Apis.Oauth2.v2;
 using Google.Apis.Services;
+using LeadsFlowCrm.Services.ModelServices;
 using LeadsFlowCrm.Utils;
 using System;
 using System.Collections.Generic;
@@ -41,11 +42,13 @@ public class BaseGoogleServiceClass : IBaseGoogleServiceClass
 		_apiHelper = apiHelper;
 	}
 
-	/// <summary>
-	/// Method for getting a BaseClientService to instanciate other Google services
-	/// </summary>
-	/// <returns></returns>
-	public async Task<BaseClientService.Initializer> GetServiceAsync()
+    public CancellationToken CancellationToken { get; set; } = new CancellationToken();
+
+    /// <summary>
+    /// Method for getting a BaseClientService to instanciate other Google services
+    /// </summary>
+    /// <returns></returns>
+    public async Task<BaseClientService.Initializer> GetServiceAsync()
 	{
 		if (_service == null)
 		{
@@ -69,9 +72,6 @@ public class BaseGoogleServiceClass : IBaseGoogleServiceClass
 		// We retrieve the client secrets from our API
 		ClientSecrets? clientSecrets = await _apiHelper.GetGoogleClientSecretsAsync();
 
-		// TODO: make cancellation token accessible in case a reauth is needed.
-		var cancelToken = new CancellationToken();
-
 		if (clientSecrets == null)
 		{
 			throw new ArgumentNullException(nameof(clientSecrets));
@@ -81,7 +81,7 @@ public class BaseGoogleServiceClass : IBaseGoogleServiceClass
 				clientSecrets,
 				_scopes,
 				"user",
-				cancelToken
+				CancellationToken
 			);
 
 		return output;
@@ -112,5 +112,20 @@ public class BaseGoogleServiceClass : IBaseGoogleServiceClass
 		}
 
 		return _credentials;
+	}
+
+	/// <summary>
+	/// Method for re-authing a user if the token has expired or is invalid
+	/// </summary>
+	public async Task ReAuthorizeUser()
+	{
+		//TODO: use a refresh token
+
+		var credentials = await GetCredentialsAsync();
+
+		await GoogleWebAuthorizationBroker.ReauthorizeAsync(
+				credentials,
+				CancellationToken
+			);
 	}
 }

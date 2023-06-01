@@ -6,6 +6,7 @@ using Google.Apis.Oauth2.v2;
 using Google.Apis.Services;
 using LeadsFlowCrm.Models;
 using LeadsFlowCrm.Services;
+using LeadsFlowCrm.Services.ModelServices;
 using LeadsFlowCrm.Utils;
 using System;
 using System.Collections.Generic;
@@ -24,19 +25,19 @@ public class LoginViewModel : Screen
 	private readonly ShellViewModel _shellViewModel;
 	private readonly IBaseGoogleServiceClass _baseService;
 	private readonly IOAuthServiceClass _oAuthService;
-	private readonly IApiHelper _api;
+	private readonly IUserService _userService;
 
 	public LoginViewModel(IWindowManager windowManager,
 					   ShellViewModel shellViewModel,
 					   IBaseGoogleServiceClass baseService, 
 					   IOAuthServiceClass oAuthService,
-					   IApiHelper api)
+					   IUserService userService)
 	{
 		_windowManager = windowManager;
 		_shellViewModel = shellViewModel;
 		_baseService = baseService;
 		_oAuthService = oAuthService;
-		_api = api;
+		_userService = userService;
 	}
 
 	/*
@@ -117,7 +118,7 @@ public class LoginViewModel : Screen
 		Trace.WriteLine(token, nameof(token));		
 
 		// We authenticate in our API
-		await _api.AuthenticateAsync(token, email);
+		await _userService.AuthenticateAsync(token, email);
 
 		return true;
 	}

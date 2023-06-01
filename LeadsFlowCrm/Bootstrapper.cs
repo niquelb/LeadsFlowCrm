@@ -1,6 +1,7 @@
 ﻿using Caliburn.Micro;
 using LeadsFlowCrm.Models;
 using LeadsFlowCrm.Services;
+using LeadsFlowCrm.Services.ModelServices;
 using LeadsFlowCrm.Utils;
 using LeadsFlowCrm.ViewModels;
 using System;
@@ -33,6 +34,7 @@ public class Bootstrapper : BootstrapperBase
 			.Singleton<IWindowManager, WindowManager>()
 			.Singleton<IEventAggregator, EventAggregator>()
 			.Singleton<IApiHelper, ApiHelper>()
+			.Singleton<IUserService,  UserService>()
 			.Singleton<LoggedInUser>() //TODO: implement an interface
 			.Singleton<IBaseGoogleServiceClass, BaseGoogleServiceClass>()
 			.Singleton<IOAuthServiceClass, OAuthServiceClass>()

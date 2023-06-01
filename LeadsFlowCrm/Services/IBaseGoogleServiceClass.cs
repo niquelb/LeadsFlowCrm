@@ -8,5 +8,6 @@ namespace LeadsFlowCrm.Services
 	{
 		Task<UserCredential> GetCredentialsAsync();
 		Task<BaseClientService.Initializer> GetServiceAsync();
+		Task ReAuthorizeUser();
 	}
 }
