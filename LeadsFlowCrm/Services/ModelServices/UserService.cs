@@ -1,9 +1,11 @@
 ﻿using Google.Apis.Auth.OAuth2;
+using Google.Apis.Oauth2.v2;
 using LeadsFlowCrm.Models;
 using LeadsFlowCrm.Utils;
 using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -17,11 +19,18 @@ namespace LeadsFlowCrm.Services.ModelServices;
 public class UserService : IUserService
 {
 	private readonly HttpClient _apiClient;
+	private readonly IBaseGoogleServiceClass _baseGoogleService;
+	private readonly IOAuthServiceClass _oAuthService;
 	private readonly LoggedInUser _user;
 
-	public UserService(IApiHelper apiHelper, LoggedInUser user)
+	public UserService(IApiHelper apiHelper,
+					IBaseGoogleServiceClass baseGoogleService,
+					IOAuthServiceClass oAuthService,
+					LoggedInUser user)
 	{
 		_apiClient = apiHelper.ApiClient;
+		_baseGoogleService = baseGoogleService;
+		_oAuthService = oAuthService;
 		_user = user;
 	}
 
@@ -57,6 +66,38 @@ public class UserService : IUserService
 		_user.Token = output.Token;
 		_user.Id = output.Id;
 		_user.AssignedUser = await GetUserAsync(output.Id, output.Token);
+	}
+
+	/// <summary>
+	/// Google Sign-In method
+	/// </summary>
+	/// <returns></returns>
+	public async Task<bool> GoogleSignInAsync()
+	{
+		// We retrieve the credentials
+		var credentials = await _baseGoogleService.GetCredentialsAsync();
+
+		if (credentials == null)
+		{
+			return false;
+		}
+
+		// We retrieve the OAuth service
+		var oauthService = await _oAuthService.GetOauthServiceAsync();
+
+		// We retrieve the user's profile information
+		var userInfo = await oauthService.Userinfo.Get().ExecuteAsync();
+
+		// We collect the user's info
+		string email = userInfo.Email;
+		string token = await credentials.GetAccessTokenForRequestAsync();
+
+		Trace.WriteLine(token, nameof(token));
+
+		// We authenticate in our API
+		await AuthenticateAsync(token, email);
+
+		return true;
 	}
 
 	/// <summary>

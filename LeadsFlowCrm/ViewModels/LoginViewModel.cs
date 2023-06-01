@@ -74,7 +74,7 @@ public class LoginViewModel : Screen
 		IsLoading = true;
 		LoadingText = "Please wait while we authenticate you...";
 
-		bool isAuthenticated = await GoogleSignInAsync();
+		bool isAuthenticated = await _userService.GoogleSignInAsync();
 
 		if (isAuthenticated)
 		{
@@ -89,37 +89,5 @@ public class LoginViewModel : Screen
 
 		IsLoading = false;
 		LoadingText = string.Empty;
-	}
-
-	/// <summary>
-	/// Google Sign-In method
-	/// </summary>
-	/// <returns></returns>
-	private async Task<bool> GoogleSignInAsync()
-	{
-		// We retrieve the credentials
-		var credentials = await _baseService.GetCredentialsAsync();
-
-		if (credentials == null)
-		{
-			return false;
-		}
-
-		// We retrieve the OAuth service
-		var oauthService = await _oAuthService.GetOauthServiceAsync();
-
-		// We retrieve the user's profile information
-		var userInfo = await oauthService.Userinfo.Get().ExecuteAsync();
-
-		// We collect the user's info
-		string email = userInfo.Email;
-		string token = await credentials.GetAccessTokenForRequestAsync();
-
-		Trace.WriteLine(token, nameof(token));		
-
-		// We authenticate in our API
-		await _userService.AuthenticateAsync(token, email);
-
-		return true;
 	}
 }
