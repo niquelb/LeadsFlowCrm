@@ -25,9 +25,12 @@ public class User
 	/// </summary>
 	public string DisplayName { get; set; } = string.Empty;
 
-	// TODO: change this to be an org model
-	/// <summary>
-	/// Organization that this user belongs to
-	/// </summary>
-	public string OrganizationId { get; set; } = string.Empty;
+	public Organization Organization { get; set; } = new();
+
+    /// <summary>
+    /// ID for Organization that this user belongs to.
+	/// 
+	/// This is mainly for parsing the response from the API which returns this ID as a Foreign Key.
+    /// </summary>
+    public string OrganizationId { get; set; } = string.Empty;
 }

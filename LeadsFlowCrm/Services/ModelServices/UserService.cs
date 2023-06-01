@@ -131,6 +131,8 @@ public class UserService : IUserService
 
 		var output = await resp.Content.ReadAsAsync<User>();
 
+		//TODO: output.Organization = getOrg(output.OrganizationId)
+
 		return output;
 	}
 }
