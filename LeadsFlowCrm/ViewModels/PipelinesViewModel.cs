@@ -17,7 +17,18 @@ public class PipelinesViewModel : Screen
 {
     public PipelinesViewModel()
     {
-    }
+		Contacts = new ObservableCollection<Contact>
+		{
+			new Contact()
+			{
+				Email = "test@gmail.com",
+				FirstName = "Juan",
+				LastNames = "Perez",
+				Phone = "603769318",
+				Notes = "Some notes",
+			}
+		};
+	}
 
 	protected async override Task OnActivateAsync(CancellationToken cancellationToken)
 	{
@@ -50,7 +61,7 @@ public class PipelinesViewModel : Screen
 	}
 	private static SolidColorBrush GetRandomBrush()
 	{
-		Random random = new Random();
+		Random random = new();
 		Color randomColor = Color.FromRgb((byte)random.Next(256), (byte)random.Next(256), (byte)random.Next(256));
 		return new SolidColorBrush(randomColor);
 	}
@@ -64,6 +75,8 @@ public class PipelinesViewModel : Screen
 
 
 	private ObservableCollection<StageButton> _stageButtons = new();
+	private ObservableCollection<Contact> _contacts = new();
+	private Contact _selectedContact;
 
 	public ObservableCollection<StageButton> StageButtons
 	{
@@ -74,5 +87,22 @@ public class PipelinesViewModel : Screen
 		}
 	}
 
+	public ObservableCollection<Contact> Contacts
+	{
+		get { return _contacts; }
+		set { 
+			_contacts = value;
+			NotifyOfPropertyChange();
+		}
+	}
+
+	public Contact SelectedContact
+	{
+		get { return _selectedContact; }
+		set { 
+			_selectedContact = value;
+			NotifyOfPropertyChange();
+		}
+	}
 
 }

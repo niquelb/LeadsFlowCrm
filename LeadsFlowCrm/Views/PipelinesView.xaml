@@ -112,6 +112,36 @@
             </Button>
 
             <!--#endregion-->
+            
+            <!--#region Listview-->
+
+            <ListView Grid.Row="1"
+                      ItemsSource="{Binding Contacts}"
+                      SelectedItem="{Binding SelectedContact}"
+                      Margin="0 15" 
+                      FontSize="18" >
+                <ListView.View>
+                    <GridView>
+                        <GridViewColumn Header="Email Adress" 
+                                    DisplayMemberBinding="{Binding Email}"
+                                    Width="200" />
+                        <GridViewColumn Header="Full Name" 
+                                    DisplayMemberBinding="{Binding FullName}"
+                                    Width="200" />
+                        <GridViewColumn Header="Phone" 
+                                    DisplayMemberBinding="{Binding Phone}"
+                                    Width="200" />
+                        <GridViewColumn Header="Last Email At" 
+                                    DisplayMemberBinding="{Binding LastEmailAt}"
+                                    Width="200" />
+                        <GridViewColumn Header="Notes" 
+                                    DisplayMemberBinding="{Binding Notes}"
+                                    Width="400" />
+                    </GridView>
+                </ListView.View>
+            </ListView>
+            
+            <!--#endregion-->
 
         </Grid>
         <!--#endregion-->
