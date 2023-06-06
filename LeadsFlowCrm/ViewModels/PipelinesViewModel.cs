@@ -1,5 +1,6 @@
 ﻿using Caliburn.Micro;
 using LeadsFlowCrm.Models;
+using LeadsFlowCrm.Services.ModelServices;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -15,19 +16,16 @@ namespace LeadsFlowCrm.ViewModels;
 
 public class PipelinesViewModel : Screen
 {
-    public PipelinesViewModel()
-    {
-		Contacts = new ObservableCollection<Contact>
-		{
-			new Contact()
-			{
-				Email = "test@gmail.com",
-				FirstName = "Juan",
-				LastNames = "Perez",
-				Phone = "603769318",
-				Notes = "Some notes",
-			}
-		};
+    public PipelinesViewModel(IContactService contactService)
+	{
+		_contactService = contactService;
+	}
+
+	protected async override Task OnInitializeAsync(CancellationToken cancellationToken)
+	{
+		await base.OnInitializeAsync(cancellationToken);
+
+		Contacts = new ObservableCollection<Contact>(await _contactService.GetAllAsync());
 	}
 
 	protected async override Task OnActivateAsync(CancellationToken cancellationToken)
@@ -77,6 +75,7 @@ public class PipelinesViewModel : Screen
 	private ObservableCollection<StageButton> _stageButtons = new();
 	private ObservableCollection<Contact> _contacts = new();
 	private Contact _selectedContact;
+	private readonly IContactService _contactService;
 
 	public ObservableCollection<StageButton> StageButtons
 	{

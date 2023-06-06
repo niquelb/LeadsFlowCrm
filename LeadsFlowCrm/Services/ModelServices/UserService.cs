@@ -27,10 +27,11 @@ public class UserService : IUserService
 	private readonly IOAuthServiceClass _oAuthService;
 	private readonly LoggedInUser _user;
 
-	public UserService(IApiHelper apiHelper,
-					IBaseGoogleServiceClass baseGoogleService,
-					IOAuthServiceClass oAuthService,
-					LoggedInUser user)
+	public UserService(
+		IApiHelper apiHelper,
+		IBaseGoogleServiceClass baseGoogleService,
+		IOAuthServiceClass oAuthService,
+		LoggedInUser user)
 	{
 		_apiClient = apiHelper.ApiClient;
 		_baseGoogleService = baseGoogleService;
@@ -125,7 +126,7 @@ public class UserService : IUserService
 				throw new UnauthorizedAccessException(resp.ReasonPhrase);
 			}
 
-			if (resp.StatusCode == HttpStatusCode.Unauthorized)
+			if (resp.StatusCode == HttpStatusCode.NotFound)
 			{
 				throw new ArgumentException(resp.ReasonPhrase);
 			}
