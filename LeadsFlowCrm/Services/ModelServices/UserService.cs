@@ -16,6 +16,10 @@ using System.Threading.Tasks;
 
 namespace LeadsFlowCrm.Services.ModelServices;
 
+/// <summary>
+/// Services for the User model 
+/// </summary>
+/// <see cref="User"/>
 public class UserService : IUserService
 {
 	private readonly HttpClient _apiClient;

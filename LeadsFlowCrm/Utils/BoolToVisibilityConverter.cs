@@ -9,6 +9,7 @@ using System.Windows.Data;
 
 namespace LeadsFlowCrm.Utils;
 
+[Obsolete]
 public class BoolToVisibilityConverter : IMultiValueConverter
 {
 	public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
