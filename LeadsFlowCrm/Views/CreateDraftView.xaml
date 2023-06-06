@@ -1,4 +1,4 @@
-﻿<Window x:Class="LeadsFlowCrm.ViewModels.CreateDraftView"
+﻿<Window x:Class="LeadsFlowCrm.Views.CreateDraftView"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -90,13 +90,7 @@
                         <RowDefinition Height="auto" />
                     </Grid.RowDefinitions>
 
-                    <!--#region Rich textbox (body)-->
-                    <RichTextBox x:Name="BodyContainer" Grid.Row="0" />
-
-                    <TextBox x:Name="hiddenTextBox"
-                             Text="{Binding Body, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                             Visibility="Collapsed" />
-                    <!--#endregion-->
+                    <TextBox Grid.Row="0" x:Name="Body" />
 
                     <!--#region Footer-->
                     <Grid Grid.Row="2">

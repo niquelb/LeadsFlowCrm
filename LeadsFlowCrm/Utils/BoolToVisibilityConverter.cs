@@ -9,7 +9,9 @@ using System.Windows.Data;
 
 namespace LeadsFlowCrm.Utils;
 
-[Obsolete]
+/// <summary>
+/// Class for converting a boolean into a valid Visibility value
+/// </summary>
 public class BoolToVisibilityConverter : IMultiValueConverter
 {
 	public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)

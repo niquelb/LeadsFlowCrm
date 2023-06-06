@@ -12,47 +12,39 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 
-namespace LeadsFlowCrm.ViewModels
+namespace LeadsFlowCrm.Views;
+
+/// <summary>
+/// Lógica de interacción para CreateDraftView.xaml
+/// </summary>
+public partial class CreateDraftView : Window
 {
-	/// <summary>
-	/// Lógica de interacción para CreateDraftView.xaml
-	/// </summary>
-	public partial class CreateDraftView : Window
+	public CreateDraftView()
 	{
-		public CreateDraftView()
-		{
-			InitializeComponent();
+		InitializeComponent();
 
-			this.MaxHeight = SystemParameters.MaximizedPrimaryScreenHeight;
-			hiddenTextBox.TextChanged += HiddenTextBox_TextChanged;
+		this.MaxHeight = SystemParameters.MaximizedPrimaryScreenHeight;
+	}
+
+	private void Window_MouseDown(object sender, MouseButtonEventArgs e)
+	{
+		this.WindowState = WindowState.Normal;
+		this.DragMove();
+	}
+
+	private void Maximize_Click(object sender, RoutedEventArgs e)
+	{
+		if (this.WindowState == WindowState.Normal)
+		{
+			this.WindowState = WindowState.Maximized;
+			return;
 		}
 
-		private void HiddenTextBox_TextChanged(object sender, TextChangedEventArgs e)
-		{
-			BodyContainer.Document.Blocks.Clear();
-			BodyContainer.Document.Blocks.Add(new Paragraph(new Run(hiddenTextBox.Text)));
-		}
+		this.WindowState = WindowState.Normal;
+	}
 
-		private void Window_MouseDown(object sender, MouseButtonEventArgs e)
-		{
-			this.WindowState = WindowState.Normal;
-			this.DragMove();
-		}
-
-		private void Maximize_Click(object sender, RoutedEventArgs e)
-		{
-			if (this.WindowState == WindowState.Normal)
-			{
-				this.WindowState = WindowState.Maximized;
-				return;
-			}
-
-			this.WindowState = WindowState.Normal;
-		}
-
-		private void Minimize_Click(object sender, RoutedEventArgs e)
-		{
-			this.WindowState = WindowState.Minimized;
-		}
+	private void Minimize_Click(object sender, RoutedEventArgs e)
+	{
+		this.WindowState = WindowState.Minimized;
 	}
 }

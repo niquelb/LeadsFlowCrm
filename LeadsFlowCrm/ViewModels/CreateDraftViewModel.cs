@@ -30,7 +30,6 @@ public class CreateDraftViewModel : Screen
 			return;
 		}
 
-
 		try
 		{
 			Email email = new()
@@ -41,6 +40,8 @@ public class CreateDraftViewModel : Screen
 			};
 
 			await _gmailService.SendEmailAsync(email);
+
+			Exit();
 		}
 		catch (Exception ex)
 		{
@@ -58,8 +59,7 @@ public class CreateDraftViewModel : Screen
 	 */
 	private string _to = string.Empty;
 	private string _subjectLine = string.Empty;
-	private string _body;
-
+	private string _body = string.Empty;
 
 	/// <summary> Message that will be sent/drafted </summary>
 	public GmailApi.Message Msg { get; set; } = new();
