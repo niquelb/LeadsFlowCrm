@@ -23,8 +23,6 @@ public class StageViewModel : Screen, IHandle<StageSelectedEvent>
 	public async Task HandleAsync(StageSelectedEvent e, CancellationToken cancellationToken)
 	{
 		Stage = e.SelectedStage;
-
-		Trace.WriteLine(Stage.Name, "Stage -> ");
 	}
 
 	protected async override Task OnInitializeAsync(CancellationToken cancellationToken)
