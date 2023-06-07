@@ -90,10 +90,19 @@ public class PipelinesViewModel : Conductor<object>
 			_selectedTab = value;
 			NotifyOfPropertyChange();
 
-			_event.PublishOnUIThreadAsync(new StageSelectedEvent()
+			if (_selectedTab != null)
 			{
-				SelectedStage = Pipeline.Stages[0]
-			});
+				int selectedIndex = Tabs.IndexOf(_selectedTab);
+				if (selectedIndex >= 0 && selectedIndex < Pipeline.Stages.Count)
+				{
+					var selectedStage = Pipeline.Stages[selectedIndex];
+
+					_event.PublishOnUIThreadAsync(new StageSelectedEvent()
+					{
+						SelectedStage = selectedStage
+					});
+				}
+			}
 		}
 	}
 }
