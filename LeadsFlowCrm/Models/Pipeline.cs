@@ -21,4 +21,9 @@ public class Pipeline
 	/// Organization which owns this pipeline
 	/// </summary>
     public Organization Organization { get; set; } = new Organization();
+
+	/// <summary>
+	/// Stages for the pipeline
+	/// </summary>
+	public IList<Stage>? Stages { get; set; }
 }
