@@ -36,6 +36,7 @@ public class Bootstrapper : BootstrapperBase
 			.Singleton<IApiHelper, ApiHelper>()
 			.PerRequest<IUserService,  UserService>()
 			.PerRequest<IContactService, ContactService>()
+			.PerRequest<IPipelineService, PipelineService>()
 			.Singleton<LoggedInUser>() //TODO: implement an interface
 			.Singleton<IBaseGoogleServiceClass, BaseGoogleServiceClass>()
 			.Singleton<IOAuthServiceClass, OAuthServiceClass>()

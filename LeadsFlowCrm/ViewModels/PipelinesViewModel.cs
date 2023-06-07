@@ -16,9 +16,16 @@ namespace LeadsFlowCrm.ViewModels;
 
 public class PipelinesViewModel : Screen
 {
-    public PipelinesViewModel(IContactService contactService)
+
+	private readonly IContactService _contactService;
+	private readonly IPipelineService _pipelineService;
+
+	public PipelinesViewModel(
+		IContactService contactService,
+		IPipelineService pipelineService)
 	{
 		_contactService = contactService;
+		_pipelineService = pipelineService;
 	}
 
 	protected async override Task OnInitializeAsync(CancellationToken cancellationToken)
@@ -26,6 +33,8 @@ public class PipelinesViewModel : Screen
 		await base.OnInitializeAsync(cancellationToken);
 
 		Contacts = new ObservableCollection<Contact>(await _contactService.GetAllAsync());
+		// TODO: Replace with real code
+		Pipeline = _pipelineService.GetDemoPipeline();
 	}
 
 	protected async override Task OnActivateAsync(CancellationToken cancellationToken)
@@ -37,47 +46,41 @@ public class PipelinesViewModel : Screen
 
 	private void GenerateButtons()
 	{
-		/*
-		 * TEST CODE
-		 */
-
 		// Clear existing buttons
 		StageButtons.Clear();
 
-		// Generate new buttons
-		for (int i = 0; i < 5; i++) // Replace 5 with the desired number of buttons
+		if (Pipeline.Stages == null)
 		{
+			return;
+		}
+
+        foreach (var stage in Pipeline.Stages)
+        {
+			Color color = (Color)ColorConverter.ConvertFromString(stage.Color);
+
 			var button = new StageButton
 			{
-				Label = $"Button {i + 1}",
-				BackgroundColor = GetRandomBrush(),
-				ClickAction = () => HandleButtonClick(i + 1)
+				Label = stage.Name,
+				BackgroundColor = new SolidColorBrush(color),
+				ClickAction = () => HandleButtonClick(stage.Id)
 			};
 
 			StageButtons.Add(button);
 		}
 	}
-	private static SolidColorBrush GetRandomBrush()
-	{
-		Random random = new();
-		Color randomColor = Color.FromRgb((byte)random.Next(256), (byte)random.Next(256), (byte)random.Next(256));
-		return new SolidColorBrush(randomColor);
-	}
 
-	private void HandleButtonClick(int buttonNumber)
+	private void HandleButtonClick(string stageId)
 	{
-		// Custom click event handling for each button
-		// You can implement your logic here
-		MessageBox.Show($"Button {buttonNumber} clicked!");
+		MessageBox.Show($"Stage {stageId} Selected");
 	}
 
 
 	private ObservableCollection<StageButton> _stageButtons = new();
 	private ObservableCollection<Contact> _contacts = new();
 	private Contact _selectedContact;
-	private readonly IContactService _contactService;
+	public Pipeline Pipeline { get; set; } = new();
 
-	public ObservableCollection<StageButton> StageButtons
+    public ObservableCollection<StageButton> StageButtons
 	{
 		get { return _stageButtons; }
 		set { 
