@@ -3,6 +3,7 @@ using System.Windows.Media;
 
 namespace LeadsFlowCrm.Models;
 
+[Obsolete]
 public class StageButton
 {
 	public string Label { get; set; } = string.Empty;

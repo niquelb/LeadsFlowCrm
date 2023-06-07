@@ -25,5 +25,5 @@ public class Pipeline
 	/// <summary>
 	/// Stages for the pipeline
 	/// </summary>
-	public IList<Stage>? Stages { get; set; }
+	public IList<Stage> Stages { get; set; } = new List<Stage>();
 }

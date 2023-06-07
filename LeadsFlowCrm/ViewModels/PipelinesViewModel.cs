@@ -1,110 +1,99 @@
 ﻿using Caliburn.Micro;
+using LeadsFlowCrm.EventModels;
 using LeadsFlowCrm.Models;
 using LeadsFlowCrm.Services.ModelServices;
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Data;
 using System.Windows.Media;
 
 namespace LeadsFlowCrm.ViewModels;
 
-public class PipelinesViewModel : Screen
+public class PipelinesViewModel : Conductor<object>
 {
 
-	private readonly IContactService _contactService;
 	private readonly IPipelineService _pipelineService;
+	private readonly IEventAggregator _event;
 
-	public PipelinesViewModel(
-		IContactService contactService,
-		IPipelineService pipelineService)
+	public PipelinesViewModel(IPipelineService pipelineService,
+						   StageViewModel stageViewModel,
+						   IEventAggregator @event)
 	{
-		_contactService = contactService;
 		_pipelineService = pipelineService;
+		_event = @event;
+		ActivateItemAsync(stageViewModel);
 	}
 
 	protected async override Task OnInitializeAsync(CancellationToken cancellationToken)
 	{
 		await base.OnInitializeAsync(cancellationToken);
 
-		Contacts = new ObservableCollection<Contact>(await _contactService.GetAllAsync());
 		// TODO: Replace with real code
 		Pipeline = _pipelineService.GetDemoPipeline();
-	}
 
-	protected async override Task OnActivateAsync(CancellationToken cancellationToken)
-	{
-		await base.OnActivateAsync(cancellationToken);
-
-		GenerateButtons();
-	}
-
-	private void GenerateButtons()
-	{
-		// Clear existing buttons
-		StageButtons.Clear();
-
-		if (Pipeline.Stages == null)
-		{
-			return;
-		}
-
+		/*
+		 * We iterate over all the stages in the Pipeline and create tabs to populate the TabControl
+		 */
         foreach (var stage in Pipeline.Stages)
         {
+			// We make the color based on the hex value from the model
 			Color color = (Color)ColorConverter.ConvertFromString(stage.Color);
 
-			var button = new StageButton
+            var tab = new TabItem()
 			{
-				Label = stage.Name,
-				BackgroundColor = new SolidColorBrush(color),
-				ClickAction = () => HandleButtonClick(stage.Id)
+				Header = stage.Name,
+				MinWidth = 200,
+				HorizontalAlignment = HorizontalAlignment.Center,
+				Background = new SolidColorBrush(color),
 			};
 
-			StageButtons.Add(button);
+			// This is what displays the Stage screen inside each tab
+			tab.SetBinding(ContentControl.ContentProperty, new Binding("ActiveItem"));
+
+			Tabs.Add(tab);
 		}
 	}
 
-	private void HandleButtonClick(string stageId)
-	{
-		MessageBox.Show($"Stage {stageId} Selected");
-	}
-
-
-	private ObservableCollection<StageButton> _stageButtons = new();
-	private ObservableCollection<Contact> _contacts = new();
-	private Contact _selectedContact;
+	/// <summary>
+	/// Pipeline for the view
+	/// </summary>
 	public Pipeline Pipeline { get; set; } = new();
 
-    public ObservableCollection<StageButton> StageButtons
+	/*
+	 * Private backing fields for the properties
+	 */
+	private ObservableCollection<TabItem> _tabs = new();
+	private TabItem _selectedTab = new();
+
+	/// <summary>
+	/// Tabs that represent each stage and it's content
+	/// </summary>
+	public ObservableCollection<TabItem> Tabs
 	{
-		get { return _stageButtons; }
+		get { return _tabs; }
 		set { 
-			_stageButtons = value;
+			_tabs = value;
 			NotifyOfPropertyChange();
 		}
 	}
 
-	public ObservableCollection<Contact> Contacts
+	/// <summary>
+	/// Selected tab (stage)
+	/// </summary>
+	public TabItem SelectedTab
 	{
-		get { return _contacts; }
+		get { return _selectedTab; }
 		set { 
-			_contacts = value;
+			_selectedTab = value;
 			NotifyOfPropertyChange();
+
+			_event.PublishOnUIThreadAsync(new StageSelectedEvent()
+			{
+				SelectedStage = Pipeline.Stages[0]
+			});
 		}
 	}
-
-	public Contact SelectedContact
-	{
-		get { return _selectedContact; }
-		set { 
-			_selectedContact = value;
-			NotifyOfPropertyChange();
-		}
-	}
-
 }
