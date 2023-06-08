@@ -6,7 +6,7 @@ namespace DataAccess.DataAccess.DAO
     {
         Task DeleteContact(string Id);
         Task<Contact?> GetContact(string Id);
-        Task<IEnumerable<Contact>> GetContacts();
+        Task<IEnumerable<Contact>> GetContacts(string? query = null);
         Task InsertContact(Contact contact);
         Task UpdateContact(Contact contact);
     }

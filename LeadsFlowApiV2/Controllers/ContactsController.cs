@@ -21,12 +21,17 @@ public class ContactsController : ControllerBase
 		_contactDAO = contactDAO;
 	}
 
-    // GET: api/<ContactsController>
-    [HttpGet]
-	public async Task<ActionResult> Get()
+	// GET: api/<ContactsController>?query=<WHERE-CLAUSE>
+	[HttpGet]
+	public async Task<ActionResult> GetAll(string? query)
 	{
 		try
 		{
+			if (string.IsNullOrWhiteSpace(query) == false)
+			{
+				return Ok(await _contactDAO.GetContacts(query));
+			}
+
 			return Ok(await _contactDAO.GetContacts());
 		}
 		catch (Exception ex)

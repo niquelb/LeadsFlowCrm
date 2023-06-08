@@ -21,12 +21,13 @@ public class ContactDAO : IContactDAO
         _db = db;
     }
 
-    /// <summary>
-    /// Get all contacts
-    /// </summary>
-    /// <returns>All contacts</returns>
-    public async Task<IEnumerable<Contact>> GetContacts() =>
-        await _db.LoadData<Contact, dynamic>("dbo.spContact_GetAll", new { });
+	/// <summary>
+	/// Get all contacts
+	/// </summary>
+	/// <param name="query">Optional SQL query</param>
+	/// <returns>All contacts</returns>
+	public async Task<IEnumerable<Contact>> GetContacts(string? query = null) =>
+        await _db.LoadData<Contact, dynamic>("dbo.spContact_GetAll", new { Filter = query });
 
     /// <summary>
     /// Get contact by ID

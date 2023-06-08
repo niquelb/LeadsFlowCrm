@@ -52,4 +52,5 @@ public class ContactService : IContactService
 
 		return output;
 	}
+
 }
