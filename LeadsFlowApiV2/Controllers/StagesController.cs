@@ -17,16 +17,21 @@ public class StagesController : ControllerBase
 	private readonly IStageDAO _stageDAO;
 
 	public StagesController(IStageDAO stageDAO)
-    {
+	{
 		_stageDAO = stageDAO;
 	}
 
-    // GET: api/<StagesController>
-    [HttpGet]
-	public async Task<ActionResult> Get()
+	// GET: api/<StagesController>?query=<WHERE-CLAUSE>
+	[HttpGet]
+	public async Task<ActionResult> GetAll(string? query)
 	{
 		try
 		{
+			if (string.IsNullOrEmpty(query) == false)
+			{
+				return Ok(await _stageDAO.GetStages(query));
+			}
+
 			return Ok(await _stageDAO.GetStages());
 		}
 		catch (Exception ex)

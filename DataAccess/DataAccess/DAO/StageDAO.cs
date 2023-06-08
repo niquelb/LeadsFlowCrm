@@ -24,9 +24,10 @@ public class StageDAO : IStageDAO
     /// <summary>
     /// Get all stages
     /// </summary>
+    /// <param name="query">Optional SQL query</param>
     /// <returns>All stages</returns>
-    public async Task<IEnumerable<Stage>> GetStages() =>
-        await _db.LoadData<Stage, dynamic>("dbo.spStage_GetAll", new { });
+    public async Task<IEnumerable<Stage>> GetStages(string? query = null) =>
+        await _db.LoadData<Stage, dynamic>("dbo.spStage_GetAll", new { Filter = query });
 
     /// <summary>
     /// Get stage by ID
