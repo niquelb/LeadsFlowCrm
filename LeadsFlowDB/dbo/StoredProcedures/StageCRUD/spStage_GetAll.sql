@@ -5,7 +5,7 @@ BEGIN
     DECLARE @SqlQuery NVARCHAR(MAX);
 
     SET @SqlQuery = N'
-        SELECT [Id], [Name], [Color], [PipelineId], [CreatedAt], [LastModifiedAt], [Deleted]
+        SELECT [Id], [Name], [Color], [PipelineId], [CreatedAt], [Order], [LastModifiedAt], [Deleted]
         FROM [Stage]
         WHERE [Deleted] = 0';
 
