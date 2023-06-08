@@ -20,9 +20,8 @@ public class ContactService : IContactService
 	private readonly HttpClient _apiClient;
 	private readonly LoggedInUser _loggedInUser;
 
-	public ContactService(
-		IApiHelper apiHelper,
-		LoggedInUser loggedInUser)
+	public ContactService(IApiHelper apiHelper,
+					   LoggedInUser loggedInUser)
 	{
 		_apiClient = apiHelper.ApiClient;
 		_loggedInUser = loggedInUser;

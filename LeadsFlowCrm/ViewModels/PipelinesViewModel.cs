@@ -31,18 +31,27 @@ public class PipelinesViewModel : Conductor<object>
 	{
 		await base.OnInitializeAsync(cancellationToken);
 
-		// TODO: Replace with real code
-		Pipeline = _pipelineService.GetDemoPipeline();
+		// We retrieve the pipeline from the API
+		Pipeline = await _pipelineService.GetPipelineAsync();
 
+		// We fill in the stage tabs
+		FillStages();
+	}
+
+	/// <summary>
+	/// Method for filling in the stage tabs for the pipeline
+	/// </summary>
+	private void FillStages()
+	{
 		/*
-		 * We iterate over all the stages in the Pipeline and create tabs to populate the TabControl
-		 */
-        foreach (var stage in Pipeline.Stages)
-        {
+		* We iterate over all the stages in the Pipeline and create tabs to populate the TabControl
+		*/
+		foreach (var stage in Pipeline.Stages)
+		{
 			// We make the color based on the hex value from the model
 			Color color = (Color)ColorConverter.ConvertFromString(stage.Color);
 
-            var tab = new TabItem()
+			var tab = new TabItem()
 			{
 				Header = stage.Name,
 				MinWidth = 200,
@@ -53,6 +62,7 @@ public class PipelinesViewModel : Conductor<object>
 			// This is what displays the Stage screen inside each tab
 			tab.SetBinding(ContentControl.ContentProperty, new Binding("ActiveItem"));
 
+			// We add the tab to the list
 			Tabs.Add(tab);
 		}
 	}

@@ -1,9 +1,10 @@
 ﻿using LeadsFlowCrm.Models;
+using System.Threading.Tasks;
 
 namespace LeadsFlowCrm.Services.ModelServices
 {
 	public interface IPipelineService
 	{
-		Pipeline GetDemoPipeline();
+		Task<Pipeline> GetPipelineAsync();
 	}
 }

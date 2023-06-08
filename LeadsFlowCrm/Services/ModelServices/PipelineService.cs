@@ -1,5 +1,11 @@
 ﻿using LeadsFlowCrm.Models;
+using LeadsFlowCrm.Utils;
+using System;
 using System.Collections.Generic;
+using System.Net;
+using System.Net.Http;
+using System.Net.Http.Headers;
+using System.Threading.Tasks;
 
 namespace LeadsFlowCrm.Services.ModelServices;
 
@@ -9,54 +15,48 @@ namespace LeadsFlowCrm.Services.ModelServices;
 /// <see cref="Pipeline"/>
 public class PipelineService : IPipelineService
 {
-	public PipelineService()
-	{
+	private readonly HttpClient _apiClient;
+	private readonly IStageService _stageService;
+	private readonly LoggedInUser _loggedInUser;
 
+	public PipelineService(IApiHelper apiHelper,
+						IStageService stageService,
+						LoggedInUser loggedInUser)
+	{
+		_apiClient = apiHelper.ApiClient;
+		_stageService = stageService;
+		_loggedInUser = loggedInUser;
 	}
 
 	/// <summary>
-	/// Method for getting a mock pipeline
+	/// Method for getting a specific Pipeline
 	/// </summary>
 	/// <returns></returns>
-	public Pipeline GetDemoPipeline()
+	/// <exception cref="UnauthorizedAccessException"></exception>
+	/// <exception cref="Exception"></exception>
+	public async Task<Pipeline> GetPipelineAsync()
 	{
-		return new Pipeline()
+		// TODO: Filter by Org
+		_apiClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _loggedInUser.Token);
+
+		// TODO: replace hard-coded ID
+		using HttpResponseMessage resp = await _apiClient.GetAsync($"api/Pipelines/a5ab0ed1-1f36-4c4c-993f-acd7a09bdf70");
+		if (resp.IsSuccessStatusCode == false)
 		{
-			Id = "2AAE13CD-E092-4C2E-83C6-90525C6638D7",
-			Name = "Sales",
-			Stages = new List<Stage>()
+			if (resp.StatusCode == HttpStatusCode.Unauthorized)
 			{
-				new Stage()
-				{
-					 Id = "{3FBD527C-EABD-45A0-AA08-E9E469AEF16A}",
-					 Name = "Lead",
-					 Color = "#2C068E"
-				},
-				new Stage()
-				{
-					 Id = "{3FBD527C-EABD-45A0-AA08-E9E469AEF16B}",
-					 Name = "Contacted",
-					 Color = "#005DFF"
-				},
-				new Stage()
-				{
-					 Id = "{3FBD527C-EABD-45A0-AA08-E9E469AEF16C}",
-					 Name = "Pitched",
-					 Color = "#2300FF"
-				},
-				new Stage()
-				{
-					 Id = "{3FBD527C-EABD-45A0-AA08-E9E469AEF16D}",
-					 Name = "Closed - Lost",
-					 Color = "#FF8A00"
-				},
-				new Stage()
-				{
-					 Id = "{3FBD527C-EABD-45A0-AA08-E9E469AEF16E}",
-					 Name = "Closed - Won",
-					 Color = "#FF003D"
-				},
+				throw new UnauthorizedAccessException(resp.ReasonPhrase);
 			}
-		};
+
+			throw new Exception(resp.ReasonPhrase);
+		}
+
+		var output = await resp.Content.ReadAsAsync<Pipeline>();
+
+		// Fill in the stages
+		output.Stages = await _stageService.GetStagesByPipelineAsync(output.Id);
+
+		return output;
 	}
+
 }
