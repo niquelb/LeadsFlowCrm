@@ -36,6 +36,8 @@ public class PipelinesViewModel : Conductor<object>
 
 		// We fill in the stage tabs
 		FillStages();
+
+		IsLoading = false;
 	}
 
 	/// <summary>
@@ -72,11 +74,25 @@ public class PipelinesViewModel : Conductor<object>
 	/// </summary>
 	public Pipeline Pipeline { get; set; } = new();
 
-	/*
+    /*
 	 * Private backing fields for the properties
 	 */
-	private ObservableCollection<TabItem> _tabs = new();
+    private ObservableCollection<TabItem> _tabs = new();
 	private TabItem _selectedTab = new();
+	private bool _isLoading = true;
+
+	/// <summary>
+	/// Controls wether the view is displaying the loading indicator
+	/// </summary>
+	public bool IsLoading
+	{
+		get { return _isLoading; }
+		set { 
+			_isLoading = value;
+			NotifyOfPropertyChange();
+		}
+	}
+
 
 	/// <summary>
 	/// Tabs that represent each stage and it's content
