@@ -27,12 +27,18 @@ public class StagesController : ControllerBase
 	{
 		try
 		{
+			IEnumerable<Stage> output;
+
 			if (string.IsNullOrEmpty(query) == false)
 			{
-				return Ok(await _stageDAO.GetStages(query));
+				output = await _stageDAO.GetStages(query);
+
+				return Ok(output.OrderBy(x => x.Order).ToList());
 			}
 
-			return Ok(await _stageDAO.GetStages());
+			output = await _stageDAO.GetStages();
+
+			return Ok(output.OrderBy(x => x.Order).ToList());
 		}
 		catch (Exception ex)
 		{
