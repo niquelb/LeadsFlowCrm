@@ -59,6 +59,19 @@ public class InboxViewModel : Screen
 	}
 
 	/// <summary>
+	/// Method for opening an email from the inbox
+	/// </summary>
+	public async void OpenEmail()
+	{
+		if (_selectedEmail == null)
+		{
+			return;
+		}
+
+		await PublishSelectedEmailAsync(_selectedEmail);
+	}
+
+	/// <summary>
 	/// Event that gets triggered when the user selects an email
 	/// </summary>
 	/// <param name="email">Selected email</param>
@@ -115,17 +128,6 @@ public class InboxViewModel : Screen
 		{
 			_selectedEmail = value;
 			NotifyOfPropertyChange();
-
-			/*
-			 * We notify the UI that the user has selected an email.
-			 * 
-			 * We have to wrap this in an if because when the user refreshes the inbox this also gets triggered
-			 * with a null value, breaking the app.
-			 */
-			if (_selectedEmail != null)
-			{
-				PublishSelectedEmailAsync(_selectedEmail);
-			}
 		}
 	}
 
