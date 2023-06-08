@@ -4,6 +4,7 @@ using LeadsFlowCrm.Models;
 using LeadsFlowCrm.Services.ModelServices;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -31,16 +32,26 @@ public class StageViewModel : Screen, IHandle<StageSelectedEvent>
 		Stage = e.SelectedStage;
 
 		Contacts = new ObservableCollection<Contact>(await _contactService.GetByStageAsync(Stage.Id));
-	}
+
+		// Show the "empty" screen if no contacts found
+		IsStageEmpty = Contacts.Count <= 0;
+
+    }
 
 	/// <summary>
 	/// Stage
 	/// </summary>
 	public Stage Stage { get; set; } = new();
 
-	/*
+	/// <summary>
+	/// Selected contact
+	/// </summary>
+	public Contact SelectedContact { get; set; } = new();
+
+    /*
 	 * Private backing fields for the properties
 	 */
+    private bool _isStageEmpty;
 	private ObservableCollection<Contact> _contacts = new();
 
 	/// <summary>
@@ -51,6 +62,18 @@ public class StageViewModel : Screen, IHandle<StageSelectedEvent>
 		get { return _contacts; }
 		set { 
 			_contacts = value;
+			NotifyOfPropertyChange();
+		}
+	}
+
+	/// <summary>
+	/// Wether the stage has contacts or is empty
+	/// </summary>
+	public bool IsStageEmpty
+	{
+		get { return _isStageEmpty; }
+		set { 
+			_isStageEmpty = value;
 			NotifyOfPropertyChange();
 		}
 	}

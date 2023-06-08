@@ -10,149 +10,205 @@
              mc:Ignorable="d" 
              d:DesignHeight="700" d:DesignWidth="1200">
     <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="auto" />
-            <RowDefinition Height="*" />
-        </Grid.RowDefinitions>
-        <!--#region Header-->
-        <Border CornerRadius="10" 
+        <!--#region Stage empty-->
+        <Grid>
+            <!--#region Empty screen visibility control-->
+            <Grid.Style>
+                <Style TargetType="Grid">
+                    <Setter Property="Visibility" Value="Visible" />
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding IsStageEmpty}" Value="False">
+                            <Setter Property="Visibility" Value="Hidden" />
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </Grid.Style>
+            <!--#endregion-->
+
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="auto" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+
+            <Image Source="LeadsFlowCrm;component/Media/Imgs/empty-icon.png" 
+                   Grid.Column="1" Grid.Row="1" 
+                   MaxHeight="150"/>
+
+            <TextBlock Text="No contacts found for this stage!" 
+                       FontSize="24"
+                       Margin="15"
+                       Grid.Column="1"
+                       Grid.Row="2" />
+        </Grid>
+        <!--#endregion-->
+
+        <!--#region Content-->
+        <Grid>
+            <!--#region Content grid visibility control-->
+            <Grid.Style>
+                <Style TargetType="Grid">
+                    <Setter Property="Visibility" Value="Hidden" />
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding IsStageEmpty}" Value="False">
+                            <Setter Property="Visibility" Value="Visible" />
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </Grid.Style>
+            <!--#endregion-->
+
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            <!--#region Header-->
+            <Border CornerRadius="10" 
                 BorderThickness="1"
                 BorderBrush="Transparent"
                 MinHeight="25"
                 Background="{StaticResource AREghZyBrush.ColourfulGlyph.MouseOver}">
-            <!--#region Search box-->
-            <Grid Grid.Row="1" Margin="0 5">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="auto" />
-                    <ColumnDefinition Width="*" />
-                </Grid.ColumnDefinitions>
+                <!--#region Search box-->
+                <Grid Grid.Row="1" Margin="0 5">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="auto" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
 
-                <Border Grid.Column="1" 
+                    <Border Grid.Column="1" 
                         Background="{StaticResource AREghZyBrush.Foreground.Static}"
                         BorderBrush="{StaticResource AREghZyBrush.Foreground.Static}"
                         CornerRadius="10" BorderThickness="1" MinWidth="400" Padding="5">
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*" />
-                            <ColumnDefinition Width="auto" />
-                        </Grid.ColumnDefinitions>
-                        <TextBox x:Name="SearchBox" 
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="auto" />
+                            </Grid.ColumnDefinitions>
+                            <TextBox x:Name="SearchBox" 
                                  Grid.Column="0" 
                                  Style="{StaticResource InboxSearchBox}"
                                  Utils:TextBoxHelper.Hint="Search pipeline..." />
-                        <Icon:PackIconMaterial Grid.Column="1" 
+                            <Icon:PackIconMaterial Grid.Column="1" 
                                                Kind="Magnify" Width="20" Height="20"
                                                Panel.ZIndex="2" Margin="5 0"
                                                VerticalAlignment="Center"
                                                HorizontalAlignment="Right"
                                                Foreground="{StaticResource AREghZyBrush.Glyph.Disabled}" />
-                    </Grid>
-                </Border>
+                        </Grid>
+                    </Border>
 
-            </Grid>
+                </Grid>
+                <!--#endregion-->
+            </Border>
             <!--#endregion-->
-        </Border>
-        <!--#endregion-->
 
-        <!--#region Body-->
-        <Grid Grid.Row="1">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="auto" />
-            </Grid.ColumnDefinitions>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="auto" />
-                <RowDefinition Height="*" />
-                <RowDefinition Height="auto" />
-            </Grid.RowDefinitions>
+            <!--#region Body-->
+            <Grid Grid.Row="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="auto" />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="auto" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="auto" />
+                </Grid.RowDefinitions>
 
-            <!--#region Refresh button-->
+                <!--#region Refresh button-->
 
-            <Button x:Name="Refresh"
+                <Button x:Name="Refresh"
                 Grid.Column="4" Grid.Row="0"
                 Style="{StaticResource IconButton}">
-                <Icon:PackIconMaterial Width="20" Height="20" Margin="10" Kind="Refresh" />
-            </Button>
+                    <Icon:PackIconMaterial Width="20" Height="20" Margin="10" Kind="Refresh" />
+                </Button>
 
-            <!--#endregion-->
+                <!--#endregion-->
 
-            <!--#region Listview-->
+                <!--#region Listview-->
 
-            <ListView Grid.Row="1"
+                <ListView Grid.Row="1"
                       Grid.ColumnSpan="2"
                       ItemsSource="{Binding Contacts}"
                       SelectedItem="{Binding SelectedContact}"
                       Margin="0 15" 
                       FontSize="18" >
-                <ListView.View>
-                    <GridView>
-                        <GridViewColumn Header="Email Adress" 
+                    <ListView.View>
+                        <GridView>
+                            <GridViewColumn Header="Email Adress" 
                                     DisplayMemberBinding="{Binding Email}"
                                     Width="200" />
-                        <GridViewColumn Header="Full Name" 
+                            <GridViewColumn Header="Full Name" 
                                     DisplayMemberBinding="{Binding FullName}"
                                     Width="200" />
-                        <GridViewColumn Header="Phone" 
+                            <GridViewColumn Header="Phone" 
                                     DisplayMemberBinding="{Binding Phone}"
                                     Width="200" />
-                        <GridViewColumn Header="Last Email At" 
+                            <GridViewColumn Header="Last Email At" 
                                     DisplayMemberBinding="{Binding LastEmailAt}"
                                     Width="200" />
-                        <GridViewColumn Header="Notes" 
+                            <GridViewColumn Header="Notes" 
                                     DisplayMemberBinding="{Binding Notes}"
                                     Width="400" />
-                    </GridView>
-                </ListView.View>
-            </ListView>
+                        </GridView>
+                    </ListView.View>
+                </ListView>
 
-            <!--#endregion-->
+                <!--#endregion-->
 
-            <!--#region Paginator-->
-            <Border Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="2" 
+                <!--#region Paginator-->
+                <Border Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="2" 
                 HorizontalAlignment="Right" 
                 BorderBrush="{StaticResource AREghZyBrush.Foreground.Static}"
                 BorderThickness="1" CornerRadius="5" Padding="5"
                 Background="{StaticResource AREghZyBrush.Foreground.Static}"
                 Margin="10">
-                <StackPanel Orientation="Horizontal">
-                    <Button x:Name="FirstPage" Style="{StaticResource PaginatorBtn}">
-                        <Icon:PackIconMaterial Kind="ChevronDoubleLeft" Style="{StaticResource PaginatorBtnIcon}" />
-                    </Button>
+                    <StackPanel Orientation="Horizontal">
+                        <Button x:Name="FirstPage" Style="{StaticResource PaginatorBtn}">
+                            <Icon:PackIconMaterial Kind="ChevronDoubleLeft" Style="{StaticResource PaginatorBtnIcon}" />
+                        </Button>
 
-                    <Rectangle Width="1" Fill="{StaticResource AREghZyBrush.Foreground.Deeper}"
+                        <Rectangle Width="1" Fill="{StaticResource AREghZyBrush.Foreground.Deeper}"
                            Margin="3 7" />
 
-                    <Button x:Name="PreviousPage" Style="{StaticResource PaginatorBtn}">
-                        <Icon:PackIconMaterial Kind="ChevronLeft" Style="{StaticResource PaginatorBtnIcon}" />
-                    </Button>
+                        <Button x:Name="PreviousPage" Style="{StaticResource PaginatorBtn}">
+                            <Icon:PackIconMaterial Kind="ChevronLeft" Style="{StaticResource PaginatorBtnIcon}" />
+                        </Button>
 
-                    <Rectangle Width="1" Fill="{StaticResource AREghZyBrush.Foreground.Deeper}"
+                        <Rectangle Width="1" Fill="{StaticResource AREghZyBrush.Foreground.Deeper}"
                            Margin="3 7" />
 
-                    <Button x:Name="CurrentPage" Style="{StaticResource PaginatorBtn}">
-                        <TextBlock Text="1" Style="{StaticResource PaginatorCurrentPageText}" />
-                    </Button>
+                        <Button x:Name="CurrentPage" Style="{StaticResource PaginatorBtn}">
+                            <TextBlock Text="1" Style="{StaticResource PaginatorCurrentPageText}" />
+                        </Button>
 
-                    <Rectangle Width="1" Fill="{StaticResource AREghZyBrush.Foreground.Deeper}"
+                        <Rectangle Width="1" Fill="{StaticResource AREghZyBrush.Foreground.Deeper}"
                            Margin="3 7" />
 
-                    <Button x:Name="NextPage" Style="{StaticResource PaginatorBtn}">
-                        <Icon:PackIconMaterial Kind="ChevronRight" Style="{StaticResource PaginatorBtnIcon}" />
-                    </Button>
+                        <Button x:Name="NextPage" Style="{StaticResource PaginatorBtn}">
+                            <Icon:PackIconMaterial Kind="ChevronRight" Style="{StaticResource PaginatorBtnIcon}" />
+                        </Button>
 
-                    <Rectangle Width="1" Fill="{StaticResource AREghZyBrush.Foreground.Deeper}"
+                        <Rectangle Width="1" Fill="{StaticResource AREghZyBrush.Foreground.Deeper}"
                            Margin="3 7" />
 
-                    <Button x:Name="LastPage" Style="{StaticResource PaginatorBtn}">
-                        <Icon:PackIconMaterial Kind="ChevronDoubleRight" Style="{StaticResource PaginatorBtnIcon}" />
-                    </Button>
+                        <Button x:Name="LastPage" Style="{StaticResource PaginatorBtn}">
+                            <Icon:PackIconMaterial Kind="ChevronDoubleRight" Style="{StaticResource PaginatorBtnIcon}" />
+                        </Button>
 
-                </StackPanel>
+                    </StackPanel>
 
-            </Border>
+                </Border>
+                <!--#endregion-->
+
+            </Grid>
             <!--#endregion-->
-
         </Grid>
         <!--#endregion-->
     </Grid>
