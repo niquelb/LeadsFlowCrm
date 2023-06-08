@@ -9,9 +9,11 @@
     @JobTitle NVARCHAR(50), 
     @Website NVARCHAR(50), 
     @Location NVARCHAR(50), 
-    @Notes NVARCHAR(MAX)
+    @Notes NVARCHAR(MAX),
+    @StageId CHAR(36),
+    @UserId CHAR(36)
 AS
 BEGIN
-    INSERT INTO [Contact] ([Id], [Email], [FirstName], [LastNames], [Phone], [Address], [Company], [JobTitle], [Website], [Location], [Notes])
-    VALUES (@Id, @Email, @FirstName, @LastNames, @Phone, @Address, @Company, @JobTitle, @Website, @Location, @Notes)
+    INSERT INTO [Contact] ([Id], [Email], [FirstName], [LastNames], [Phone], [Address], [Company], [JobTitle], [Website], [Location], [Notes], [StageId], [UserId])
+    VALUES (@Id, @Email, @FirstName, @LastNames, @Phone, @Address, @Company, @JobTitle, @Website, @Location, @Notes, @StageId, @UserId)
 END

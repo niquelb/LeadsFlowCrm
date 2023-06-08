@@ -9,7 +9,9 @@
     @JobTitle NVARCHAR(50) = null, 
     @Website NVARCHAR(50) = null, 
     @Location NVARCHAR(50) = null, 
-    @Notes NVARCHAR(MAX) = null
+    @Notes NVARCHAR(MAX) = null,
+    @StageId CHAR(36) = null,
+    @UserId CHAR(36) = null
 AS
 BEGIN
     UPDATE [Contact]
@@ -24,6 +26,8 @@ BEGIN
     [Website] = COALESCE(@Website, [Website]), 
     [Location] = COALESCE(@Location, [Location]), 
     [Notes] = COALESCE(@Notes, [Notes]), 
+    [StageId] = COALESCE(@StageId, [StageId]), 
+    [UserId] = COALESCE(@UserId, [UserId]), 
     [LastModifiedAt] = getutcdate()
     WHERE [Id] = @Id;
 END

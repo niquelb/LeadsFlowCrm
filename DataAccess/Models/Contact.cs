@@ -13,4 +13,6 @@ public class Contact
     public string? Website { get; set; }
     public string? Location { get; set; }
     public string? Notes { get; set; }
+    public string? StageId { get; set; }
+    public string? UserId { get; set; }
 }
