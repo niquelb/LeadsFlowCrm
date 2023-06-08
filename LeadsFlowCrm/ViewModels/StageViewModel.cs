@@ -20,13 +20,6 @@ public class StageViewModel : Screen, IHandle<StageSelectedEvent>
 		@event.SubscribeOnUIThread(this);
 	}
 
-	protected async override Task OnInitializeAsync(CancellationToken cancellationToken)
-	{
-		await base.OnInitializeAsync(cancellationToken);
-
-		Contacts = new ObservableCollection<Contact>(await _contactService.GetAllAsync());
-	}
-
 	/// <summary>
 	/// Event that gets triggered when the user switches between stages in the Pipelines screen
 	/// </summary>
@@ -36,6 +29,8 @@ public class StageViewModel : Screen, IHandle<StageSelectedEvent>
 	public async Task HandleAsync(StageSelectedEvent e, CancellationToken cancellationToken)
 	{
 		Stage = e.SelectedStage;
+
+		Contacts = new ObservableCollection<Contact>(await _contactService.GetByStageAsync(Stage.Id));
 	}
 
 	/// <summary>

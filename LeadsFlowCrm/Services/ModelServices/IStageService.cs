@@ -6,6 +6,6 @@ namespace LeadsFlowCrm.Services.ModelServices
 {
 	public interface IStageService
 	{
-		Task<IList<Stage>> GetStagesByPipelineAsync(string pipelineId);
+		Task<IList<Stage>> GetByPipelineAsync(string pipelineId);
 	}
 }

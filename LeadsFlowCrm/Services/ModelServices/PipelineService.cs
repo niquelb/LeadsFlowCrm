@@ -54,7 +54,7 @@ public class PipelineService : IPipelineService
 		var output = await resp.Content.ReadAsAsync<Pipeline>();
 
 		// Fill in the stages
-		output.Stages = await _stageService.GetStagesByPipelineAsync(output.Id);
+		output.Stages = await _stageService.GetByPipelineAsync(output.Id);
 
 		return output;
 	}

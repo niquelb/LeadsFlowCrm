@@ -34,7 +34,7 @@ public class StageService : IStageService
 	/// <returns>A list of the pipeline's stages</returns>
 	/// <exception cref="UnauthorizedAccessException">If the token is invalid</exception>
 	/// <exception cref="Exception">If there's an error in the request</exception>
-	public async Task<IList<Stage>> GetStagesByPipelineAsync(string pipelineId)
+	public async Task<IList<Stage>> GetByPipelineAsync(string pipelineId)
 	{
 		_apiClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _loggedInUser.Token);
 

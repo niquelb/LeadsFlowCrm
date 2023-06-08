@@ -53,4 +53,38 @@ public class ContactService : IContactService
 		return output;
 	}
 
+	/// <summary>
+	/// Method for retrieving the contacts that match the given Stage ID from the API
+	/// </summary>
+	/// <param name="stageId">Stage ID</param>
+	/// <returns>List of desired contacts</returns>
+	/// <exception cref="UnauthorizedAccessException">If the token is incorrect</exception>
+	/// <exception cref="Exception">If there was another issue with the API or the request</exception>
+	public async Task<IList<Contact>> GetByStageAsync(string stageId)
+	{
+		_apiClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _loggedInUser.Token);
+
+		/*
+		 * We make the query for filtering by the Stage ID, for this we need to encode it
+		 * 
+		 * The final URL should look like this without encoding → "[URL]/Contacts?query=stageId='ID'
+		 */
+		string encodedPipelineId = WebUtility.UrlEncode(stageId);
+		string query = $"stageId = '{encodedPipelineId}'";
+
+		using HttpResponseMessage resp = await _apiClient.GetAsync($"api/Contacts?query={query}");
+		if (resp.IsSuccessStatusCode == false)
+		{
+			if (resp.StatusCode == HttpStatusCode.Unauthorized)
+			{
+				throw new UnauthorizedAccessException(resp.ReasonPhrase);
+			}
+
+			throw new Exception(resp.ReasonPhrase);
+		}
+
+		var output = await resp.Content.ReadAsAsync<IList<Contact>>();
+
+		return output;
+	}
 }
