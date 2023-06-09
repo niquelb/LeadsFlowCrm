@@ -1,9 +1,7 @@
-using DataAccess.DataAccess;
 using DataAccess.DataAccess.DAO;
 using DataAccess.DbAccess;
 using LeadsFlowApiV2.Auth;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.Filters;
@@ -40,14 +38,17 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 			ValidateIssuerSigningKey = true,
 			IssuerSigningKey = new SymmetricSecurityKey(
 				Encoding.UTF8.GetBytes(
-					builder.Configuration.GetSection("Authentication:Token").Value
+					(builder.Configuration.GetSection("Authentication:Token").Value) ?? ""
 					)),
 			ValidateIssuer = false,
 			ValidateAudience = false,
 		};
 	});
 
-// Add our services
+/*
+ * Add our services
+ */
+
 builder.Services.AddScoped<IAuthMethods, AuthMethods>();
 
 builder.Services.AddSingleton<ISqlDataAccess, SqlDataAccess>();

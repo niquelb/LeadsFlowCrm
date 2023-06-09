@@ -20,8 +20,9 @@
                 case ThemeType.Red:
                     return "RedBlackTheme";
                 default:
-                    return null;
-            }
+                    return "Dark_DarkBackLightBorder";
+
+			}
         }
     }
 }

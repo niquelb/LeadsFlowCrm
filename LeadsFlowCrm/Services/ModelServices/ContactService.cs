@@ -18,12 +18,15 @@ namespace LeadsFlowCrm.Services.ModelServices;
 public class ContactService : IContactService
 {
 	private readonly HttpClient _apiClient;
+	private readonly IPeopleServiceClass _peopleService;
 	private readonly LoggedInUser _loggedInUser;
 
 	public ContactService(IApiHelper apiHelper,
+					   IPeopleServiceClass peopleService,
 					   LoggedInUser loggedInUser)
 	{
 		_apiClient = apiHelper.ApiClient;
+		_peopleService = peopleService;
 		_loggedInUser = loggedInUser;
 	}
 

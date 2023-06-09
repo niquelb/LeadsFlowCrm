@@ -21,13 +21,13 @@ public class GmailServiceClass : IGmailServiceClass
 	private readonly IBaseGoogleServiceClass _baseGoogleService;
 
 	/// <summary> List of the emails in the user's inbox </summary>
-	private List<Email> _inbox;
+	private List<Email>? _inbox;
 
 	/// <summary> Special keyword reserved for referencing the logged in user </summary>
-	private const string me = "me";
+	private const string _me = "me";
 
 	/// <summary> Service object for the Gmail API </summary>
-	private GmailService _gmailService;
+	private GmailService? _gmailService;
 
 	public GmailServiceClass(IBaseGoogleServiceClass baseGoogleService, IOAuthServiceClass oAuthService)
 	{
@@ -40,10 +40,14 @@ public class GmailServiceClass : IGmailServiceClass
 	/// </summary>
 	public Email? SelectedEmail { get; set; }
 
+	/// <summary> Special keyword reserved for referencing the logged in user </summary>
+	public static string Me => _me;
+
 	/// <summary>
 	/// Method for retrieving the Gmail service object for the Gmail API
 	/// </summary>
 	/// <returns>GmailService object</returns>
+	/// <see cref="GmailService"/>
 	public async Task<GmailService> GetGmailServiceAsync()
 	{
 		if (_gmailService == null)
@@ -238,7 +242,7 @@ public class GmailServiceClass : IGmailServiceClass
 
 
 		// And we make send the email
-		var sendRequest = service.Users.Messages.Send(message, me);
+		var sendRequest = service.Users.Messages.Send(message, Me);
 		await sendRequest.ExecuteAsync();
 	}
 
@@ -287,7 +291,7 @@ public class GmailServiceClass : IGmailServiceClass
 
 		GmailService service = await GetGmailServiceAsync();
 
-		await service.Users.Messages.Modify(messageRequest, me, email.Id).ExecuteAsync();
+		await service.Users.Messages.Modify(messageRequest, Me, email.Id).ExecuteAsync();
 	}
 
 	/// <summary>
@@ -320,7 +324,7 @@ public class GmailServiceClass : IGmailServiceClass
 		GmailService gmailService = await GetGmailServiceAsync();
 
 		// We define the request to retrieve email list
-		var emailListRequest = gmailService.Users.Messages.List(me);
+		var emailListRequest = gmailService.Users.Messages.List(Me);
 
 		// Only get emails labeled as 'INBOX':
 		emailListRequest.LabelIds = new[] { "INBOX" };
@@ -366,7 +370,7 @@ public class GmailServiceClass : IGmailServiceClass
 		/*
 		 * Retrieve the email details, this will create another "Message" object with the whole email with all the details
 		 */
-		var request = gmailService.Users.Messages.Get(me, email.Id);
+		var request = gmailService.Users.Messages.Get(Me, email.Id);
 		request.Format = UsersResource.MessagesResource.GetRequest.FormatEnum.Full;
 		request.MetadataHeaders = new string[] { "labelIds" };
 

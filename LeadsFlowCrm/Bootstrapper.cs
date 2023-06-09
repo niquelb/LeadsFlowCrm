@@ -41,6 +41,7 @@ public class Bootstrapper : BootstrapperBase
 			.Singleton<LoggedInUser>() //TODO: implement an interface
 			.Singleton<IBaseGoogleServiceClass, BaseGoogleServiceClass>()
 			.Singleton<IOAuthServiceClass, OAuthServiceClass>()
+			.Singleton<IPeopleServiceClass, PeopleServiceClass>()
 			.Singleton<IGmailServiceClass, GmailServiceClass>();
 
 		// Adds all of our ViewModels into Dependency Injection
