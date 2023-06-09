@@ -48,7 +48,7 @@
                             <TextBlock Text="Pipelines"/>
                         </StackPanel>
                     </Button>
-                    <Button x:Name="Contacts" Style="{StaticResource SidebarBtn}" IsEnabled="False">
+                    <Button x:Name="Contacts" Style="{StaticResource SidebarBtn}">
                         <StackPanel Orientation="Horizontal">
                             <Icon:PackIconMaterial Kind="Contacts" Style="{StaticResource SidebarIcon}"/>
                             <TextBlock Text="Contacts"/>

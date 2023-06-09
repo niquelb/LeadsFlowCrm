@@ -17,12 +17,14 @@ public class ShellViewModel : Conductor<object>, IHandle<EmailSelectedEvent>, IH
 	private readonly InboxViewModel _inboxViewModel;
 	private readonly PipelinesViewModel _pipelinesViewModel;
 	private readonly SelectedEmailViewModel _selectedEmailViewModel;
+	private readonly ContactsShellViewModel _contactsShellViewModel;
 	private readonly IEventAggregator _event;
 	private readonly IUserService _userService;
 
 	public ShellViewModel(InboxViewModel inboxViewModel,
 					   PipelinesViewModel pipelinesViewModel,
 					   SelectedEmailViewModel selectedEmailViewModel,
+					   ContactsShellViewModel contactsShellViewModel,
 					   SidebarViewModel sidebarViewModel,
 					   IEventAggregator @event,
 					   IUserService userService)
@@ -30,6 +32,7 @@ public class ShellViewModel : Conductor<object>, IHandle<EmailSelectedEvent>, IH
 		_inboxViewModel = inboxViewModel;
 		_pipelinesViewModel = pipelinesViewModel;
 		_selectedEmailViewModel = selectedEmailViewModel;
+		_contactsShellViewModel = contactsShellViewModel;
 		Sidebar = sidebarViewModel;
 		_event = @event;
 		_userService = userService;
@@ -76,6 +79,9 @@ public class ShellViewModel : Conductor<object>, IHandle<EmailSelectedEvent>, IH
 				break;
 			case NavigationEvent.NavigationRoutes.Pipelines:
 				await ActivateItemAsync(_pipelinesViewModel, cancellationToken);
+				break;
+			case NavigationEvent.NavigationRoutes.Contacts:
+				await ActivateItemAsync(_contactsShellViewModel, cancellationToken);
 				break;
 			default:
 				throw new ArgumentException($"{nameof(e.Route)} is not a valid navigation object or is not yet implemented");
