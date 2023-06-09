@@ -42,6 +42,8 @@ public class InboxViewModel : Screen
 
 		IsLoading = false;
 		CanRefreshInbox = true;
+
+		IsInboxEmpty = Inbox.Count <= 0;
 	}
 
 	/// <summary>
@@ -49,6 +51,7 @@ public class InboxViewModel : Screen
 	/// </summary>
 	public async void RefreshInbox()
 	{
+		IsInboxEmpty = false;
 		IsLoading = true;
 		CanRefreshInbox = false;
 
@@ -56,7 +59,9 @@ public class InboxViewModel : Screen
 
 		IsLoading = false;
 		CanRefreshInbox = true;
-	}
+
+		IsInboxEmpty = Inbox.Count <= 0;
+    }
 
 	/// <summary>
 	/// Method for opening an email from the inbox
@@ -87,6 +92,7 @@ public class InboxViewModel : Screen
 	 * Property backing fields
 	 */
 	private bool _isLoading = true;
+	private bool _isInboxEmpty;
 	private bool _canRefreshInbox = false;
 	private Email _selectedEmail;
 	private ObservableCollection<Email> _inbox = new();
@@ -103,6 +109,19 @@ public class InboxViewModel : Screen
 			NotifyOfPropertyChange();
 		}
 	}
+
+	/// <summary>
+	/// This property controls wether the "empty" screen is showing or not
+	/// </summary>
+	public bool IsInboxEmpty
+	{
+		get { return _isInboxEmpty; }
+		set { 
+			_isInboxEmpty = value;
+			NotifyOfPropertyChange();
+		}
+	}
+
 
 	/// <summary>
 	/// Property to control if the refresh button is enabled or not

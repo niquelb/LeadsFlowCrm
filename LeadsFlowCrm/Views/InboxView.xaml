@@ -90,6 +90,45 @@
             <TextBlock Grid.Column="1" Grid.Row="2" Text="Loading  inbox, please hang tight..." />
         </Grid>
         <!--#endregion-->
+        
+        <!--#region "Empty" screen-->
+        <Grid Grid.Column="0" Grid.ColumnSpan="4" Grid.Row="1">
+            <!--#region Empty screen visibility control-->
+            <Grid.Style>
+                <Style TargetType="Grid">
+                    <Setter Property="Visibility" Value="Hidden" />
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding IsInboxEmpty}" Value="True">
+                            <Setter Property="Visibility" Value="Visible" />
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </Grid.Style>
+            <!--#endregion-->
+
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="auto" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+
+            <Image Source="pack://application:,,,/Media/Imgs/empty-icon.png" 
+                   Grid.Column="1" Grid.Row="1" 
+                   MaxHeight="150"/>
+
+            <TextBlock Text="Looks like your inbox is empty!" 
+                       FontSize="24"
+                       Margin="15"
+                       Grid.Column="1"
+                       Grid.Row="2" />
+        </Grid>
+        <!--#endregion-->
 
         <!--#region Inbox-->
 
@@ -102,6 +141,9 @@
                     <Style.Triggers>
                         <DataTrigger Binding="{Binding IsLoading}" Value="False">
                             <Setter Property="Visibility" Value="Visible" />
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding IsInboxEmpty}" Value="True">
+                            <Setter Property="Visibility" Value="Hidden" />
                         </DataTrigger>
                     </Style.Triggers>
                 </Style>
