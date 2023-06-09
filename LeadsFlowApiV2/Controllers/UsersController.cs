@@ -23,12 +23,17 @@ public class UsersController : ControllerBase
 		_organizationDAO = organizationDAO;
 	}
 
-    // GET: api/<UsersController>
-    [HttpGet]
-	public async Task<ActionResult<IEnumerable<User>>> Get()
+	// GET: api/<UsersController>?query=<WHERE-CLAUSE>
+	[HttpGet]
+	public async Task<ActionResult> GetAll(string? query)
 	{
 		try
 		{
+			if (string.IsNullOrEmpty(query) == false)
+			{
+				return Ok(await _userDAO.GetUsers(query));
+			}
+
 			return Ok(await _userDAO.GetUsers());
 		}
 		catch (Exception ex)
@@ -39,7 +44,7 @@ public class UsersController : ControllerBase
 
 	// GET api/<UsersController>/5
 	[HttpGet("{id}")]
-	public async Task<ActionResult<string>> Get(string id)
+	public async Task<ActionResult> Get(string id)
 	{
 		try
 		{

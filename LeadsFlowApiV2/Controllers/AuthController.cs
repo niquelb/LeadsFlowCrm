@@ -37,42 +37,42 @@ public class AuthController : ControllerBase
 	/// [Problem] if the token generation fails or there are any other problems
 	/// </returns>
 	[HttpPost("Login")]
-	public async Task<ActionResult> Login([FromBody] LoginUser user)
+	public async Task<ActionResult> Login([FromBody] LoginUser loggedInUser)
 	{
 		try
 		{
 			/*
 			 * We check the validity of the OAuth token
 			 */
-			if (await _auth.CheckOauthToken(user.OAuthToken) == false)
+			if (await _auth.CheckOauthToken(loggedInUser.OAuthToken) == false)
 			{
 				return BadRequest("OAuth Token is not valid");
 			}
 
-			// We retrieve the user ID
-			string? userId = await _userDAO.GetUserByEmail(user.Email);
+			// We retrieve the user from the BD using the email
+			var user = (await _userDAO.GetUsers($"email like '{loggedInUser.Email}'")).FirstOrDefault();
 
 			/*
 			 * We check if the user exists in the BD
 			 */
-			if (string.IsNullOrWhiteSpace(userId))
+			if (user == null || string.IsNullOrWhiteSpace(user.Id))
 			{
 				// TODO: register the user if it doesn't exist
 				return NotFound("No user was found with the given email");
 			}
 
 			// We update the given user's record on the DB with the new OAuth token
-			await _auth.UpdateUser(userId, user.OAuthToken);
+			await _auth.UpdateUser(user.Id, loggedInUser.OAuthToken);
 
 			// We generate the token
-			string token = _auth.GetToken(userId);
+			string token = _auth.GetToken(user.Id);
 
 			if (string.IsNullOrEmpty(token))
 			{
 				return Problem("There was an error generating the token");
 			}
 
-			return Ok(new LoggedInUser { Id = userId, Token = token });
+			return Ok(new LoggedInUser { Id = user.Id, Token = token });
 
 		}
 		catch (Exception ex)

@@ -21,24 +21,13 @@ public class UserDAO : IUserDAO
         _db = db;
     }
 
-    /// <summary>
-    /// Method for getting a specific User's ID with a given Email
-    /// </summary>
-    /// <param name="email">Email for the query</param>
-    /// <returns></returns>
-    public async Task<string?> GetUserByEmail(string email)
-    {
-        var result = await _db.LoadData<string, dynamic>("dbo.spUser_GetByEmail", new { email });
-
-        return result.FirstOrDefault();
-	}
-
-    /// <summary>
-    /// Get all users
-    /// </summary>
-    /// <returns>All users</returns>
-    public async Task<IEnumerable<User>> GetUsers() =>
-        await _db.LoadData<User, dynamic>("dbo.spUser_GetAll", new { });
+	/// <summary>
+	/// Get all users
+	/// </summary>
+	/// <param name="query">Optional SQL query</param>
+	/// <returns>All users</returns>
+	public async Task<IEnumerable<User>> GetUsers(string? query = null) =>
+        await _db.LoadData<User, dynamic>("dbo.spUser_GetAll", new { Filter = query });
 
     /// <summary>
     /// Get user by ID
