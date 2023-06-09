@@ -1,11 +1,14 @@
 ﻿using Caliburn.Micro;
 using LeadsFlowCrm.EventModels;
+using LeadsFlowCrm.Services.ModelServices;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace LeadsFlowCrm.ViewModels;
 
@@ -15,21 +18,34 @@ public class ShellViewModel : Conductor<object>, IHandle<EmailSelectedEvent>, IH
 	private readonly PipelinesViewModel _pipelinesViewModel;
 	private readonly SelectedEmailViewModel _selectedEmailViewModel;
 	private readonly IEventAggregator _event;
+	private readonly IUserService _userService;
 
 	public ShellViewModel(InboxViewModel inboxViewModel,
 					   PipelinesViewModel pipelinesViewModel,
 					   SelectedEmailViewModel selectedEmailViewModel,
 					   SidebarViewModel sidebarViewModel,
-					   IEventAggregator @event)
+					   IEventAggregator @event,
+					   IUserService userService)
     {
 		_inboxViewModel = inboxViewModel;
 		_pipelinesViewModel = pipelinesViewModel;
 		_selectedEmailViewModel = selectedEmailViewModel;
 		Sidebar = sidebarViewModel;
 		_event = @event;
+		_userService = userService;
 		_event.SubscribeOnUIThread(this);
 
 		ActivateItemAsync(_inboxViewModel);
+	}
+
+	/// <summary>
+	/// Logout method
+	/// </summary>
+	public async void Logout()
+	{
+		await _userService.LogoutUserAsync();
+
+		await TryCloseAsync();
 	}
 
 	public SidebarViewModel Sidebar { get; }

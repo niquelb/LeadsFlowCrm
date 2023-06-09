@@ -46,7 +46,7 @@ public class OAuthServiceClass : IOAuthServiceClass
 				 * If the auth credentials are not valid
 				 */
 
-				await _baseGoogleService.ReAuthorizeUser();
+				await _baseGoogleService.ReAuthorizeUserAsync();
 
 				_oauth2Service = new Oauth2Service(await _baseGoogleService.GetServiceAsync());
 			}

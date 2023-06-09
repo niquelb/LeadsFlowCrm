@@ -20,7 +20,7 @@ public class UserService : IUserService
 	private readonly HttpClient _apiClient;
 	private readonly IBaseGoogleServiceClass _baseGoogleService;
 	private readonly IOAuthServiceClass _oAuthService;
-	private readonly LoggedInUser _user;
+	private LoggedInUser _user;
 
 	public UserService(
 		IApiHelper apiHelper,
@@ -135,4 +135,26 @@ public class UserService : IUserService
 
 		return output;
 	}
+
+	/// <summary>
+	/// Method for logging out the user, removing all stored info and revoking the OAuth token
+	/// </summary>
+	/// <returns></returns>
+	public async Task LogoutUserAsync()
+	{
+		try
+		{
+			// We revoke the OAuth token
+			await _baseGoogleService.RevokeAuthAsync();
+
+			// We clear the user info
+			_user = new();
+
+			//TODO: Revoke token from proprietary API
+		}
+		catch (Exception)
+		{
+			throw;
+		}
+    }
 }

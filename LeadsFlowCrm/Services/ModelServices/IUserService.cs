@@ -8,5 +8,6 @@ namespace LeadsFlowCrm.Services.ModelServices
 		Task AuthenticateAsync(string OAuthToken, string Email);
 		Task<User> GetUserAsync(string id, string token);
 		Task<bool> GoogleSignInAsync();
+		Task LogoutUserAsync();
 	}
 }
