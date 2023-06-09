@@ -7,16 +7,12 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid Margin="5">
-        <TabControl>
-            <TabItem Header="My Contacts" Padding="25 0">
-                <UserControl x:Name="MyContacts" />
-            </TabItem>
-            <TabItem Header="Import Contacts" Padding="25 0">
-                <UserControl x:Name="ImportContacts" />
-            </TabItem>
-            <TabItem Header="Create Contact" Padding="25 0">
-                <UserControl x:Name="CreateContact" />
-            </TabItem>
+        <TabControl x:Name="Items">
+            <TabControl.ItemTemplate>
+                <DataTemplate>
+                    <TextBlock Text="{Binding DisplayHeader}" />
+                </DataTemplate>
+            </TabControl.ItemTemplate>
         </TabControl>
     </Grid>
 </UserControl>

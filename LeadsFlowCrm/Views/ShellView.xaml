@@ -37,7 +37,7 @@
             </MenuItem>
         </Menu>
         <ContentControl x:Name="Sidebar"
-                           DockPanel.Dock="Left"/>
+                        DockPanel.Dock="Left"/>
         <Grid DockPanel.Dock="Bottom">
             <ContentControl x:Name="ActiveItem"
                             Margin="5" />
