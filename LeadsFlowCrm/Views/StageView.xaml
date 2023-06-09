@@ -37,7 +37,7 @@
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
 
-            <Image Source="LeadsFlowCrm;component/Media/Imgs/empty-icon.png" 
+            <Image Source="pack://application:,,,/Media/Imgs/empty-icon.png" 
                    Grid.Column="1" Grid.Row="1" 
                    MaxHeight="150"/>
 
