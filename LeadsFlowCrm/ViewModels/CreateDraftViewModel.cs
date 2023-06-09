@@ -10,6 +10,8 @@ using LeadsFlowCrm.Models;
 using System.Diagnostics;
 using System.Windows.Documents;
 using System.Windows.Controls;
+using Notifications.Wpf.Controls;
+using Notifications.Wpf;
 
 namespace LeadsFlowCrm.ViewModels;
 
@@ -23,10 +25,25 @@ public class CreateDraftViewModel : Screen
 		_gmailService = gmailService;
 	}
 
+	/// <summary>
+	/// Method for showing a "toast" style notification to the user
+	/// </summary>
+	/// <param name="title">Notification title</param>
+	/// <param name="msg">Description/message</param>
+	/// <param name="notificationType">Notification type (eg. success, error...)</param>
+	private void ShowNotification(string title, string msg, NotificationType notificationType) =>
+		Notification.Show(new NotificationContent
+		{
+			Title = title,
+			Message = msg,
+			Type = notificationType
+		});
+
 	public async void Send()
 	{
 		if (string.IsNullOrWhiteSpace(To) || string.IsNullOrWhiteSpace(SubjectLine) || string.IsNullOrWhiteSpace(Body))
 		{
+			ShowNotification("Fields are empty", "The email was not sent because one or more required fields are empty.", NotificationType.Error);
 			return;
 		}
 
@@ -41,18 +58,27 @@ public class CreateDraftViewModel : Screen
 
 			await _gmailService.SendEmailAsync(email);
 
+			ShowNotification("Email sent successfully", $"The email has been sent to {To}.", NotificationType.Success);
+
 			Exit();
 		}
 		catch (Exception ex)
 		{
-			Trace.TraceError(ex.Message);
+			//TODO: remove specific exception msg for production
+			ShowNotification("Error", $"Email was not sent. {ex.Message}", NotificationType.Error);
 		}
 	}
 
     public async void Exit()
 	{
+		To = string.Empty; 
+		SubjectLine = string.Empty;
+		Body = string.Empty;
+
 		await TryCloseAsync();
 	}
+
+	public NotificationManager Notification { get; set; } = new();
 
 	/*
 	 * Prop backing fields

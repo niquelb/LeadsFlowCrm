@@ -2,6 +2,7 @@
 using LeadsFlowCrm.EventModels;
 using LeadsFlowCrm.Models;
 using LeadsFlowCrm.Services;
+using Notifications.Wpf;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -70,6 +71,20 @@ public class SelectedEmailViewModel : Screen
 	}
 
 	/// <summary>
+	/// Method for showing a "toast" style notification to the user
+	/// </summary>
+	/// <param name="title">Notification title</param>
+	/// <param name="msg">Description/message</param>
+	/// <param name="notificationType">Notification type (eg. success, error...)</param>
+	private void ShowNotification(string title, string msg, NotificationType notificationType) => 
+		Notification.Show(new NotificationContent
+			{
+				Title = title,
+				Message = msg,
+				Type = notificationType
+			});
+
+	/// <summary>
 	/// Method that will redirect to the inbox
 	/// </summary>
 	public async void Back() => await _event.PublishOnUIThreadAsync(new NavigationEvent(NavigationEvent.NavigationRoutes.Inbox));
@@ -77,17 +92,33 @@ public class SelectedEmailViewModel : Screen
 	/// <summary>
 	/// Method for marking the email as unread
 	/// </summary>
-	public async void MarkUnread() => await _gmailServiceClass.MarkEmailAsUnreadAsync(SelectedEmail);
+	public async void MarkUnread()
+	{
+		await _gmailServiceClass.MarkEmailAsUnreadAsync(SelectedEmail);
+
+		ShowNotification("Marked unread", "Successfully marked the email as unread.", NotificationType.Success);
+	}
 
 	/// <summary>
 	/// Method for marking the email as archived
 	/// </summary>
-	public async void Archive() => await _gmailServiceClass.MarkEmailAsArchivedAsync(SelectedEmail);
+	public async void Archive()
+	{
+		await _gmailServiceClass.MarkEmailAsArchivedAsync(SelectedEmail);
+
+		ShowNotification("Archived", "Successfully archived the email.", NotificationType.Success);
+	}
 
 	/// <summary>
 	/// Method for marking the email as trash
 	/// </summary>
-	public async void Delete() => await _gmailServiceClass.MarkEmailAsTrashAsync(SelectedEmail);
+	public async void Delete()
+	{
+		await _gmailServiceClass.MarkEmailAsTrashAsync(SelectedEmail);
+
+
+		ShowNotification("Deleted", "Successfully deleted the email.", NotificationType.Success);
+	}
 
 	/// <summary>
 	/// Method for either marking or removing the label of favorite from the email depending on if the email is already marked as favorite
@@ -97,13 +128,19 @@ public class SelectedEmailViewModel : Screen
 		if (SelectedEmail.IsFavorite)
 		{
 			await _gmailServiceClass.MarkEmailAsNotFavoriteAsync(SelectedEmail);
+
+			ShowNotification("Marked as not favorite", "Successfully marked the email as not favorite.", NotificationType.Success);
 			return;
 		}
 
 		await _gmailServiceClass.MarkEmailAsFavoriteAsync(SelectedEmail);
+
+		ShowNotification("Marked as favorite", "Successfully marked the email as favorite.", NotificationType.Success);
 	}
 
-	public bool CanReply { get; set; } = false;
+	public NotificationManager Notification { get; set; } = new();
+
+    public bool CanReply { get; set; } = false;
 
 	public bool CanLabel { get; set; } = false;
 
