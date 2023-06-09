@@ -2,6 +2,7 @@
 using Google.Apis.Auth.OAuth2.Flows;
 using Google.Apis.Gmail.v1;
 using Google.Apis.Oauth2.v2;
+using Google.Apis.PeopleService.v1;
 using Google.Apis.Services;
 using LeadsFlowCrm.Models;
 using LeadsFlowCrm.Services.ModelServices;
@@ -36,6 +37,7 @@ public class BaseGoogleServiceClass : IBaseGoogleServiceClass
 	/// <summary> Scopes for the OAuth login </summary>
 	private static readonly string[] _scopes = {
 			GmailService.Scope.MailGoogleCom,
+			PeopleServiceService.Scope.Contacts,
 			Oauth2Service.Scope.UserinfoEmail,
 			Oauth2Service.Scope.UserinfoProfile,
 		};

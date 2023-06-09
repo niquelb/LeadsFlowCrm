@@ -1,4 +1,5 @@
-﻿using LeadsFlowCrm.Models;
+﻿using Google.Apis.Oauth2.v2.Data;
+using LeadsFlowCrm.Models;
 using LeadsFlowCrm.Utils;
 using System;
 using System.Diagnostics;
@@ -86,7 +87,21 @@ public class UserService : IUserService
 		var oauthService = await _oAuthService.GetOauthServiceAsync();
 
 		// We retrieve the user's profile information
-		var userInfo = await oauthService.Userinfo.Get().ExecuteAsync();
+		Userinfo userInfo;
+
+		/*
+		 * We do this in a Try-Catch because if the scopes for the OAuth request changes this throws an exception,
+		 * shouldn't happen often
+		 */
+		try
+		{
+			userInfo = await oauthService.Userinfo.Get().ExecuteAsync();
+		}
+		catch (Exception)
+		{
+			await _baseGoogleService.ReAuthorizeUserAsync();
+			userInfo = await oauthService.Userinfo.Get().ExecuteAsync();
+		}
 
 		// We collect the user's info
 		string email = userInfo.Email;
