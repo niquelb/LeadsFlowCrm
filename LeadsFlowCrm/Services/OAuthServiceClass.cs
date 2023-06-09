@@ -21,7 +21,7 @@ public class OAuthServiceClass : IOAuthServiceClass
 	private readonly IBaseGoogleServiceClass _baseGoogleService;
 
 	/// <summary> OAuth 2 service </summary>
-	private Oauth2Service _oauth2Service;
+	private Oauth2Service? _oauth2Service;
 
 	public OAuthServiceClass(IBaseGoogleServiceClass baseGoogleService)
 	{

@@ -50,10 +50,7 @@ public class GmailServiceClass : IGmailServiceClass
 	/// <see cref="GmailService"/>
 	public async Task<GmailService> GetGmailServiceAsync()
 	{
-		if (_gmailService == null)
-		{
-			_gmailService = new GmailService(await _baseGoogleService.GetServiceAsync());
-		}
+		_gmailService ??= new GmailService(await _baseGoogleService.GetServiceAsync());
 
 		return _gmailService;
 	}
@@ -64,10 +61,7 @@ public class GmailServiceClass : IGmailServiceClass
 	/// <returns>List of the emails in the user's inbox</returns>
 	public async Task<List<Email>> GetInboxAsync()
 	{
-		if (_inbox == null)
-		{
-			_inbox = await GetEmailsFromInboxAsync();
-		}
+		_inbox ??= await GetEmailsFromInboxAsync();
 
 		return _inbox;
 	}

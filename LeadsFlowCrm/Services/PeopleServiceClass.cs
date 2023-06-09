@@ -25,10 +25,7 @@ public class PeopleServiceClass : IPeopleServiceClass
 	/// <see cref="PeopleServiceService"/>
 	public async Task<PeopleServiceService> GetPeopleServiceAsync()
 	{
-		if (_service == null)
-		{
-			_service = new PeopleServiceService(await _baseGoogleService.GetServiceAsync());
-		}
+		_service ??= new PeopleServiceService(await _baseGoogleService.GetServiceAsync());
 
 		return _service;
 	}
@@ -40,10 +37,7 @@ public class PeopleServiceClass : IPeopleServiceClass
 	/// <see cref="Person"/>
 	public async Task<List<Person>> GetPeopleAsync()
 	{
-		if (_people == null)
-		{
-			_people = await RetrievePeopleAsync();
-        }
+		_people ??= await RetrievePeopleAsync();
 
 		return _people.ToList();
 	}

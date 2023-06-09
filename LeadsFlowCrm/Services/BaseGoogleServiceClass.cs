@@ -56,14 +56,11 @@ public class BaseGoogleServiceClass : IBaseGoogleServiceClass
     /// <returns></returns>
     public async Task<BaseClientService.Initializer> GetServiceAsync()
 	{
-		if (_service == null)
-		{
-			_service = new BaseClientService.Initializer
+		_service ??= new BaseClientService.Initializer
 			{
 				HttpClientInitializer = await GetCredentialsAsync(),
 				ApplicationName = _appName
 			};
-		}
 
 		return _service;
 	}
