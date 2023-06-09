@@ -31,11 +31,11 @@ public class SidebarViewModel
 	{
 		await _event.PublishOnUIThreadAsync(new NavigationEvent(NavigationEvent.NavigationRoutes.Pipelines));
 	}
-	public async void Contacts()
+	public void Contacts()
 	{
 		throw new NotImplementedException();
 	}
-	public async void Utils()
+	public void Utils()
 	{
 		throw new NotImplementedException();
 	}

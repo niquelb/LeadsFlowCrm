@@ -11,6 +11,7 @@
 
   <ItemGroup>
     <None Remove="Media\Imgs\empty-icon.png" />
+    <None Remove="Media\Imgs\LeadsFlowCRM.png" />
   </ItemGroup>
 
   <ItemGroup>
@@ -29,6 +30,9 @@
 
   <ItemGroup>
     <Resource Include="Media\Imgs\empty-icon.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Media\Imgs\LeadsFlowCRM.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
   </ItemGroup>

@@ -4,40 +4,50 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:LoadingSpinner="clr-namespace:LoadingSpinnerControl;assembly=LoadingSpinnerControl"
+        xmlns:Icon="http://metro.mahapps.com/winfx/xaml/iconpacks" 
         mc:Ignorable="d" FontSize="18"
         Title="Login - Leads Flow CRM" Height="700" Width="900"
-        Style="{DynamicResource CustomWindowStyle}"
-        WindowStartupLocation="CenterScreen">
-    <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*" />
-            <ColumnDefinition Width="*" />
-        </Grid.ColumnDefinitions>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="*" />
-            <RowDefinition Height="auto" />
-            <RowDefinition Height="*" />
-        </Grid.RowDefinitions>
+        WindowStartupLocation="CenterScreen"
+        ResizeMode="CanResizeWithGrip" 
+        WindowStyle="None" 
+        AllowsTransparency="True" 
+        Background="{x:Null}" 
+        MouseDown="Window_MouseDown">
+    <Border Background="#0e022c"
+            CornerRadius="10">
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
 
-        <Grid Grid.Row="0"
-              Grid.Column="1"
-              Grid.RowSpan="3"
-              Background="#2300FF">
-            <!--#region Loading Spinner-->
-            <Grid>
-                <!--#region Loading grid visibility control-->
-                <Grid.Style>
-                    <Style TargetType="Grid">
-                        <Setter Property="Visibility" Value="Hidden" />
-                        <Style.Triggers>
-                            <DataTrigger Binding="{Binding IsLoading}" Value="True">
-                                <Setter Property="Visibility" Value="Visible" />
-                            </DataTrigger>
-                        </Style.Triggers>
-                    </Style>
-                </Grid.Style>
-                <!--#endregion-->
+            <!--#region Toolbar-->
+            <StackPanel Orientation="Horizontal"
+                    Grid.Row="0"
+                    Grid.Column="1"
+                    HorizontalAlignment="Right"
+                    Margin="5"
+                    Panel.ZIndex="1">
+                <Button x:Name="Minimize"
+                    Style="{StaticResource LoginIconButton}"
+                    Click="Minimize_Click">
+                    <Icon:PackIconMaterial Width="15" Height="15" Margin="15"  Kind="WindowMinimize" />
+                </Button>
+                <Button x:Name="Exit"
+                    Style="{StaticResource ExitIconButton}">
+                    <Icon:PackIconMaterial Width="15" Height="15" Margin="15"  Kind="WindowClose" />
+                </Button>
+            </StackPanel>
+            <!--#endregion-->
 
+            <!--#region Left card-->
+            <Grid Grid.Row="0"
+                  Grid.RowSpan="2"
+                  Grid.Column="0">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*" />
                     <ColumnDefinition Width="auto" />
@@ -46,64 +56,144 @@
                 <Grid.RowDefinitions>
                     <RowDefinition Height="*" />
                     <RowDefinition Height="auto" />
-                    <RowDefinition Height="auto" />
                     <RowDefinition Height="*" />
                 </Grid.RowDefinitions>
 
-                <LoadingSpinner:LoadingSpinner Grid.Column="1" Grid.Row="1" 
-                                           IsLoading="{Binding IsLoading}"
-                                           Margin="15" Thickness="5" Color="white"/>
-                <TextBlock x:Name="LoadingText" Grid.Column="1" Grid.Row="2" />
+                <Image Source="pack://application:,,,/Media/Imgs/LeadsFlowCRM.png" 
+                   Grid.Column="1" Grid.Row="1" 
+                   MaxHeight="250"/>
+
             </Grid>
             <!--#endregion-->
-            
-            <!--#region Login form-->
-            <Grid>
-                <!--#region Login form grid visibility control-->
-                <Grid.Style>
-                    <Style TargetType="Grid">
-                        <Setter Property="Visibility" Value="Visible" />
-                        <Style.Triggers>
-                            <DataTrigger Binding="{Binding IsLoading}" Value="True">
+
+            <!--#region Right card-->
+            <Border Grid.Row="0"
+                    Grid.Column="1"
+                    Grid.RowSpan="2"
+                    CornerRadius="0 10 10 0">
+                <Border.Background>
+                    <LinearGradientBrush StartPoint="0 0" EndPoint="0 1">
+                        <LinearGradientBrush.GradientStops>
+                            <GradientStop Offset="0.1" Color="#2300FF" />
+                            <GradientStop Offset="1" Color="#3D00BF" />
+                        </LinearGradientBrush.GradientStops>
+                    </LinearGradientBrush>
+                </Border.Background>
+                <Grid>
+                    <!--#region Loading Spinner-->
+                    <Grid>
+                        <!--#region Loading grid visibility control-->
+                        <Grid.Style>
+                            <Style TargetType="Grid">
                                 <Setter Property="Visibility" Value="Hidden" />
-                            </DataTrigger>
-                        </Style.Triggers>
-                    </Style>
-                </Grid.Style>
-                <!--#endregion-->
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="auto" />
-                    <ColumnDefinition Width="*" />
-                </Grid.ColumnDefinitions>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="*" />
-                    <RowDefinition Height="auto" />
-                    <RowDefinition Height="auto" />
-                    <RowDefinition Height="auto" />
-                    <RowDefinition Height="*" />
-                </Grid.RowDefinitions>
-                <TextBlock Grid.Row="1"
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding IsLoading}" Value="True">
+                                        <Setter Property="Visibility" Value="Visible" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Grid.Style>
+                        <!--#endregion-->
+
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="auto" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*" />
+                            <RowDefinition Height="auto" />
+                            <RowDefinition Height="auto" />
+                            <RowDefinition Height="*" />
+                        </Grid.RowDefinitions>
+
+                        <LoadingSpinner:LoadingSpinner Grid.Column="1" Grid.Row="1" 
+                                           IsLoading="{Binding IsLoading}"
+                                           Margin="15" Thickness="5" Color="white"/>
+                        <TextBlock x:Name="LoadingText" Grid.Column="1" Grid.Row="2" />
+                    </Grid>
+                    <!--#endregion-->
+
+                    <!--#region Login form-->
+                    <Grid>
+                        <!--#region Login form grid visibility control-->
+                        <Grid.Style>
+                            <Style TargetType="Grid">
+                                <Setter Property="Visibility" Value="Visible" />
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding IsLoading}" Value="True">
+                                        <Setter Property="Visibility" Value="Hidden" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Grid.Style>
+                        <!--#endregion-->
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="auto" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="2*" />
+                            <RowDefinition Height="auto" />
+                            <RowDefinition Height="*" />
+                            <RowDefinition Height="auto" />
+                            <RowDefinition Height="auto" />
+                            <RowDefinition Height="4*" />
+                        </Grid.RowDefinitions>
+                        <TextBlock Grid.Row="1"
                        Grid.Column="1"
-                       FontSize="24"
+                       FontSize="36"
+                       FontWeight="DemiBold"
                        VerticalAlignment="Center"
                        HorizontalAlignment="Center"
                        Text="Log In"/>
-                <Button x:Name="Login"
-                    Grid.Column="1"
-                    Grid.Row="2"
-                    Content="Please log in to your Google account."
-                    Margin="10"
-                    Padding="10"/>
-                <TextBlock Grid.Row="3"
-                       Grid.Column="1"
-                       FontWeight="Light"
-                       VerticalAlignment="Center"
-                       HorizontalAlignment="Center"
-                       Text="Trouble logging in? Contact support here."/>
 
-            </Grid>
+                        <Separator Grid.Row="2"
+                           Grid.Column="1"
+                           BorderBrush="{StaticResource AREghZyBrush.Foreground.Static}"
+                           BorderThickness="5"
+                           Margin="0 -15 0 0"/>
+
+                        <Button x:Name="Login"
+                        Grid.Column="1"
+                        Grid.Row="3"
+                        Style="{StaticResource GoogleSignInBtn}">
+                            <StackPanel Orientation="Horizontal">
+                                <Icon:PackIconMaterial Kind="Google" 
+                                               Style="{StaticResource Icon}"/>
+                                <TextBlock Text="Please log in to your Google account" 
+                                   Style="{StaticResource LoginBtnTextBlock}"/>
+                            </StackPanel>
+                        </Button>
+
+                        <!--#region Support link-->
+                        <StackPanel Orientation="Horizontal"
+                                    HorizontalAlignment="Center"
+                                    Grid.Row="4"
+                                    Grid.Column="1">
+                            <TextBlock FontWeight="Light"
+                                       VerticalAlignment="Center"
+                                       HorizontalAlignment="Center"
+                                       Margin="0 20"
+                                       Text="Trouble logging in? " />
+                            <TextBlock FontWeight="Light"
+                                       VerticalAlignment="Center"
+                                       HorizontalAlignment="Center">
+                                <Hyperlink NavigateUri="https://support.google.com/"
+                                           RequestNavigate="Hyperlink_RequestNavigate"
+                                           Foreground="{StaticResource AREghZyBrush.Foreground.Deeper}">
+                                    Contact support here.
+                                </Hyperlink>
+                            </TextBlock>
+                        </StackPanel>
+                        <!--#endregion-->
+
+                    </Grid>
+                    <!--#endregion-->
+                </Grid>
+            </Border>
             <!--#endregion-->
         </Grid>
-    </Grid>
+    </Border>
 </Window>

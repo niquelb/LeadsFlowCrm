@@ -61,7 +61,7 @@ public class LoginViewModel : Screen
 	 * These properties are used to control the visibility of the loading spinner and the login form
 	 */
     private bool _isLoading = false;
-	private string _loadingText;
+	private string _loadingText = string.Empty;
 
 	public bool IsLoading
 	{
@@ -80,6 +80,11 @@ public class LoginViewModel : Screen
 			_loadingText = value;
 			NotifyOfPropertyChange();
 		}
+	}
+
+	public async void Exit()
+	{
+		await TryCloseAsync();
 	}
 
 

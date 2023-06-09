@@ -56,7 +56,7 @@
                             <Icon:PackIconMaterial Width="15" Height="15" Margin="15"  Kind="WindowMaximize" />
                         </Button>
                         <Button x:Name="Exit"
-                                Style="{StaticResource IconButton}">
+                                Style="{StaticResource ExitIconButton}">
                             <Icon:PackIconMaterial Width="15" Height="15" Margin="15"  Kind="WindowClose" />
                         </Button>
                     </StackPanel>

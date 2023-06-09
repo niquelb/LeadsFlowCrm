@@ -110,7 +110,8 @@ public class AuthMethods : IAuthMethods
 			new Claim("id", id)
 		};
 
-		var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration.GetSection("Authentication:Token").Value));
+		string configToken = _configuration.GetSection("Authentication:Token").Value ?? "";
+		var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configToken));
 
 		var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256Signature);
 

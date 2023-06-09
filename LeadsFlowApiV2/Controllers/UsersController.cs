@@ -83,11 +83,16 @@ public class UsersController : ControllerBase
 	{
 		try
 		{
-			/*
+            if (string.IsNullOrWhiteSpace(user.Id))
+            {
+				return NotFound(user.Id);
+			}
+
+            /*
 			Before doing the updating we check if the entry exists, this is done because otherwise
 			the API will return 200 even if the updating failed due to not being any entries with that ID
 			*/
-			var result = await _userDAO.GetUser(user.Id);
+            var result = await _userDAO.GetUser(user.Id);
 			if (result == null)
 			{
 				return NotFound(user.Id);

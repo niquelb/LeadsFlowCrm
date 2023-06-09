@@ -86,6 +86,11 @@ public class StagesController : ControllerBase
 	{
 		try
 		{
+			if (string.IsNullOrWhiteSpace(stage.Id))
+			{
+				return NotFound(stage.Id);
+			}
+
 			/*
 			Before doing the updating we check if the entry exists, this is done because otherwise
 			the API will return 200 even if the updating failed due to not being any entries with that ID
