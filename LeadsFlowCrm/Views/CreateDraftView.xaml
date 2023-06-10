@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:LeadsFlowCrm.ViewModels"
+        xmlns:Behaviors="clr-namespace:WPFTextBoxAutoComplete;assembly=WPFTextBoxAutoComplete"
         xmlns:Icon="http://metro.mahapps.com/winfx/xaml/iconpacks" 
         xmlns:Utils="clr-namespace:LeadsFlowCrm.Utils"
         mc:Ignorable="d" FontSize="18"
@@ -69,6 +70,8 @@
                          Grid.ColumnSpan="3"
                          Style="{StaticResource HintedTextBox}"
                          Utils:TextBoxHelper.Hint="To" 
+		                 Behaviors:AutoCompleteBehavior.AutoCompleteItemsSource="{Binding AutoCompleteData}" 
+		                 Behaviors:AutoCompleteBehavior.AutoCompleteStringComparison="InvariantCultureIgnoreCase"
                          Margin="0, 5" />
 
                     <TextBox x:Name="SubjectLine"
