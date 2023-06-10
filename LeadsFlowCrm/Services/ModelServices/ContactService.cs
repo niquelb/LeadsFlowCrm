@@ -31,16 +31,25 @@ public class ContactService : IContactService
 	}
 
 	/// <summary>
-	/// Method for retrieving all the contacts from the API
+	/// Method for retrieving all the contacts associated with the user from the API
 	/// </summary>
-	/// <returns>List of all contacts</returns>
+	/// <param name="userId">User's ID</param>
+	/// <returns>List of all contacts associated with the user</returns>
 	/// <exception cref="UnauthorizedAccessException">If the token is incorrect</exception>
 	/// <exception cref="Exception">If there was another issue with the API or the request</exception>
-	public async Task<IList<Contact>> GetAllAsync()
+	public async Task<IList<Contact>> GetAllFromUserAsync(string userId)
 	{
 		_apiClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _loggedInUser.Token);
 
-		using HttpResponseMessage resp = await _apiClient.GetAsync($"api/Contacts");
+		/*
+		 * We make the query for filtering by the Stage ID, for this we need to encode it
+		 * 
+		 * The final URL should look like this without encoding → "[URL]/Contacts?query=stageId='ID'
+		 */
+		string encodedPipelineId = WebUtility.UrlEncode(userId);
+		string query = $"userId = '{encodedPipelineId}'";
+
+		using HttpResponseMessage resp = await _apiClient.GetAsync($"api/Contacts?query={query}");
 		if (resp.IsSuccessStatusCode == false)
 		{
 			if (resp.StatusCode == HttpStatusCode.Unauthorized)

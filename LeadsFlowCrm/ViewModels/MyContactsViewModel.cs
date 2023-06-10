@@ -13,9 +13,11 @@ namespace LeadsFlowCrm.ViewModels;
 
 public class MyContactsViewModel : Screen
 {
-    public MyContactsViewModel(IContactService contactService)
+    public MyContactsViewModel(IContactService contactService,
+							   LoggedInUser loggedInUser)
     {
 		_contactService = contactService;
+		_loggedInUser = loggedInUser;
 	}
 
 	protected async override Task OnInitializeAsync(CancellationToken cancellationToken)
@@ -53,7 +55,7 @@ public class MyContactsViewModel : Screen
 	/// <returns>List of Contacts</returns>
 	private async Task<IList<Contact>> GetContactsAsync()
 	{
-		return await _contactService.GetAllAsync();
+		return await _contactService.GetAllFromUserAsync(_loggedInUser.Id);
 	}
 
 	public string DisplayHeader { get; set; } = "My Contacts";
@@ -68,6 +70,7 @@ public class MyContactsViewModel : Screen
 	private BindableCollection<Contact> _contacts = new();
 	private Contact _selectedContact = new();
 	private readonly IContactService _contactService;
+	private readonly LoggedInUser _loggedInUser;
 
 	/// <summary>
 	/// Contacts
