@@ -29,6 +29,7 @@ public class MyContactsViewModel : Screen
 		await base.OnActivateAsync(cancellationToken);
 
 		ShowLoadingScreen = true;
+		NoneSelected = true;
 
 		// We retrieve the contacts from the API
 		Contacts = new BindableCollection<Contact>(await GetContactsAsync());
@@ -63,6 +64,7 @@ public class MyContactsViewModel : Screen
     private bool _showContent;
 	private bool _showEmptyScreen;
 	private bool _showLoadingScreen;
+	private bool _noneSelected = true;
 	private BindableCollection<Contact> _contacts = new();
 	private Contact _selectedContact = new();
 	private readonly IContactService _contactService;
@@ -87,6 +89,21 @@ public class MyContactsViewModel : Screen
 		get { return _selectedContact; }
 		set { 
 			_selectedContact = value;
+			NotifyOfPropertyChange();
+
+			// We display the contact info
+			NoneSelected = false;
+		}
+	}
+
+	/// <summary>
+	/// Controls wether the selected contact info is displayed or not
+	/// </summary>
+	public bool NoneSelected
+	{
+		get { return _noneSelected; }
+		set { 
+			_noneSelected = value;
 			NotifyOfPropertyChange();
 		}
 	}

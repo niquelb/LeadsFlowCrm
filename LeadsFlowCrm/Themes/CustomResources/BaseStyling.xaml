@@ -106,7 +106,15 @@
             </Setter.Value>
         </Setter>
     </Style>
-
+    <!--#endregion-->
+    
+    <!--#region Text Area-->
+    <Style x:Key="TextArea" TargetType="TextBox" BasedOn="{StaticResource {x:Type TextBox}}">
+        <Setter Property="TextWrapping" Value="Wrap" />
+        <Setter Property="FontWeight" Value="Light" />
+        <Setter Property="VerticalScrollBarVisibility" Value="Auto" />
+        <Setter Property="Foreground" Value="LightSlateGray" />
+    </Style>
     <!--#endregion-->
 
     <!--#region Icons-->

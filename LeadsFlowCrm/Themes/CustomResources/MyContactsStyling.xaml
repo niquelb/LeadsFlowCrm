@@ -1,0 +1,14 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <!--#region TextBlocks-->
+    
+    <!--#region Field Text-->
+    <Style x:Key="FieldText" TargetType="TextBlock" BasedOn="{StaticResource {x:Type TextBlock}}">
+        <Setter Property="FontWeight" Value="Light"/>
+        <Setter Property="HorizontalAlignment" Value="Right"/>
+        <Setter Property="Foreground" Value="LightSlateGray" />
+    </Style>
+    <!--#endregion-->
+    
+    <!--#endregion-->
+</ResourceDictionary>
