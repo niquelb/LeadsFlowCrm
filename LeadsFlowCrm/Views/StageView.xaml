@@ -5,8 +5,9 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:LeadsFlowCrm.Views"
              xmlns:Utils="clr-namespace:LeadsFlowCrm.Utils"
+             xmlns:cal="http://www.caliburnproject.org"
              xmlns:Icon="http://metro.mahapps.com/winfx/xaml/iconpacks"
-             mc:Ignorable="d" 
+             mc:Ignorable="d" FontSize="18"
              d:DesignHeight="700" d:DesignWidth="1200">
     <Grid>
         <!--#region Stage empty-->
@@ -18,6 +19,9 @@
                     <Style.Triggers>
                         <DataTrigger Binding="{Binding IsStageEmpty}" Value="False">
                             <Setter Property="Visibility" Value="Hidden" />
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding IsStageEmpty}" Value="True">
+                            <Setter Property="Visibility" Value="Visible" />
                         </DataTrigger>
                     </Style.Triggers>
                 </Style>
@@ -33,6 +37,7 @@
                 <RowDefinition Height="*" />
                 <RowDefinition Height="auto" />
                 <RowDefinition Height="auto" />
+                <RowDefinition Height="auto" />
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
 
@@ -45,6 +50,30 @@
                        Margin="15"
                        Grid.Column="1"
                        Grid.Row="2" />
+
+            <Grid Grid.Column="1"
+                  Grid.Row="3">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="auto" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+
+                <Button Grid.Column="1"
+                        cal:Message.Attach="[Event Click] = [Action RefreshStage]"
+                        ToolTip="Reload the current stage"
+                        Style="{StaticResource SmallBtnStyling}">
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="Reload Stage" 
+                                   VerticalAlignment="Center" 
+                                   Margin="5" />
+                        <Icon:PackIconMaterial Kind="Refresh" 
+                                               Margin="5 0" 
+                                               VerticalAlignment="Center" 
+                                               Foreground="White"/>
+                    </StackPanel>
+                </Button>
+            </Grid>
         </Grid>
         <!--#endregion-->
 
@@ -53,10 +82,13 @@
             <!--#region Content grid visibility control-->
             <Grid.Style>
                 <Style TargetType="Grid">
-                    <Setter Property="Visibility" Value="Hidden" />
+                    <Setter Property="Visibility" Value="Visible" />
                     <Style.Triggers>
                         <DataTrigger Binding="{Binding IsStageEmpty}" Value="False">
                             <Setter Property="Visibility" Value="Visible" />
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding IsStageEmpty}" Value="True">
+                            <Setter Property="Visibility" Value="Hidden" />
                         </DataTrigger>
                     </Style.Triggers>
                 </Style>
@@ -93,7 +125,7 @@
                             <TextBox x:Name="SearchBox" 
                                  Grid.Column="0" 
                                  Style="{StaticResource InboxSearchBox}"
-                                 Utils:TextBoxHelper.Hint="Search pipeline..." />
+                                 Utils:TextBoxHelper.Hint="Search stage..." />
                             <Icon:PackIconMaterial Grid.Column="1" 
                                                Kind="Magnify" Width="20" Height="20"
                                                Panel.ZIndex="2" Margin="5 0"
@@ -122,9 +154,9 @@
 
                 <!--#region Refresh button-->
 
-                <Button x:Name="Refresh"
-                Grid.Column="4" Grid.Row="0"
-                Style="{StaticResource IconButton}">
+                <Button x:Name="RefreshStage"
+                        Grid.Column="4" Grid.Row="0"
+                        Style="{StaticResource IconButton}">
                     <Icon:PackIconMaterial Width="20" Height="20" Margin="10" Kind="Refresh" />
                 </Button>
 
@@ -163,11 +195,11 @@
 
                 <!--#region Paginator-->
                 <Border Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="2" 
-                HorizontalAlignment="Right" 
-                BorderBrush="{StaticResource AREghZyBrush.Foreground.Static}"
-                BorderThickness="1" CornerRadius="5" Padding="5"
-                Background="{StaticResource AREghZyBrush.Foreground.Static}"
-                Margin="10">
+                        HorizontalAlignment="Right" 
+                        BorderBrush="{StaticResource AREghZyBrush.Foreground.Static}"
+                        BorderThickness="1" CornerRadius="5" Padding="5"
+                        Background="{StaticResource AREghZyBrush.Foreground.Static}"
+                        Margin="10">
                     <StackPanel Orientation="Horizontal">
                         <Button x:Name="FirstPage" Style="{StaticResource PaginatorBtn}">
                             <Icon:PackIconMaterial Kind="ChevronDoubleLeft" Style="{StaticResource PaginatorBtnIcon}" />

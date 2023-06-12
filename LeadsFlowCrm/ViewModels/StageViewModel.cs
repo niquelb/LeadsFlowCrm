@@ -2,6 +2,8 @@
 using LeadsFlowCrm.EventModels;
 using LeadsFlowCrm.Models;
 using LeadsFlowCrm.Services.ModelServices;
+using LeadsFlowCrm.Utils;
+using Notifications.Wpf;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
@@ -21,6 +23,7 @@ public class StageViewModel : Screen, IHandle<StageSelectedEvent>
 		@event.SubscribeOnUIThread(this);
 	}
 
+	#region Events
 	/// <summary>
 	/// Event that gets triggered when the user switches between stages in the Pipelines screen
 	/// </summary>
@@ -31,13 +34,40 @@ public class StageViewModel : Screen, IHandle<StageSelectedEvent>
 	{
 		Stage = e.SelectedStage;
 
+		await LoadContacts();
+
+    }
+	#endregion
+
+	#region Public Methods
+	/// <summary>
+	/// Method to refresh the contacts list
+	/// </summary>
+	/// <returns></returns>
+	public async Task RefreshStage()
+	{
+		Utilities.ShowNotification("Reloading stage", "Reloading the current stage...", NotificationType.Information);
+		await LoadContacts();
+	}
+
+	#endregion
+
+	#region Private Methods
+	/// <summary>
+	/// Method that loads the Contacts collection from the API and shows/hides the "empty" screen
+	/// </summary>
+	/// <returns></returns>
+	private async Task LoadContacts()
+	{
 		Contacts = new ObservableCollection<Contact>(await _contactService.GetByStageAsync(Stage.Id));
 
 		// Show the "empty" screen if no contacts found
 		IsStageEmpty = Contacts.Count <= 0;
+	}
 
-    }
+	#endregion
 
+	#region Properties
 	/// <summary>
 	/// Stage
 	/// </summary>
@@ -48,11 +78,10 @@ public class StageViewModel : Screen, IHandle<StageSelectedEvent>
 	/// </summary>
 	public Contact SelectedContact { get; set; } = new();
 
-    /*
-	 * Private backing fields for the properties
-	 */
-    private bool _isStageEmpty;
+	#region Property backing fields
+	private bool _isStageEmpty;
 	private ObservableCollection<Contact> _contacts = new();
+	#endregion
 
 	/// <summary>
 	/// Contacts for the stage
@@ -77,6 +106,6 @@ public class StageViewModel : Screen, IHandle<StageSelectedEvent>
 			NotifyOfPropertyChange();
 		}
 	}
-
+	#endregion
 
 }
