@@ -31,8 +31,16 @@ public class ImportContactsViewModel : Screen
 		ShowLoadingScreen = true;
 		NoneSelected = true;
 
-		// We retrieve the contacts from the People API
-		GoogleContacts = new(await _contactService.GetFromPeopleApiAsync());
+		try
+		{
+			// We retrieve the contacts from the People API
+			GoogleContacts = new(await _contactService.GetFromPeopleApiAsync());
+		}
+		catch (Exception)
+		{
+			// TODO handle error
+			throw;
+		}
 
 		ShowLoadingScreen = false;
 

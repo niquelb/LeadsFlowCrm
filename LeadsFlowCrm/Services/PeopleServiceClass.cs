@@ -63,7 +63,6 @@ public class PeopleServiceClass : IPeopleServiceClass
 		}
 		catch (System.Exception ex)
 		{
-			Trace.WriteLine(ex.Message);
 			throw;
 		}
 	} 

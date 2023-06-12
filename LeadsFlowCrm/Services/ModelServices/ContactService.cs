@@ -108,9 +108,11 @@ public class ContactService : IContactService
 	public async Task<IList<Contact>> GetFromPeopleApiAsync()
 	{
 		var output = new List<Contact>();
+		
+		// We retrieve the contacts from the user
 		var people = await _peopleService.GetPeopleAsync();
 
-
+		// We parse them into Contact objects
 		foreach (var person in people)
         {
 			var contact = new Contact()
