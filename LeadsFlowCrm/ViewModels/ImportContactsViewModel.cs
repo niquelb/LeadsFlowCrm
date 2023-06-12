@@ -16,11 +16,15 @@ public class ImportContactsViewModel : Screen
 {
 	private readonly IContactService _contactService;
 	private readonly IPeopleServiceClass _peopleService;
+	private readonly LoggedInUser _loggedInUser;
 
-	public ImportContactsViewModel(IContactService contactService, IPeopleServiceClass peopleService)
+	public ImportContactsViewModel(IContactService contactService,
+								IPeopleServiceClass peopleService,
+								LoggedInUser loggedInUser)
     {
 		_contactService = contactService;
 		_peopleService = peopleService;
+		_loggedInUser = loggedInUser;
 	}
 
 
@@ -57,7 +61,7 @@ public class ImportContactsViewModel : Screen
 
 	public async void SaveContact()
 	{
-		Trace.WriteLine(SelectedContact.FullName, "Selected contact");
+		await _contactService.PostToApiAsync(contact: SelectedContact, UserId: _loggedInUser.Id);
 	}
 
 	public string DisplayHeader { get; set; } = "Import Contacts";

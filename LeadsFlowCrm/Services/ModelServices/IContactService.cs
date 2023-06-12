@@ -9,5 +9,6 @@ namespace LeadsFlowCrm.Services.ModelServices
 		Task<IList<Contact>> GetByUserAsync(string userId);
 		Task<IList<Contact>> GetByStageAsync(string stageId);
 		Task<IList<Contact>> GetFromPeopleApiAsync();
+		Task PostToApiAsync(Contact contact, string UserId, string? StageId = null);
 	}
 }

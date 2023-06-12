@@ -61,7 +61,7 @@ public class PeopleServiceClass : IPeopleServiceClass
 			var resp = await connections.ExecuteAsync();
 			return resp.Connections;
 		}
-		catch (System.Exception ex)
+		catch (System.Exception)
 		{
 			throw;
 		}
