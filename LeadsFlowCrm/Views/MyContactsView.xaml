@@ -185,7 +185,7 @@
                    Grid.Column="1" Grid.Row="1" 
                    MaxHeight="150"/>
 
-                <TextBlock Text="No Contact selected!" 
+                <TextBlock Text="No contact selected!" 
                        FontSize="24"
                        Margin="15"
                        Grid.Column="1"
@@ -244,7 +244,8 @@
                                                    Margin="15"  
                                                    Kind="Email" />
                         </Button>
-                        <Button Style="{StaticResource ExitIconButton}"
+                        <Button x:Name="Delete"
+                                Style="{StaticResource ExitIconButton}"
                                 ToolTip="Delete Contact">
                             <Icon:PackIconMaterial Width="15" 
                                                    Height="15" 

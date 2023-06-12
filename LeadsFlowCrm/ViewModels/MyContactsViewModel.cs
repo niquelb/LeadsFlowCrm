@@ -65,6 +65,22 @@ public class MyContactsViewModel : Screen
 		}
 	}
 
+	/// <summary>
+	/// Method for deleting the selected contact
+	/// </summary>
+	public async void Delete()
+	{
+		try
+		{
+
+		}
+		catch (Exception ex)
+		{
+			Utilities.ShowNotification("Error loading contacts", $"There was an error loading the contacts ({ex.Message})", NotificationType.Error);
+			return;
+		}
+	}
+
 	public string DisplayHeader { get; set; } = "My Contacts";
 
 	#region Private backing fields

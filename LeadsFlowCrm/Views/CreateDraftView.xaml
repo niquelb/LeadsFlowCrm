@@ -93,7 +93,9 @@
                         <RowDefinition Height="auto" />
                     </Grid.RowDefinitions>
 
-                    <TextBox Grid.Row="0" x:Name="Body" />
+                    <TextBox Grid.Row="0" 
+                             x:Name="Body"
+                             TextWrapping="WrapWithOverflow"/>
 
                     <!--#region Footer-->
                     <Grid Grid.Row="2">
