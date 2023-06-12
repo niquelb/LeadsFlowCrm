@@ -25,9 +25,9 @@ public class MyContactsViewModel : Screen
 		_loggedInUser = loggedInUser;
 	}
 
-	protected async override Task OnInitializeAsync(CancellationToken cancellationToken)
+	protected async override Task OnActivateAsync(CancellationToken cancellationToken)
 	{
-		await base.OnInitializeAsync(cancellationToken);
+		await base.OnActivateAsync(cancellationToken);
 
 		ShowLoadingScreen = true;
 		NoneSelected = true;
