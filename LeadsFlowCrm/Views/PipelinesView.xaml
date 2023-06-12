@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:LeadsFlowCrm.Views"
+             xmlns:Icon="http://metro.mahapps.com/winfx/xaml/iconpacks"
              xmlns:LoadingSpinner="clr-namespace:LoadingSpinnerControl;assembly=LoadingSpinnerControl"
              mc:Ignorable="d" 
              d:DesignHeight="600" d:DesignWidth="1000">
@@ -14,8 +15,11 @@
             <!--#region Loading grid visibility control-->
             <Grid.Style>
                 <Style TargetType="Grid">
-                    <Setter Property="Visibility" Value="Visible" />
+                    <Setter Property="Visibility" Value="Hidden" />
                     <Style.Triggers>
+                        <DataTrigger Binding="{Binding IsLoading}" Value="True">
+                            <Setter Property="Visibility" Value="Visible" />
+                        </DataTrigger>
                         <DataTrigger Binding="{Binding IsLoading}" Value="False">
                             <Setter Property="Visibility" Value="Hidden" />
                         </DataTrigger>
@@ -48,8 +52,11 @@
             <!--#region Content grid visibility control-->
             <Grid.Style>
                 <Style TargetType="Grid">
-                    <Setter Property="Visibility" Value="Hidden" />
+                    <Setter Property="Visibility" Value="Visible" />
                     <Style.Triggers>
+                        <DataTrigger Binding="{Binding IsLoading}" Value="True">
+                            <Setter Property="Visibility" Value="Hidden" />
+                        </DataTrigger>
                         <DataTrigger Binding="{Binding IsLoading}" Value="False">
                             <Setter Property="Visibility" Value="Visible" />
                         </DataTrigger>
@@ -57,9 +64,28 @@
                 </Style>
             </Grid.Style>
             <!--#endregion-->
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="auto" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+
+                <TextBlock Grid.Column="1"
+                           FontWeight="DemiBold"
+                           FontSize="28"
+                           Text="{Binding PipelineName}" 
+                           Margin="7"/>
+            </Grid>
 
             <TabControl x:Name="Tabs" 
-                    SelectedItem="{Binding SelectedTab}" />
+                        Grid.Row="1"
+                        SelectedItem="{Binding SelectedTab}" />
         </Grid>
         <!--#endregion-->
             

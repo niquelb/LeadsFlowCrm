@@ -35,6 +35,13 @@ public class PipelinesViewModel : Conductor<object>
 	{
 		await base.OnInitializeAsync(cancellationToken);
 
+		await LoadPipeline();
+	}
+
+	#region Private methods
+	private async Task LoadPipeline()
+	{
+		IsLoading = true;
 		try
 		{
 			// We retrieve the pipeline from the API
@@ -45,6 +52,8 @@ public class PipelinesViewModel : Conductor<object>
 			Utilities.ShowNotification("Error loading pipelines", $"There was an error loading the pipelines ({ex.Message})", NotificationType.Error);
 			return;
 		}
+
+		PipelineName = Pipeline.Name;
 
 		// We fill in the stage tabs
 		FillStages();
@@ -80,18 +89,20 @@ public class PipelinesViewModel : Conductor<object>
 			Tabs.Add(tab);
 		}
 	}
+	#endregion
 
+	#region Properties
 	/// <summary>
 	/// Pipeline for the view
 	/// </summary>
 	public Pipeline Pipeline { get; set; } = new();
 
-    /*
-	 * Private backing fields for the properties
-	 */
-    private ObservableCollection<TabItem> _tabs = new();
+	#region Property backing fields
+	private ObservableCollection<TabItem> _tabs = new();
 	private TabItem _selectedTab = new();
 	private bool _isLoading = true;
+	private string _pipelineName = string.Empty;
+	#endregion
 
 	/// <summary>
 	/// Controls wether the view is displaying the loading indicator
@@ -105,6 +116,17 @@ public class PipelinesViewModel : Conductor<object>
 		}
 	}
 
+	/// <summary>
+	/// Name of the pipeline
+	/// </summary>
+	public string PipelineName
+	{
+		get { return _pipelineName; }
+		set { 
+			_pipelineName = value;
+			NotifyOfPropertyChange();
+		}
+	}
 
 	/// <summary>
 	/// Tabs that represent each stage and it's content
@@ -143,4 +165,5 @@ public class PipelinesViewModel : Conductor<object>
 			}
 		}
 	}
+	#endregion
 }
