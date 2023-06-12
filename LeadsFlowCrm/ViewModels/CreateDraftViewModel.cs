@@ -3,17 +3,13 @@ using GmailApi = Google.Apis.Gmail.v1.Data;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using LeadsFlowCrm.Services;
 using LeadsFlowCrm.Models;
-using System.Diagnostics;
-using System.Windows.Documents;
-using System.Windows.Controls;
-using Notifications.Wpf.Controls;
 using Notifications.Wpf;
 using System.Threading;
 using LeadsFlowCrm.Services.ModelServices;
+using LeadsFlowCrm.Utils;
 
 namespace LeadsFlowCrm.ViewModels;
 
@@ -38,7 +34,7 @@ public class CreateDraftViewModel : Screen
 		await base.OnInitializeAsync(cancellationToken);
 
 		// We retrieve the contacts from the API
-		Contacts = (await _contactService.GetAllFromUserAsync(_loggedInUser.Id)).ToList();
+		Contacts = (await _contactService.GetByUserAsync(_loggedInUser.Id)).ToList();
 
 		/*
 		 * We iterate through these contacts and add the email to the AutoCompleteData collection.
@@ -51,19 +47,7 @@ public class CreateDraftViewModel : Screen
         }
     }
 
-	/// <summary>
-	/// Method for showing a "toast" style notification to the user
-	/// </summary>
-	/// <param name="title">Notification title</param>
-	/// <param name="msg">Description/message</param>
-	/// <param name="notificationType">Notification type (eg. success, error...)</param>
-	private void ShowNotification(string title, string msg, NotificationType notificationType) =>
-		Notification.Show(new NotificationContent
-		{
-			Title = title,
-			Message = msg,
-			Type = notificationType
-		});
+	
 
 	/// <summary>
 	/// Method to send the email
@@ -72,7 +56,7 @@ public class CreateDraftViewModel : Screen
 	{
 		if (string.IsNullOrWhiteSpace(To) || string.IsNullOrWhiteSpace(SubjectLine) || string.IsNullOrWhiteSpace(Body))
 		{
-			ShowNotification("Fields are empty", "The email was not sent because one or more required fields are empty.", NotificationType.Error);
+			Utilities.ShowNotification("Fields are empty", "The email was not sent because one or more required fields are empty.", NotificationType.Error);
 			return;
 		}
 
@@ -87,14 +71,14 @@ public class CreateDraftViewModel : Screen
 
 			await _gmailService.SendEmailAsync(email);
 
-			ShowNotification("Email sent successfully", $"The email has been sent to {To}.", NotificationType.Success);
+			Utilities.ShowNotification("Email sent successfully", $"The email has been sent to {To}.", NotificationType.Success);
 
 			Exit();
 		}
 		catch (Exception ex)
 		{
 			//TODO: remove specific exception msg for production
-			ShowNotification("Error", $"Email was not sent. {ex.Message}", NotificationType.Error);
+			Utilities.ShowNotification("Error", $"Email was not sent. {ex.Message}", NotificationType.Error);
 		}
 	}
 
@@ -107,8 +91,6 @@ public class CreateDraftViewModel : Screen
 		await TryCloseAsync();
 	}
 
-	/// <summary> Notification manager for the toast-style notifications </summary>
-	public NotificationManager Notification { get; set; } = new();
 
 	/// <summary> Message that will be sent/drafted </summary>
 	public GmailApi.Message Msg { get; set; } = new();

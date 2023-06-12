@@ -16,7 +16,7 @@
                 <ResourceDictionary Source="Themes/CustomResources/InboxStyling.xaml"/>
                 <ResourceDictionary Source="Themes/CustomResources/LoginStyling.xaml"/>
                 <ResourceDictionary Source="Themes/CustomResources/CreateDraftStyling.xaml"/>
-                <ResourceDictionary Source="Themes/CustomResources/MyContactsStyling.xaml"/>
+                <ResourceDictionary Source="Themes/CustomResources/ContactsStyling.xaml"/>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Application.Resources>

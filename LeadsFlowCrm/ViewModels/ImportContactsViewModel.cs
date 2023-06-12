@@ -1,29 +1,34 @@
 ﻿using Caliburn.Micro;
-using LeadsFlowCrm.EventModels;
 using LeadsFlowCrm.Models;
+using LeadsFlowCrm.Services;
 using LeadsFlowCrm.Services.ModelServices;
 using LeadsFlowCrm.Utils;
 using Notifications.Wpf;
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.ComponentModel;
+using System.Diagnostics;
+using System.Linq;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
 namespace LeadsFlowCrm.ViewModels;
 
-public class MyContactsViewModel : Screen
+public class ImportContactsViewModel : Screen
 {
 	private readonly IContactService _contactService;
+	private readonly IPeopleServiceClass _peopleService;
 	private readonly LoggedInUser _loggedInUser;
 
-	public MyContactsViewModel(IContactService contactService,
-							   LoggedInUser loggedInUser)
+	public ImportContactsViewModel(IContactService contactService,
+								IPeopleServiceClass peopleService,
+								LoggedInUser loggedInUser)
     {
 		_contactService = contactService;
+		_peopleService = peopleService;
 		_loggedInUser = loggedInUser;
 	}
+
 
 	protected async override Task OnInitializeAsync(CancellationToken cancellationToken)
 	{
@@ -32,13 +37,21 @@ public class MyContactsViewModel : Screen
 		ShowLoadingScreen = true;
 		NoneSelected = true;
 
-		// We retrieve the contacts from the API
-		Contacts = new BindableCollection<Contact>(await GetContactsAsync());
+		try
+		{
+			// We retrieve the contacts from the People API
+			GoogleContacts = new(await _contactService.GetFromPeopleApiAsync());
+		}
+		catch (Exception ex)
+		{
+			Utilities.ShowNotification("Error loading contacts", $"There was an error loading the contacts ({ex.Message})", NotificationType.Error);
+			return;
+		}
 
 		ShowLoadingScreen = false;
 
 		// If no contacts found, we show the "empty" screen
-		if (Contacts.Count <= 0)
+		if (GoogleContacts.Count <= 0)
 		{
 			ShowEmptyScreen = true;
 		}
@@ -49,23 +62,22 @@ public class MyContactsViewModel : Screen
 	}
 
 	/// <summary>
-	/// Method for retrieving the contacts from the API
+	/// Method for saving the selected contact into the API (Contact table)
 	/// </summary>
-	/// <returns>List of Contacts</returns>
-	private async Task<IList<Contact>> GetContactsAsync()
+	public async void SaveContact()
 	{
 		try
 		{
-			return await _contactService.GetByUserAsync(_loggedInUser.Id);
+			await _contactService.PostToApiAsync(contact: SelectedContact, UserId: _loggedInUser.Id);
+			Utilities.ShowNotification("Success", $"Contact ({SelectedContact.Email}) saved successfully.", NotificationType.Success);
 		}
 		catch (Exception ex)
 		{
-			Utilities.ShowNotification("Error loading contacts", $"There was an error loading the contacts ({ex.Message})", NotificationType.Error);
-			return new List<Contact>();
+			Utilities.ShowNotification("Error saving contact", $"There was an error saving the selected contact ({ex.Message})", NotificationType.Error);
 		}
 	}
 
-	public string DisplayHeader { get; set; } = "My Contacts";
+	public string DisplayHeader { get; set; } = "Import Contacts";
 
 	#region Private backing fields
 
@@ -73,7 +85,7 @@ public class MyContactsViewModel : Screen
 	private bool _showEmptyScreen;
 	private bool _showLoadingScreen;
 	private bool _noneSelected = true;
-	private BindableCollection<Contact> _contacts = new();
+	private BindableCollection<Contact> _googleContacts = new();
 	private Contact _selectedContact = new();
 
 	#endregion
@@ -81,11 +93,12 @@ public class MyContactsViewModel : Screen
 	/// <summary>
 	/// Contacts
 	/// </summary>
-	public BindableCollection<Contact> Contacts
+	public BindableCollection<Contact> GoogleContacts
 	{
-		get { return _contacts; }
-		set { 
-			_contacts = value;
+		get { return _googleContacts; }
+		set
+		{
+			_googleContacts = value;
 			NotifyOfPropertyChange();
 		}
 	}
@@ -96,7 +109,8 @@ public class MyContactsViewModel : Screen
 	public Contact SelectedContact
 	{
 		get { return _selectedContact; }
-		set { 
+		set
+		{
 			_selectedContact = value;
 			NotifyOfPropertyChange();
 
@@ -105,7 +119,7 @@ public class MyContactsViewModel : Screen
 		}
 	}
 
-	#region Visibility controls
+	#region Visibility properties
 
 	/// <summary>
 	/// Controls wether the selected contact info is displayed or not
@@ -113,7 +127,8 @@ public class MyContactsViewModel : Screen
 	public bool NoneSelected
 	{
 		get { return _noneSelected; }
-		set { 
+		set
+		{
 			_noneSelected = value;
 			NotifyOfPropertyChange();
 		}
@@ -126,7 +141,8 @@ public class MyContactsViewModel : Screen
 	public bool ShowContent
 	{
 		get { return _showContent; }
-		set { 
+		set
+		{
 			_showContent = value;
 			NotifyOfPropertyChange();
 		}
@@ -138,7 +154,8 @@ public class MyContactsViewModel : Screen
 	public bool ShowLoadingScreen
 	{
 		get { return _showLoadingScreen; }
-		set { 
+		set
+		{
 			_showLoadingScreen = value;
 			NotifyOfPropertyChange();
 		}
@@ -150,7 +167,8 @@ public class MyContactsViewModel : Screen
 	public bool ShowEmptyScreen
 	{
 		get { return _showEmptyScreen; }
-		set {
+		set
+		{
 			_showEmptyScreen = value;
 			NotifyOfPropertyChange();
 		}
