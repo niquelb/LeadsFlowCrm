@@ -2,6 +2,10 @@
 using LeadsFlowCrm.EventModels;
 using LeadsFlowCrm.Models;
 using LeadsFlowCrm.Services.ModelServices;
+using LeadsFlowCrm.Utils;
+using Notifications.Wpf;
+using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Threading;
 using System.Threading.Tasks;
@@ -31,8 +35,16 @@ public class PipelinesViewModel : Conductor<object>
 	{
 		await base.OnInitializeAsync(cancellationToken);
 
-		// We retrieve the pipeline from the API
-		Pipeline = await _pipelineService.GetPipelineAsync();
+		try
+		{
+			// We retrieve the pipeline from the API
+			Pipeline = await _pipelineService.GetPipelineAsync();
+		}
+		catch (Exception ex)
+		{
+			Utilities.ShowNotification("Error loading pipelines", $"There was an error loading the pipelines ({ex.Message})", NotificationType.Error);
+			return;
+		}
 
 		// We fill in the stage tabs
 		FillStages();

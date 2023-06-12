@@ -2,6 +2,8 @@
 using LeadsFlowCrm.Models;
 using LeadsFlowCrm.Services;
 using LeadsFlowCrm.Services.ModelServices;
+using LeadsFlowCrm.Utils;
+using Notifications.Wpf;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -40,10 +42,10 @@ public class ImportContactsViewModel : Screen
 			// We retrieve the contacts from the People API
 			GoogleContacts = new(await _contactService.GetFromPeopleApiAsync());
 		}
-		catch (Exception)
+		catch (Exception ex)
 		{
-			// TODO handle error
-			throw;
+			Utilities.ShowNotification("Error loading contacts", $"There was an error loading the contacts ({ex.Message})", NotificationType.Error);
+			return;
 		}
 
 		ShowLoadingScreen = false;
@@ -59,9 +61,20 @@ public class ImportContactsViewModel : Screen
 		}
 	}
 
+	/// <summary>
+	/// Method for saving the selected contact into the API (Contact table)
+	/// </summary>
 	public async void SaveContact()
 	{
-		await _contactService.PostToApiAsync(contact: SelectedContact, UserId: _loggedInUser.Id);
+		try
+		{
+			await _contactService.PostToApiAsync(contact: SelectedContact, UserId: _loggedInUser.Id);
+			Utilities.ShowNotification("Success", $"Contact ({SelectedContact.Email}) saved successfully.", NotificationType.Success);
+		}
+		catch (Exception ex)
+		{
+			Utilities.ShowNotification("Error saving contact", $"There was an error saving the selected contact ({ex.Message})", NotificationType.Error);
+		}
 	}
 
 	public string DisplayHeader { get; set; } = "Import Contacts";

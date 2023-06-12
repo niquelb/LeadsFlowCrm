@@ -2,6 +2,8 @@
 using LeadsFlowCrm.EventModels;
 using LeadsFlowCrm.Models;
 using LeadsFlowCrm.Services.ModelServices;
+using LeadsFlowCrm.Utils;
+using Notifications.Wpf;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -52,7 +54,15 @@ public class MyContactsViewModel : Screen
 	/// <returns>List of Contacts</returns>
 	private async Task<IList<Contact>> GetContactsAsync()
 	{
-		return await _contactService.GetByUserAsync(_loggedInUser.Id);
+		try
+		{
+			return await _contactService.GetByUserAsync(_loggedInUser.Id);
+		}
+		catch (Exception ex)
+		{
+			Utilities.ShowNotification("Error loading contacts", $"There was an error loading the contacts ({ex.Message})", NotificationType.Error);
+			return new List<Contact>();
+		}
 	}
 
 	public string DisplayHeader { get; set; } = "My Contacts";

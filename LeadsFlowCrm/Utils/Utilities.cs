@@ -1,4 +1,6 @@
 ﻿using MimeKit;
+using Notifications.Wpf.Controls;
+using Notifications.Wpf;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -68,5 +70,23 @@ public static class Utilities
 
 		message.WriteTo(memoryStream);
 		return Convert.ToBase64String(memoryStream.ToArray());
+	}
+
+	/// <summary>
+	/// Method for showing a "toast" style notification to the user
+	/// </summary>
+	/// <param name="title">Notification title</param>
+	/// <param name="msg">Description/message</param>
+	/// <param name="notificationType">Notification type (eg. success, error...)</param>
+	public static void ShowNotification(string title, string msg, NotificationType notificationType)
+	{
+		NotificationManager notification = new();
+
+		notification.Show(new NotificationContent
+		{
+			Title = title,
+			Message = msg,
+			Type = notificationType
+		});
 	}
 }
