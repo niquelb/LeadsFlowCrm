@@ -11,6 +11,7 @@ using System.Threading;
 using LeadsFlowCrm.Services.ModelServices;
 using LeadsFlowCrm.Utils;
 using System.Text.RegularExpressions;
+using System.Diagnostics;
 
 namespace LeadsFlowCrm.ViewModels;
 
@@ -156,6 +157,12 @@ public class CreateDraftViewModel : Screen
 		SelectedRecipient = recipient;
 
 		IsRecipientSelected = true;
+	}
+
+	public void RemoveRecipient()
+	{
+		//TODO implement this method
+		throw new NotImplementedException();
 	}
 
 	/// <summary> Message that will be sent/drafted </summary>

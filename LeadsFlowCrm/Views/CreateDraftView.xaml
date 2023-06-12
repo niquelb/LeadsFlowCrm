@@ -65,6 +65,8 @@
                     <!--#endregion-->
 
                     <!--#region To + Subject line-->
+                    
+                    <!--#region To-->
                     <Grid Grid.Column="0"
                           Grid.Row="1"
                           Grid.ColumnSpan="3">
@@ -72,6 +74,8 @@
                             <ColumnDefinition Width="*" />
                             <ColumnDefinition Width="auto" />
                         </Grid.ColumnDefinitions>
+
+                        <!--#region TextBox-->
                         <TextBox x:Name="To"
                                  Style="{StaticResource HintedTextBox}"
                                  MinWidth="200"
@@ -80,7 +84,9 @@
 		                         Behaviors:AutoCompleteBehavior.AutoCompleteItemsSource="{Binding AutoCompleteData}" 
 		                         Behaviors:AutoCompleteBehavior.AutoCompleteStringComparison="InvariantCultureIgnoreCase"
                                  Margin="0, 5" />
+                        <!--#endregion-->
 
+                        <!--#region ComboBox-->
                         <Grid Grid.Column="1"
                               Margin="5 0">
                             <!--#region Recipients listing visibility control-->
@@ -103,13 +109,14 @@
                                 <ComboBox.ItemTemplate>
                                     <DataTemplate>
                                         <StackPanel Orientation="Horizontal">
-                                            <TextBlock Text="{Binding}"
+                                            <TextBlock x:Name="Item"
+                                                       Text="{Binding}"
                                                        Style="{StaticResource FieldText}"
                                                        VerticalAlignment="Center"/>
                                             <Button Style="{StaticResource ExitIconButton}"
                                                     Margin="5 0"
                                                     ToolTip="Remove recipient">
-                                                                <Icon:PackIconMaterial Width="10" 
+                                                <Icon:PackIconMaterial Width="10" 
                                                                                    Height="10" 
                                                                                    Margin="10"  
                                                                                    Kind="TrashCan" />
@@ -119,7 +126,10 @@
                                 </ComboBox.ItemTemplate>
                             </ComboBox>
                         </Grid>
+                        <!--#endregion-->
+                        
                     </Grid>
+                    <!--#endregion-->
 
                     <TextBox x:Name="SubjectLine"
                          Grid.Column="0"
