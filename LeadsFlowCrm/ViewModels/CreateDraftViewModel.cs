@@ -51,36 +51,68 @@ public class CreateDraftViewModel : Screen
 	
 
 	/// <summary>
-	/// Method to send the email
+	/// Method to send the email(s)
 	/// </summary>
 	public async void Send()
 	{
-		if (string.IsNullOrWhiteSpace(To) || string.IsNullOrWhiteSpace(SubjectLine) || string.IsNullOrWhiteSpace(Body))
+		if (string.IsNullOrWhiteSpace(SubjectLine) || string.IsNullOrWhiteSpace(Body))
 		{
 			Utilities.ShowNotification("Fields are empty", "The email was not sent because one or more required fields are empty.", NotificationType.Error);
 			return;
 		}
 
-		try
+        if (Recipients.Count <= 0)
 		{
-			Email email = new()
+			Utilities.ShowNotification("No recipients specified", "The email was not sent because there are no specified recipients.", NotificationType.Error);
+			return;
+		}
+
+		// We display a notification that the emails are being sent
+		if (Recipients.Count > 1)
+		{
+			Utilities.ShowNotification("Sending emails", $"{Recipients.Count} emails are being sent.", NotificationType.Information);
+		}
+		else
+		{
+			Utilities.ShowNotification("Sending email", $"Sending email to {Recipients.FirstOrDefault()}.", NotificationType.Information);
+		}
+
+		// We iterate over the recipients and send each one the email
+		foreach (var r in Recipients)
+        {
+			try
 			{
-				To = To,
-				SubjectLine = SubjectLine,
-				Body = Body,
-			};
+				Email email = new()
+				{
+					To = r,
+					SubjectLine = SubjectLine,
+					Body = Body,
+				};
 
-			await _gmailService.SendEmailAsync(email);
+				await _gmailService.SendEmailAsync(email);
 
-			Utilities.ShowNotification("Email sent successfully", $"The email has been sent to {To}.", NotificationType.Success);
+			}
+			catch (Exception ex)
+			{
+				//TODO: don't halt the whole correspondence, also save a log of which emails were not sent
+				//TODO: remove specific exception msg for production
+				Utilities.ShowNotification("Error", $"Email was not sent. {ex.Message}", NotificationType.Error);
 
-			Exit();
+				return;
+			}
 		}
-		catch (Exception ex)
-		{
-			//TODO: remove specific exception msg for production
-			Utilities.ShowNotification("Error", $"Email was not sent. {ex.Message}", NotificationType.Error);
+
+		// We display a notification that the emails were sent successfully
+		if (Recipients.Count > 1)
+        {
+			Utilities.ShowNotification("Emails sent successfully", $"{Recipients.Count} emails sent successfully.", NotificationType.Success);
 		}
+        else
+        {
+			Utilities.ShowNotification("Email sent successfully", $"The email has been sent to {Recipients.FirstOrDefault()}.", NotificationType.Success);
+		}
+
+        Exit();
 	}
 
 	/// <summary>
@@ -95,6 +127,9 @@ public class CreateDraftViewModel : Screen
 		await TryCloseAsync();
 	}
 
+	/// <summary>
+	/// Method to add the recipient to the list
+	/// </summary>
 	public void AddRecipient()
 	{
         if (string.IsNullOrWhiteSpace(To))
