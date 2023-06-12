@@ -12,6 +12,8 @@ using LeadsFlowCrm.Services.ModelServices;
 using LeadsFlowCrm.Utils;
 using System.Text.RegularExpressions;
 using System.Diagnostics;
+using Google.Apis.Gmail.v1;
+using Org.BouncyCastle.Cms;
 
 namespace LeadsFlowCrm.ViewModels;
 
@@ -25,7 +27,7 @@ public class CreateDraftViewModel : Screen
 	public CreateDraftViewModel(IGmailServiceClass gmailService,
 							 IContactService contactService,
 							 LoggedInUser loggedInUser)
-    {
+	{
 		_gmailService = gmailService;
 		_contactService = contactService;
 		_loggedInUser = loggedInUser;
@@ -43,30 +45,32 @@ public class CreateDraftViewModel : Screen
 		 * 
 		 * This allows for the autocompletion of the TextBox with the contact's emails.
 		 */
-        foreach (var contact in Contacts)
-        {
+		foreach (var contact in Contacts)
+		{
 			AutoCompleteData.Add(contact.Email);
-        }
-    }
+		}
+	}
 
-	
+
 
 	/// <summary>
 	/// Method to send the email(s)
 	/// </summary>
 	public async void Send()
 	{
+		#region null and empty checks
 		if (string.IsNullOrWhiteSpace(SubjectLine) || string.IsNullOrWhiteSpace(Body))
 		{
 			Utilities.ShowNotification("Fields are empty", "The email was not sent because one or more required fields are empty.", NotificationType.Error);
 			return;
 		}
 
-        if (Recipients.Count <= 0)
+		if (Recipients.Count <= 0)
 		{
 			Utilities.ShowNotification("No recipients specified", "The email was not sent because there are no specified recipients.", NotificationType.Error);
 			return;
 		}
+		#endregion
 
 		// We display a notification that the emails are being sent
 		if (Recipients.Count > 1)
@@ -80,7 +84,7 @@ public class CreateDraftViewModel : Screen
 
 		// We iterate over the recipients and send each one the email
 		foreach (var r in Recipients)
-        {
+		{
 			try
 			{
 				Email email = new()
@@ -105,23 +109,90 @@ public class CreateDraftViewModel : Screen
 
 		// We display a notification that the emails were sent successfully
 		if (Recipients.Count > 1)
-        {
+		{
 			Utilities.ShowNotification("Emails sent successfully", $"{Recipients.Count} emails sent successfully.", NotificationType.Success);
 		}
-        else
-        {
+		else
+		{
 			Utilities.ShowNotification("Email sent successfully", $"The email has been sent to {Recipients.FirstOrDefault()}.", NotificationType.Success);
 		}
 
-        Exit();
+		Exit();
+	}
+
+	/// <summary>
+	/// Method for saving the draft(s)
+	/// </summary>
+	public async void SaveDraft()
+	{
+		#region null and empty checks
+		if (string.IsNullOrWhiteSpace(SubjectLine) || string.IsNullOrWhiteSpace(Body))
+		{
+			Utilities.ShowNotification("Fields are empty", "The draft was not saved because one or more required fields are empty.", NotificationType.Error);
+			return;
+		}
+
+		if (Recipients.Count <= 0)
+		{
+			Utilities.ShowNotification("No recipients specified", "The draft was not saved because there are no specified recipients.", NotificationType.Error);
+			return;
+		}
+		#endregion
+
+		// We display a notification that the emails are being sent
+		if (Recipients.Count > 1)
+		{
+			Utilities.ShowNotification("Saving drafts", $"{Recipients.Count} drafts are being saved.", NotificationType.Information);
+		}
+		else
+		{
+			Utilities.ShowNotification("Saving draft", $"Saving draft for {Recipients.FirstOrDefault()}.", NotificationType.Information);
+		}
+
+		// We iterate over the recipients and send each one the email
+		foreach (var r in Recipients)
+		{
+			try
+			{
+				Email email = new()
+				{
+					To = r,
+					SubjectLine = SubjectLine,
+					Body = Body,
+				};
+
+				await _gmailService.SaveDraftAsync(email);
+
+			}
+			catch (Exception ex)
+			{
+				//TODO: don't halt the whole correspondence, also save a log of which drafts were not saved
+				//TODO: remove specific exception msg for production
+				Utilities.ShowNotification("Error", $"Draft was not saved. {ex.Message}", NotificationType.Error);
+
+				return;
+			}
+		}
+
+		// We display a notification that the drafts were saved successfully
+		if (Recipients.Count > 1)
+		{
+			Utilities.ShowNotification("Drafts saved successfully", $"{Recipients.Count} drafts were saved successfully.", NotificationType.Success);
+		}
+		else
+		{
+			Utilities.ShowNotification("Draft saved successfully", $"The draft for {Recipients.FirstOrDefault()} has been saved successfully.", NotificationType.Success);
+		}
+
+		Exit();
 	}
 
 	/// <summary>
 	/// Window close function
 	/// </summary>
-    public async void Exit()
+	public async void Exit()
 	{
-		To = string.Empty; 
+		To = string.Empty;
 		SubjectLine = string.Empty;
 		Body = string.Empty;
 
@@ -133,10 +204,10 @@ public class CreateDraftViewModel : Screen
 	/// </summary>
 	public void AddRecipient()
 	{
-        if (string.IsNullOrWhiteSpace(To))
-        {
-			return;   
-        }
+		if (string.IsNullOrWhiteSpace(To))
+		{
+			return;
+		}
 
 		//TODO in-depth regex email validator
 
@@ -146,14 +217,14 @@ public class CreateDraftViewModel : Screen
 
 		// We check for duplicates
 		foreach (var r in Recipients)
-        {
-            if (recipient.Equals(r))
-            {
+		{
+			if (recipient.Equals(r))
+			{
 				return;
-            }
-        }
+			}
+		}
 
-        Recipients.Add(recipient);
+		Recipients.Add(recipient);
 		SelectedRecipient = recipient;
 
 		IsRecipientSelected = true;
@@ -202,19 +273,21 @@ public class CreateDraftViewModel : Screen
 	public string To
 	{
 		get { return _to; }
-		set { 
+		set
+		{
 			_to = value;
 			NotifyOfPropertyChange();
 		}
 	}
-	
+
 	/// <summary>
 	/// Subject line
 	/// </summary>
 	public string SubjectLine
 	{
 		get { return _subjectLine; }
-		set { 
+		set
+		{
 			_subjectLine = value;
 			NotifyOfPropertyChange();
 		}
@@ -226,7 +299,8 @@ public class CreateDraftViewModel : Screen
 	public string Body
 	{
 		get { return _body; }
-		set { 
+		set
+		{
 			_body = value;
 			NotifyOfPropertyChange();
 		}
@@ -238,7 +312,8 @@ public class CreateDraftViewModel : Screen
 	public BindableCollection<string> AutoCompleteData
 	{
 		get { return _autoCompleteData; }
-		set { 
+		set
+		{
 			_autoCompleteData = value;
 			NotifyOfPropertyChange();
 		}
@@ -250,7 +325,8 @@ public class CreateDraftViewModel : Screen
 	public BindableCollection<string> Recipients
 	{
 		get { return _recipients; }
-		set { 
+		set
+		{
 			_recipients = value;
 			NotifyOfPropertyChange();
 		}
@@ -262,7 +338,8 @@ public class CreateDraftViewModel : Screen
 	public string SelectedRecipient
 	{
 		get { return _selectedRecipient; }
-		set { 
+		set
+		{
 			_selectedRecipient = value;
 			NotifyOfPropertyChange();
 		}

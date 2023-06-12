@@ -43,10 +43,6 @@
                     <StackPanel Orientation="Horizontal"
                                 Grid.Column="2"
                                 Grid.Row="0">
-                        <Button x:Name="MailMerge"
-                                Style="{StaticResource IconButton}">
-                            <Icon:PackIconMaterial Width="15" Height="15" Margin="15"  Kind="Merge"  />
-                        </Button>
                         <Rectangle Width="2" Fill="{StaticResource AREghZyBrush.Foreground.Deeper}"
                            Margin="3 7" />
                         <Button x:Name="Minimize"
@@ -165,6 +161,7 @@
                         <!--#region Left toolbar (send + schedule)-->
                         <StackPanel Grid.Column="0" Orientation="Horizontal">
                             <Button x:Name="Send"
+                                    ToolTip="Send the email"
                                     Style="{StaticResource SmallBtnStyling}">
                                 <StackPanel Orientation="Horizontal">
                                     <TextBlock Text="Send" VerticalAlignment="Center" Margin="5 0" />
@@ -175,6 +172,7 @@
                             <Separator Margin="3 0" Width="0" />
 
                             <Button x:Name="Schedule"
+                                    ToolTip="Schedule the email"
                                     Style="{StaticResource IconButton}">
                                 <Icon:PackIconMaterial Kind="SendClock" Width="15" Height="15" Margin="10"/>
                             </Button>
@@ -184,12 +182,14 @@
                         <!--#region Right toolbar (delete + save draft)-->
                         <StackPanel Orientation="Horizontal" Grid.Column="2">
                             <Button x:Name="SaveDraft"
+                                    ToolTip="Save the email as a draft"
                                     Style="{StaticResource IconButton}"
                                     Margin="1 0">
                                 <Icon:PackIconMaterial Kind="ContentSaveEdit" Width="15" Height="15" Margin="10"/>
                             </Button>
 
                             <Button x:Name="Delete"
+                                    ToolTip="Discard the email"
                                     Style="{StaticResource IconButton}"
                                     Margin="1 0">
                                 <Icon:PackIconMaterial Kind="TrashCan" Width="15" Height="15" Margin="10"/>

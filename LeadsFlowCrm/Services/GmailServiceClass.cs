@@ -331,7 +331,7 @@ public class GmailServiceClass : IGmailServiceClass
 	{
 		if (email == null)
 		{
-			throw new ArgumentNullException(nameof(email);
+			throw new ArgumentNullException(nameof(email));
 		}
 
 		/*
