@@ -24,12 +24,6 @@ public class MyContactsViewModel : Screen
 	{
 		await base.OnInitializeAsync(cancellationToken);
 
-	}
-
-	protected async override Task OnActivateAsync(CancellationToken cancellationToken)
-	{
-		await base.OnActivateAsync(cancellationToken);
-
 		ShowLoadingScreen = true;
 		NoneSelected = true;
 
