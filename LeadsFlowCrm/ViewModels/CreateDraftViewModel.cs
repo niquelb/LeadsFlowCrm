@@ -51,8 +51,7 @@ public class CreateDraftViewModel : Screen
 		}
 	}
 
-
-
+	#region Public Methods
 	/// <summary>
 	/// Method to send the email(s)
 	/// </summary>
@@ -117,7 +116,7 @@ public class CreateDraftViewModel : Screen
 			Utilities.ShowNotification("Email sent successfully", $"The email has been sent to {Recipients.FirstOrDefault()}.", NotificationType.Success);
 		}
 
-		Exit();
+		Clear();
 	}
 
 	/// <summary>
@@ -139,7 +138,7 @@ public class CreateDraftViewModel : Screen
 		}
 		#endregion
 
-		// We display a notification that the emails are being sent
+		// We display a notification that the drafts are being saved
 		if (Recipients.Count > 1)
 		{
 			Utilities.ShowNotification("Saving drafts", $"{Recipients.Count} drafts are being saved.", NotificationType.Information);
@@ -149,7 +148,7 @@ public class CreateDraftViewModel : Screen
 			Utilities.ShowNotification("Saving draft", $"Saving draft for {Recipients.FirstOrDefault()}.", NotificationType.Information);
 		}
 
-		// We iterate over the recipients and send each one the email
+		// We iterate over the recipients and save each draft
 		foreach (var r in Recipients)
 		{
 			try
@@ -184,6 +183,18 @@ public class CreateDraftViewModel : Screen
 			Utilities.ShowNotification("Draft saved successfully", $"The draft for {Recipients.FirstOrDefault()} has been saved successfully.", NotificationType.Success);
 		}
 
+		Clear();
+	}
+
+	/// <summary>
+	/// Method for clearing the view and exiting
+	/// </summary>
+	public void Discard()
+	{
+		Clear();
+
+		Utilities.ShowNotification("Draft discarded", "The draft was discarded", NotificationType.Information);
+
 		Exit();
 	}
 
@@ -192,10 +203,6 @@ public class CreateDraftViewModel : Screen
 	/// </summary>
 	public async void Exit()
 	{
-		To = string.Empty;
-		SubjectLine = string.Empty;
-		Body = string.Empty;
-
 		await TryCloseAsync();
 	}
 
@@ -204,6 +211,7 @@ public class CreateDraftViewModel : Screen
 	/// </summary>
 	public void AddRecipient()
 	{
+		#region email validation and trimming
 		if (string.IsNullOrWhiteSpace(To))
 		{
 			return;
@@ -213,6 +221,8 @@ public class CreateDraftViewModel : Screen
 
 		// We remove ALL blank space characters
 		var recipient = Regex.Replace(To, @"\s", "");
+
+		// We empty the TextBlock
 		To = string.Empty;
 
 		// We check for duplicates
@@ -223,6 +233,7 @@ public class CreateDraftViewModel : Screen
 				return;
 			}
 		}
+		#endregion
 
 		Recipients.Add(recipient);
 		SelectedRecipient = recipient;
@@ -235,11 +246,28 @@ public class CreateDraftViewModel : Screen
 		//TODO implement this method
 		throw new NotImplementedException();
 	}
+	#endregion
 
-	/// <summary> Message that will be sent/drafted </summary>
-	public GmailApi.Message Msg { get; set; } = new();
+	#region Private Methods
+	/// <summary>
+	/// Method for clearing the view
+	/// </summary>
+	private void Clear()
+	{
+		To = string.Empty;
+		SubjectLine = string.Empty;
+		Body = string.Empty;
+		Recipients.Clear();
+		SelectedRecipient = string.Empty;
 
-	/// <summary> Contacts that "belong" to the user from the API </summary>
+		IsRecipientSelected = false;
+	}
+	#endregion
+
+	#region Properties
+	/// <summary> 
+	/// Contacts that "belong" to the user (referencing the "UserId" field) from the API.
+	/// </summary>
 	public List<Contact> Contacts { get; set; } = new();
 
 	#region Prop backing fields
@@ -344,6 +372,6 @@ public class CreateDraftViewModel : Screen
 			NotifyOfPropertyChange();
 		}
 	}
-
+	#endregion
 
 }

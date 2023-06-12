@@ -188,7 +188,7 @@
                                 <Icon:PackIconMaterial Kind="ContentSaveEdit" Width="15" Height="15" Margin="10"/>
                             </Button>
 
-                            <Button x:Name="Delete"
+                            <Button x:Name="Discard"
                                     ToolTip="Discard the email"
                                     Style="{StaticResource IconButton}"
                                     Margin="1 0">
