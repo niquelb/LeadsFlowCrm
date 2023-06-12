@@ -7,7 +7,7 @@ namespace LeadsFlowCrm.Services
 {
 	public interface IPeopleServiceClass
 	{
-		Task<List<Person>> GetPeopleAsync();
+		Task<IList<Person>> GetPeopleAsync();
 		Task<PeopleServiceService> GetPeopleServiceAsync();
 	}
 }

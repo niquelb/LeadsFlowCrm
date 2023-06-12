@@ -38,7 +38,7 @@ public class CreateDraftViewModel : Screen
 		await base.OnInitializeAsync(cancellationToken);
 
 		// We retrieve the contacts from the API
-		Contacts = (await _contactService.GetAllFromUserAsync(_loggedInUser.Id)).ToList();
+		Contacts = (await _contactService.GetByUserAsync(_loggedInUser.Id)).ToList();
 
 		/*
 		 * We iterate through these contacts and add the email to the AutoCompleteData collection.

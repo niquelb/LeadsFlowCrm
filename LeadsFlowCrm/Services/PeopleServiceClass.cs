@@ -2,6 +2,7 @@
 using Google.Apis.PeopleService.v1.Data;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -35,7 +36,7 @@ public class PeopleServiceClass : IPeopleServiceClass
 	/// </summary>
 	/// <returns>List of Person objects</returns>
 	/// <see cref="Person"/>
-	public async Task<List<Person>> GetPeopleAsync()
+	public async Task<IList<Person>> GetPeopleAsync()
 	{
 		_people ??= await RetrievePeopleAsync();
 
@@ -53,9 +54,18 @@ public class PeopleServiceClass : IPeopleServiceClass
 
 		// We fetch and process the contacts
 		var connections = service.People.Connections.List("people/me");
-		connections.RequestMaskIncludeField = "person.names,person.emailAddresses"; // ← Here we specify the info we want from the contacts
+		connections.RequestMaskIncludeField = "person.names,person.emailAddresses,person.phoneNumbers"; // ← Here we specify the info we want from the contacts
 
-		return (await connections.ExecuteAsync()).Connections;
+		try
+		{
+			var resp = await connections.ExecuteAsync();
+			return resp.Connections;
+		}
+		catch (System.Exception ex)
+		{
+			Trace.WriteLine(ex.Message);
+			throw;
+		}
 	} 
 
 }

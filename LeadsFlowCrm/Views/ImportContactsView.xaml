@@ -1,0 +1,364 @@
+﻿<UserControl x:Class="LeadsFlowCrm.Views.ImportContactsView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:LeadsFlowCrm.Views"
+             xmlns:Icon="http://metro.mahapps.com/winfx/xaml/iconpacks"
+             xmlns:cal="http://www.caliburnproject.org"
+             xmlns:LoadingSpinner="clr-namespace:LoadingSpinnerControl;assembly=LoadingSpinnerControl"
+             mc:Ignorable="d" FontSize="20"
+             d:DesignHeight="800" d:DesignWidth="1000">
+    <Grid>
+        <!--#region Contacts empty-->
+        <Grid>
+            <!--#region Empty screen visibility control-->
+            <Grid.Style>
+                <Style TargetType="Grid">
+                    <Setter Property="Visibility" Value="Hidden" />
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding ShowEmptyScreen}" Value="True">
+                            <Setter Property="Visibility" Value="Visible" />
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding ShowEmptyScreen}" Value="False">
+                            <Setter Property="Visibility" Value="Hidden" />
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </Grid.Style>
+            <!--#endregion-->
+
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="auto" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+
+            <Image Source="pack://application:,,,/Media/Imgs/empty-icon.png" 
+                   Grid.Column="1" Grid.Row="1" 
+                   MaxHeight="150"/>
+
+            <StackPanel Orientation="Vertical"
+                       Grid.Column="1"
+                       Grid.Row="2" >
+                <TextBlock Text="No contacts found in your Google account!" 
+                           FontSize="24"
+                           HorizontalAlignment="Center"
+                           Margin="15"/>
+                <TextBlock Text="You may need to create the contacts from scratch." 
+                           FontSize="18"
+                           HorizontalAlignment="Center"
+                           Grid.Column="1"
+                           Grid.Row="2" />
+            </StackPanel>
+        </Grid>
+        <!--#endregion-->
+
+        <!--#region Loading Spinner-->
+        <Grid>
+            <!--#region Loading grid visibility control-->
+            <Grid.Style>
+                <Style TargetType="Grid">
+                    <Setter Property="Visibility" Value="Hidden" />
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding ShowLoadingScreen}" Value="True">
+                            <Setter Property="Visibility" Value="Visible" />
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding ShowLoadingScreen}" Value="False">
+                            <Setter Property="Visibility" Value="Hidden" />
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </Grid.Style>
+            <!--#endregion-->
+
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="auto" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+
+            <LoadingSpinner:LoadingSpinner Grid.Column="1" Grid.Row="1" 
+                                           IsLoading="{Binding ShowLoadingScreen}"
+                                           Margin="15" Thickness="5" Color="white"/>
+            <TextBlock Grid.Column="1" Grid.Row="2" Text="Loading  contacts, please hang tight..." />
+        </Grid>
+        <!--#endregion-->
+
+        <!--#region Content-->
+        <Grid>
+            <!--#region Content grid visibility control-->
+            <Grid.Style>
+                <Style TargetType="Grid">
+                    <Setter Property="Visibility" Value="Visible" />
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding ShowContent}" Value="True">
+                            <Setter Property="Visibility" Value="Visible" />
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding ShowContent}" Value="False">
+                            <Setter Property="Visibility" Value="Hidden" />
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </Grid.Style>
+            <!--#endregion-->
+
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="auto" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+
+            <!--#region List-->
+            <DockPanel Margin="0 10">
+                <TextBlock Text="Your Google Contacts"
+                           DockPanel.Dock="Top"
+                           Margin="7 10"
+                           FontWeight="DemiBold"
+                           FontSize="24"/>
+
+                <ListBox x:Name="GoogleContacts" 
+                         SelectedItem="{Binding SelectedContact}"
+                         HorizontalContentAlignment="Stretch">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <WrapPanel>
+                                <TextBlock Text="{Binding FullName}"
+                                           Margin="0 5"
+                                           VerticalAlignment="Center"/>
+                                <TextBlock Text=" - " 
+                                           VerticalAlignment="Center"/>
+                                <TextBlock Text="{Binding Email}"
+                                           Style="{StaticResource FieldText}"
+                                           VerticalAlignment="Center"/>
+                            </WrapPanel>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+            </DockPanel>
+            <!--#endregion-->
+
+            <!--#region Vertical separatod-->
+            <StackPanel Orientation="Horizontal"
+                        Grid.Column="1"
+                        Margin="15">
+                <Separator Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}" />
+            </StackPanel>
+            <!--#endregion-->
+            
+            <!--#region No Contact Selected-->
+            <Grid Grid.Column="2">
+                <!--#region Not selected screen visibility control-->
+                <Grid.Style>
+                    <Style TargetType="Grid">
+                        <Setter Property="Visibility" Value="Hidden" />
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding NoneSelected}" Value="True">
+                                <Setter Property="Visibility" Value="Visible" />
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding NoneSelected}" Value="False">
+                                <Setter Property="Visibility" Value="Hidden" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Grid.Style>
+                <!--#endregion-->
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="auto" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="auto" />
+                    <RowDefinition Height="auto" />
+                    <RowDefinition Height="1.5*" />
+                </Grid.RowDefinitions>
+
+                <Image Source="pack://application:,,,/Media/Imgs/not-selected.png" 
+                   Grid.Column="1" Grid.Row="1" 
+                   MaxHeight="150"/>
+
+                <TextBlock Text="No Contact selected!" 
+                       FontSize="24"
+                       Margin="15"
+                       Grid.Column="1"
+                       Grid.Row="2" />
+            </Grid>
+            <!--#endregion-->
+
+            <!--#region Contact Info-->
+            <Grid  Grid.Column="2"
+                   Margin="05 10">
+                <!--#region Not selected screen visibility control-->
+                <Grid.Style>
+                    <Style TargetType="Grid">
+                        <Setter Property="Visibility" Value="Visible" />
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding NoneSelected}" Value="True">
+                                <Setter Property="Visibility" Value="Hidden" />
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding NoneSelected}" Value="False">
+                                <Setter Property="Visibility" Value="Visible" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Grid.Style>
+                <!--#endregion-->
+
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="auto" />
+                </Grid.RowDefinitions>
+
+                <DockPanel>
+                    <!--#region Name + Toolbar-->
+                    <DockPanel DockPanel.Dock="Top"
+                               Margin="0 10">
+                        <TextBlock x:Name="SelectedContact_FullName"
+                                   Text="Contact Name"
+                                   VerticalAlignment="Center"
+                                   FontWeight="DemiBold"
+                                   DockPanel.Dock="Left"
+                                   FontSize="24"/>
+
+                        <StackPanel Orientation="Horizontal"
+                                    HorizontalAlignment="Right">
+                            <Button Style="{StaticResource IconButton}" 
+                                    cal:Message.Attach="[Event Click] = [Action SaveContact]"
+                                    ToolTip="Add To My Contacts">
+                                <Icon:PackIconMaterial Width="15" 
+                                                       Height="15" 
+                                                       Margin="15"  
+                                                       Kind="AccountPlus" />
+                            </Button>
+                            <Button Style="{StaticResource IconButton}"
+                                    ToolTip="Send New Correspondence">
+                                <Icon:PackIconMaterial Width="15" 
+                                                       Height="15" 
+                                                       Margin="15"  
+                                                       Kind="Email" />
+                            </Button>
+                        </StackPanel>
+
+                    </DockPanel>
+                    <!--#endregion-->
+
+                    <!--#region Main section-->
+                    <ScrollViewer VerticalScrollBarVisibility="Auto">
+                        <StackPanel Orientation="Vertical">
+                            <DockPanel Margin="0 10 0 0" >
+                                <TextBlock Text="Email"
+                                           DockPanel.Dock="Left"/>
+                                <TextBlock x:Name="SelectedContact_Email"
+                                           Text="demo@email.com"
+                                           Style="{StaticResource FieldText}"
+                                           DockPanel.Dock="Right"/>
+                            </DockPanel>
+                            <Separator Height="15"
+                                       Background="LightSlateGray"/>
+                            <DockPanel>
+                                <TextBlock Text="Phone Number"
+                                           DockPanel.Dock="Left"/>
+                                <TextBlock x:Name="SelectedContact_Phone"
+                                           Text="666768181"
+                                           Style="{StaticResource FieldText}"
+                                           DockPanel.Dock="Right"/>
+                            </DockPanel>
+                            <Separator Height="15"
+                                       Background="LightSlateGray"/>
+                            <DockPanel>
+                                <TextBlock Text="Website"
+                                           DockPanel.Dock="Left"/>
+                                <TextBlock x:Name="SelectedContact_Website"
+                                           Text="www.website.com"
+                                           Style="{StaticResource FieldText}"
+                                           DockPanel.Dock="Right"/>
+                            </DockPanel>
+                            <Separator Height="15"
+                                       Background="LightSlateGray"/>
+                            <DockPanel>
+                                <TextBlock Text="Company"
+                                           DockPanel.Dock="Left"/>
+                                <TextBlock x:Name="SelectedContact_Company"
+                                           Text="Company, Ltd."
+                                           Style="{StaticResource FieldText}"
+                                           DockPanel.Dock="Right"/>
+                            </DockPanel>
+                            <Separator Height="15"
+                                       Background="LightSlateGray"/>
+                            <DockPanel>
+                                <TextBlock Text="Job Title"
+                                           DockPanel.Dock="Left"/>
+                                <TextBlock x:Name="SelectedContact_JobTitle"
+                                           Text="Some job title"
+                                           Style="{StaticResource FieldText}"
+                                           DockPanel.Dock="Right"/>
+                            </DockPanel>
+                            <Separator Height="15"
+                                       Background="LightSlateGray"/>
+                            <DockPanel>
+                                <TextBlock Text="Location"
+                                           DockPanel.Dock="Left"/>
+                                <TextBlock x:Name="SelectedContact_Location"
+                                           Text="San Francisco, USA"
+                                           Style="{StaticResource FieldText}"
+                                           DockPanel.Dock="Right"/>
+                            </DockPanel>
+                            <Separator Height="15"
+                                       Background="LightSlateGray"/>
+                            <DockPanel>
+                                <TextBlock Text="Address"
+                                           DockPanel.Dock="Left"/>
+                                <TextBlock x:Name="SelectedContact_Address"
+                                           Text="52nd St. San Francisco, USA"
+                                           Style="{StaticResource FieldText}"
+                                           DockPanel.Dock="Right"/>
+                            </DockPanel>
+                        </StackPanel>
+                    </ScrollViewer>
+                    <!--#endregion-->
+
+                </DockPanel>
+
+                <!--#region Footer-->
+                <StackPanel Orientation="Horizontal" 
+                            Grid.Row="1"
+                            Margin="0 15">
+                    <Button x:Name="SaveContact"
+                            Style="{StaticResource SmallBtnStyling}">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="Add To My Contacts" 
+                                       VerticalAlignment="Center" 
+                                       Margin="5 0" />
+                            <Icon:PackIconMaterial Kind="AccountPlus" 
+                                                   Margin="5 0" 
+                                                   VerticalAlignment="Center" 
+                                                   Foreground="White"/>
+                        </StackPanel>
+                    </Button>
+                </StackPanel>
+                <!--#endregion-->
+            </Grid>
+            <!--#endregion-->
+
+        </Grid>
+        <!--#endregion-->
+    </Grid>
+</UserControl>

@@ -9,6 +9,7 @@ using System.Net.Http;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
+using Google.Apis.PeopleService.v1.Data;
 
 namespace LeadsFlowCrm.Services.ModelServices;
 
@@ -37,7 +38,7 @@ public class ContactService : IContactService
 	/// <returns>List of all contacts associated with the user</returns>
 	/// <exception cref="UnauthorizedAccessException">If the token is incorrect</exception>
 	/// <exception cref="Exception">If there was another issue with the API or the request</exception>
-	public async Task<IList<Contact>> GetAllFromUserAsync(string userId)
+	public async Task<IList<Contact>> GetByUserAsync(string userId)
 	{
 		_apiClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _loggedInUser.Token);
 
@@ -99,4 +100,29 @@ public class ContactService : IContactService
 
 		return output;
 	}
+
+	/// <summary>
+	/// Method for retrieving the user's Google contacts from the People API and converting them to a ContactModel
+	/// </summary>
+	/// <returns>List of contacts from the user's Google account</returns>
+	public async Task<IList<Contact>> GetFromPeopleApiAsync()
+	{
+		var output = new List<Contact>();
+		var people = await _peopleService.GetPeopleAsync();
+
+
+		foreach (var person in people)
+        {
+			var contact = new Contact()
+			{
+				Email = person.EmailAddresses?.FirstOrDefault()?.Value ?? "-",
+				FirstName = person.Names?.FirstOrDefault()?.DisplayName ?? "-",
+				Phone = person.PhoneNumbers?.FirstOrDefault()?.Value ?? "-"
+			};
+
+			output.Add(contact);
+        }
+
+		return output;
+    }
 }
