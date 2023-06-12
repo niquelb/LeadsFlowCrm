@@ -10,6 +10,7 @@ using Notifications.Wpf;
 using System.Threading;
 using LeadsFlowCrm.Services.ModelServices;
 using LeadsFlowCrm.Utils;
+using System.Text.RegularExpressions;
 
 namespace LeadsFlowCrm.ViewModels;
 
@@ -82,6 +83,9 @@ public class CreateDraftViewModel : Screen
 		}
 	}
 
+	/// <summary>
+	/// Window close function
+	/// </summary>
     public async void Exit()
 	{
 		To = string.Empty; 
@@ -91,6 +95,33 @@ public class CreateDraftViewModel : Screen
 		await TryCloseAsync();
 	}
 
+	public void AddRecipient()
+	{
+        if (string.IsNullOrWhiteSpace(To))
+        {
+			return;   
+        }
+
+		//TODO in-depth regex email validator
+
+		// We remove ALL blank space characters
+		var recipient = Regex.Replace(To, @"\s", "");
+		To = string.Empty;
+
+		// We check for duplicates
+		foreach (var r in Recipients)
+        {
+            if (recipient.Equals(r))
+            {
+				return;
+            }
+        }
+
+        Recipients.Add(recipient);
+		SelectedRecipient = recipient;
+
+		IsRecipientSelected = true;
+	}
 
 	/// <summary> Message that will be sent/drafted </summary>
 	public GmailApi.Message Msg { get; set; } = new();
@@ -98,13 +129,30 @@ public class CreateDraftViewModel : Screen
 	/// <summary> Contacts that "belong" to the user from the API </summary>
 	public List<Contact> Contacts { get; set; } = new();
 
-    /*
-	 * Prop backing fields
-	 */
+	#region Prop backing fields
+
 	private string _to = string.Empty;
 	private string _subjectLine = string.Empty;
 	private string _body = string.Empty;
 	private BindableCollection<string> _autoCompleteData = new();
+	private BindableCollection<string> _recipients = new();
+	private bool _isRecipientSelected;
+	private string _selectedRecipient = string.Empty;
+
+	#endregion
+
+	/// <summary>
+	/// Controls wether or not the recipients combobox is visible
+	/// </summary>
+	public bool IsRecipientSelected
+	{
+		get { return _isRecipientSelected; }
+		set
+		{
+			_isRecipientSelected = value;
+			NotifyOfPropertyChange();
+		}
+	}
 
 	/// <summary>
 	/// Reciever
@@ -153,5 +201,30 @@ public class CreateDraftViewModel : Screen
 			NotifyOfPropertyChange();
 		}
 	}
+
+	/// <summary>
+	/// Collection of email addresses that the email will be sent to
+	/// </summary>
+	public BindableCollection<string> Recipients
+	{
+		get { return _recipients; }
+		set { 
+			_recipients = value;
+			NotifyOfPropertyChange();
+		}
+	}
+
+	/// <summary>
+	/// Selected item from the Recipients collection
+	/// </summary>
+	public string SelectedRecipient
+	{
+		get { return _selectedRecipient; }
+		set { 
+			_selectedRecipient = value;
+			NotifyOfPropertyChange();
+		}
+	}
+
 
 }

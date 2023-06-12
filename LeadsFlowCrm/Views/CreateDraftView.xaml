@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:LeadsFlowCrm.ViewModels"
         xmlns:Behaviors="clr-namespace:WPFTextBoxAutoComplete;assembly=WPFTextBoxAutoComplete"
+        xmlns:cal="http://www.caliburnproject.org"
         xmlns:Icon="http://metro.mahapps.com/winfx/xaml/iconpacks" 
         xmlns:Utils="clr-namespace:LeadsFlowCrm.Utils"
         mc:Ignorable="d" FontSize="18"
@@ -64,15 +65,61 @@
                     <!--#endregion-->
 
                     <!--#region To + Subject line-->
-                    <TextBox x:Name="To"
-                         Grid.Column="0"
-                         Grid.Row="1"
-                         Grid.ColumnSpan="3"
-                         Style="{StaticResource HintedTextBox}"
-                         Utils:TextBoxHelper.Hint="To" 
-		                 Behaviors:AutoCompleteBehavior.AutoCompleteItemsSource="{Binding AutoCompleteData}" 
-		                 Behaviors:AutoCompleteBehavior.AutoCompleteStringComparison="InvariantCultureIgnoreCase"
-                         Margin="0, 5" />
+                    <Grid Grid.Column="0"
+                          Grid.Row="1"
+                          Grid.ColumnSpan="3">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="auto" />
+                        </Grid.ColumnDefinitions>
+                        <TextBox x:Name="To"
+                                 Style="{StaticResource HintedTextBox}"
+                                 MinWidth="200"
+                                 cal:Message.Attach="[Event LostFocus] = [Action AddRecipient]"
+                                 Utils:TextBoxHelper.Hint="To" 
+		                         Behaviors:AutoCompleteBehavior.AutoCompleteItemsSource="{Binding AutoCompleteData}" 
+		                         Behaviors:AutoCompleteBehavior.AutoCompleteStringComparison="InvariantCultureIgnoreCase"
+                                 Margin="0, 5" />
+
+                        <Grid Grid.Column="1"
+                              Margin="5 0">
+                            <!--#region Recipients listing visibility control-->
+                            <Grid.Style>
+                                <Style TargetType="Grid">
+                                    <Setter Property="Visibility" Value="Visible" />
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding IsRecipientSelected}" Value="True">
+                                            <Setter Property="Visibility" Value="Visible" />
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding IsRecipientSelected}" Value="False">
+                                            <Setter Property="Visibility" Value="Collapsed" />
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Grid.Style>
+                            <!--#endregion-->
+                            <ComboBox Name="Recipients"
+                                      SelectedIndex="{Binding SelectedRecipient}">
+                                <ComboBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <StackPanel Orientation="Horizontal">
+                                            <TextBlock Text="{Binding}"
+                                                       Style="{StaticResource FieldText}"
+                                                       VerticalAlignment="Center"/>
+                                            <Button Style="{StaticResource ExitIconButton}"
+                                                    Margin="5 0"
+                                                    ToolTip="Remove recipient">
+                                                                <Icon:PackIconMaterial Width="10" 
+                                                                                   Height="10" 
+                                                                                   Margin="10"  
+                                                                                   Kind="TrashCan" />
+                                            </Button>
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </ComboBox.ItemTemplate>
+                            </ComboBox>
+                        </Grid>
+                    </Grid>
 
                     <TextBox x:Name="SubjectLine"
                          Grid.Column="0"
