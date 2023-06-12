@@ -320,6 +320,39 @@ public class GmailServiceClass : IGmailServiceClass
 
 		return output;
 	}
+
+	/// <summary>
+	/// Method for creating a Message object based on a given Email object
+	/// </summary>
+	/// <param name="email">Email object to be used</param>
+	/// <returns>Message object</returns>
+	/// <exception cref="ArgumentNullException">If the email is null</exception>
+	private async Task<Message> CreateMessageAsync(Email email)
+	{
+		if (email == null)
+		{
+			throw new ArgumentNullException(nameof(email);
+		}
+
+		/*
+		 * To send or create drafts through the Gmail API we need to provide a Message object with the B64 encoded
+		 * email (MIME) as the "Raw" property
+		 */
+
+		var oauth = await _oAuthService.GetOauthServiceAsync();
+		var userInfo = await oauth.Userinfo.Get().ExecuteAsync();
+
+		// We create and encode the MIME message
+		var encodedEmail = Utilities.ConstructEmail(email.To, userInfo.Email, email.SubjectLine, email.Body);
+
+		// We create the Message object
+		var message = new Message
+		{
+			Raw = encodedEmail
+		};
+
+		return message;
+	}
 	#endregion
 
 	#region Email marking methods (favorites...)
@@ -469,38 +502,55 @@ public class GmailServiceClass : IGmailServiceClass
 	/// <summary>
 	/// Method for sending an email through the Gmail API with the logged in user's email as the sender
 	/// </summary>
+	/// <see cref="CreateMessageAsync(Email)"/>
+	/// <seealso cref="SaveDraftAsync(Email)"/>
 	/// <param name="email">Email to be sent, the necessary properties are "To", "SubjectLine" and "Body"</param>
 	/// <returns></returns>
 	public async Task SendEmailAsync(Email email)
 	{
-		// TODO: convert logic such that it creates and sends drafts and so that these drafts can be saved.
 		if (email == null)
 		{
 			return;
 		}
 
-		/*
-		 * To send or create drafts through the Gmail API we need to provide a Message object with the B64 encoded
-		 * email (MIME) as the "Raw" property
-		 */
-		
 		GmailService service = await GetGmailServiceAsync();
-		var oauth = await _oAuthService.GetOauthServiceAsync();
-		var userInfo = await oauth.Userinfo.Get().ExecuteAsync();
-
-		// We create and encode the MIME message
-		var encodedEmail = Utilities.ConstructEmail(email.To, userInfo.Email, email.SubjectLine, email.Body);
 
 		// We create the Message object
-		var message = new Message
-		{
-			Raw = encodedEmail
-		};
+		var message = await CreateMessageAsync(email);
 
-
-		// And we make send the email
+		// We create and send the request
 		var sendRequest = service.Users.Messages.Send(message, Me);
 		await sendRequest.ExecuteAsync();
+	}
+
+	/// <summary>
+	/// Method for creating a draft through the Gmail API with the logged in user's email as the sender
+	/// </summary>
+	/// <see cref="CreateMessageAsync(Email)"/>
+	/// <seealso cref="SendEmailAsync(Email)"/>
+	/// <param name="email">Email to be sent, the necessary properties are "To", "SubjectLine" and "Body"</param>
+	/// <returns></returns>
+	public async Task SaveDraftAsync(Email email)
+	{
+		if (email == null)
+		{
+			return;
+		}
+
+		GmailService service = await GetGmailServiceAsync();
+
+		// We create the Message object
+		var message = await CreateMessageAsync(email);
+
+		// We create the draft object
+		var draft = new Draft()
+		{
+			Message = message,
+		};
+
+		// We create and send the request
+		var draftRequest = service.Users.Drafts.Create(draft, Me);
+		await draftRequest.ExecuteAsync();
 	}
 	#endregion
 }

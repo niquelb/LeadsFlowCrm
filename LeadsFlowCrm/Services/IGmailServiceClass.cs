@@ -21,5 +21,6 @@ namespace LeadsFlowCrm.Services
 		Task RefreshInboxAsync();
 		Task<List<Email>> RefreshAndGetInboxAsync();
 		Task SendEmailAsync(Email email);
+		Task SaveDraftAsync(Email email);
 	}
 }
