@@ -53,7 +53,10 @@ public class CreateContactViewModel : Screen
 
 	public void SelectStage(Stage stage)
 	{
-		Trace.WriteLine(stage.Name, "SELECTED STAGE");
+		SelectedStage = stage;
+
+		StageSelectorIsVisible = false;
+		StageSelectedIsVisible = true;
 	}
 
 	public void SelectPipeline(Pipeline pipeline)
@@ -63,6 +66,7 @@ public class CreateContactViewModel : Screen
 		Stages = new(SelectedPipeline.Stages.ToList());
 
 		PipelinesSelectorIsVisible = false;
+		PipelineSelectedIsVisible = true;
 		StageSelectorIsVisible = true;
 	}
 
@@ -77,14 +81,14 @@ public class CreateContactViewModel : Screen
 
     #region Private property backing fields
     private bool _loadingSpinnerIsVisible;
-	private bool _emptyScreenIsVisible;
 	private bool _pipelinesSelectorIsVisible;
 	private bool _stageSelectorIsVisible;
-	private string _emptyScreenText = "No pipelines found!";
+	private bool _pipelineSelectedIsVisible;
+	private bool _stageSelectedIsVisible;
 	private BindableCollection<Stage> _stages = new();
 	private BindableCollection<Pipeline> _pipelines = new();
-	private Stage _selectedStageSelectedStage;
-	private Pipeline _selectedPipeline;
+	private Stage _selectedStageSelectedStage = new();
+	private Pipeline _selectedPipeline = new();
 	#endregion
 
 	/// <summary>
@@ -126,24 +130,11 @@ public class CreateContactViewModel : Screen
 	/// <summary>
 	/// Selected stage
 	/// </summary>
-	public Stage MyProperty
+	public Stage SelectedStage
 	{
 		get { return _selectedStageSelectedStage; }
 		set {
 			_selectedStageSelectedStage = value;
-			NotifyOfPropertyChange();
-		}
-	}
-
-
-	/// <summary>
-	/// Text that will be displayed in the "empty" message/screen
-	/// </summary>
-	public string EmptyScreenText
-	{
-		get { return _emptyScreenText; }
-		set { 
-			_emptyScreenText = value;
 			NotifyOfPropertyChange();
 		}
 	}
@@ -159,18 +150,6 @@ public class CreateContactViewModel : Screen
 		get { return _loadingSpinnerIsVisible; }
 		set { 
 			_loadingSpinnerIsVisible = value;
-			NotifyOfPropertyChange();
-		}
-	}
-
-	/// <summary>
-	/// Controls the visibility of the "empty" message
-	/// </summary>
-	public bool EmptyScreenIsVisible
-	{
-		get { return _emptyScreenIsVisible; }
-		set { 
-			_emptyScreenIsVisible = value;
 			NotifyOfPropertyChange();
 		}
 	}
@@ -195,6 +174,26 @@ public class CreateContactViewModel : Screen
 		get { return _stageSelectorIsVisible; }
 		set {
 			_stageSelectorIsVisible = value; 
+			NotifyOfPropertyChange();
+		}
+	}
+
+
+	public bool PipelineSelectedIsVisible
+	{
+		get { return _pipelineSelectedIsVisible; }
+		set { 
+			_pipelineSelectedIsVisible = value;
+			NotifyOfPropertyChange();
+		}
+	}
+
+
+	public bool StageSelectedIsVisible
+	{
+		get { return _stageSelectedIsVisible; }
+		set {
+			_stageSelectedIsVisible = value;
 			NotifyOfPropertyChange();
 		}
 	}
