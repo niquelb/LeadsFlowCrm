@@ -240,12 +240,6 @@ public class CreateDraftViewModel : Screen
 
 		IsRecipientSelected = true;
 	}
-
-	public void RemoveRecipient()
-	{
-		//TODO implement this method
-		throw new NotImplementedException();
-	}
 	#endregion
 
 	#region Private Methods

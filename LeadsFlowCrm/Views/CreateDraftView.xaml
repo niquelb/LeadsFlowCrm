@@ -43,8 +43,6 @@
                     <StackPanel Orientation="Horizontal"
                                 Grid.Column="2"
                                 Grid.Row="0">
-                        <Rectangle Width="2" Fill="{StaticResource AREghZyBrush.Foreground.Deeper}"
-                           Margin="3 7" />
                         <Button x:Name="Minimize"
                                 Style="{StaticResource IconButton}" Click="Minimize_Click">
                             <Icon:PackIconMaterial Width="15" Height="15" Margin="15"  Kind="WindowMinimize" />
@@ -104,20 +102,10 @@
                                       SelectedIndex="{Binding SelectedRecipient}">
                                 <ComboBox.ItemTemplate>
                                     <DataTemplate>
-                                        <StackPanel Orientation="Horizontal">
-                                            <TextBlock x:Name="Item"
-                                                       Text="{Binding}"
-                                                       Style="{StaticResource FieldText}"
-                                                       VerticalAlignment="Center"/>
-                                            <Button Style="{StaticResource ExitIconButton}"
-                                                    Margin="5 0"
-                                                    ToolTip="Remove recipient">
-                                                <Icon:PackIconMaterial Width="10" 
-                                                                                   Height="10" 
-                                                                                   Margin="10"  
-                                                                                   Kind="TrashCan" />
-                                            </Button>
-                                        </StackPanel>
+                                        <TextBlock x:Name="Item"
+                                                   Text="{Binding}"
+                                                   Padding="5"
+                                                   VerticalAlignment="Center"/>
                                     </DataTemplate>
                                 </ComboBox.ItemTemplate>
                             </ComboBox>
@@ -190,7 +178,7 @@
 
                             <Button x:Name="Discard"
                                     ToolTip="Discard the email"
-                                    Style="{StaticResource IconButton}"
+                                    Style="{StaticResource ExitIconButton}"
                                     Margin="1 0">
                                 <Icon:PackIconMaterial Kind="TrashCan" Width="15" Height="15" Margin="10"/>
                             </Button>

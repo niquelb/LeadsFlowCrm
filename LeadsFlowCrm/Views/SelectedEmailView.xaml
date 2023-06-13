@@ -15,10 +15,13 @@
             <!--#region Loading grid visibility control-->
             <Grid.Style>
                 <Style TargetType="Grid">
-                    <Setter Property="Visibility" Value="Visible" />
+                    <Setter Property="Visibility" Value="Hidden" />
                     <Style.Triggers>
                         <DataTrigger Binding="{Binding IsLoading}" Value="False">
                             <Setter Property="Visibility" Value="Hidden" />
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding IsLoading}" Value="True">
+                            <Setter Property="Visibility" Value="Visible" />
                         </DataTrigger>
                     </Style.Triggers>
                 </Style>
@@ -49,10 +52,13 @@
             <!--#region Inbox grid visibility control-->
             <DockPanel.Style>
                 <Style TargetType="DockPanel">
-                    <Setter Property="Visibility" Value="Hidden" />
+                    <Setter Property="Visibility" Value="Visible" />
                     <Style.Triggers>
                         <DataTrigger Binding="{Binding IsLoading}" Value="False">
                             <Setter Property="Visibility" Value="Visible" />
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding IsLoading}" Value="True">
+                            <Setter Property="Visibility" Value="Hidden" />
                         </DataTrigger>
                     </Style.Triggers>
                 </Style>
@@ -72,6 +78,7 @@
                     <StackPanel Orientation="Horizontal">
                         <Button x:Name="Back"
                                 Grid.Column="0"
+                                ToolTip="Go back"
                                 Style="{StaticResource IconButton}">
                             <Icon:PackIconMaterial Width="20" Height="20" Margin="10" Kind="ArrowLeft" />
                         </Button>
@@ -92,33 +99,39 @@
                 <StackPanel Orientation="Horizontal"
                             Grid.Column="2" Margin="10">
                     <Button x:Name="Reply"
-                                Grid.Column="0"
-                                Style="{StaticResource IconButton}">
+                            Grid.Column="0"
+                            ToolTip="Reply to the email"
+                            Style="{StaticResource IconButton}">
                         <Icon:PackIconMaterial Width="20" Height="20" Margin="15" Kind="Reply" />
                     </Button>
                     <Button x:Name="Label"
-                                Grid.Column="0"
-                                Style="{StaticResource IconButton}">
+                            Grid.Column="0"
+                            ToolTip="Label the email"
+                            Style="{StaticResource IconButton}">
                         <Icon:PackIconMaterial Width="20" Height="20" Margin="15" Kind="Label" />
                     </Button>
                     <Button x:Name="MarkUnread"
-                                Grid.Column="0"
-                                Style="{StaticResource IconButton}">
+                            Grid.Column="0"
+                            ToolTip="Mark the email as unread"
+                            Style="{StaticResource IconButton}">
                         <Icon:PackIconMaterial Width="20" Height="20" Margin="15" Kind="EmailMarkAsUnread" />
                     </Button>
                     <Button x:Name="MarkFavorite"
-                                Grid.Column="0"
-                                Style="{StaticResource IconButton}">
+                            Grid.Column="0"
+                            ToolTip="Mark the email as favorite"
+                            Style="{StaticResource IconButton}">
                         <Icon:PackIconMaterial Width="20" Height="20" Margin="15" Kind="Star" />
                     </Button>
                     <Button x:Name="Archive"
-                                Grid.Column="0"
-                                Style="{StaticResource IconButton}">
+                            Grid.Column="0"
+                            ToolTip="Archive the email"
+                            Style="{StaticResource IconButton}">
                         <Icon:PackIconMaterial Width="20" Height="20" Margin="15" Kind="ArchiveArrowDown" />
                     </Button>
                     <Button x:Name="Delete"
-                                Grid.Column="0"
-                                Style="{StaticResource IconButton}">
+                            Grid.Column="0"
+                            ToolTip="Delete the email"
+                            Style="{StaticResource ExitIconButton}">
                         <Icon:PackIconMaterial Width="20" Height="20" Margin="15" Kind="TrashCan" />
                     </Button>
                 </StackPanel>
