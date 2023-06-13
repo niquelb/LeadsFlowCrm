@@ -37,12 +37,15 @@ public class GmailServiceClass : IGmailServiceClass
 		_oAuthService = oAuthService;
 	}
 
+	#region Enums
 	public enum PaginationOptions
 	{
 		PreviousPage,
 		NextPage,
-		CurrentPage
+		CurrentPage,
+		FirstPage,
 	}
+	#endregion
 
 	#region Properties
 	/// <summary> Currently selected email </summary>
@@ -53,6 +56,9 @@ public class GmailServiceClass : IGmailServiceClass
 
 	/// <summary> Gmail API pagination token </summary>
 	public string PageToken { get; set; } = string.Empty;
+
+	/// <summary> List of previous page tokens </summary>
+	public List<string> PreviousPageTokens { get; set; } = new();
     #endregion
 
     #region Get and refresh methods
@@ -164,10 +170,13 @@ public class GmailServiceClass : IGmailServiceClass
 				//TODO implement previous page
 				break;
 			case PaginationOptions.NextPage:
-				emailListRequest.PageToken = PageToken;
+				emailListRequest.PageToken = GetPreviousPageToken();
 				break;
 			case PaginationOptions.CurrentPage:
 				emailListRequest.PageToken = string.Empty;
+				break;
+			case PaginationOptions.FirstPage:
+				emailListRequest.PageToken = PreviousPageTokens.FirstOrDefault() ?? "";
 				break;
 		}
 
@@ -183,6 +192,7 @@ public class GmailServiceClass : IGmailServiceClass
         if (string.IsNullOrWhiteSpace(emailListResponse.NextPageToken) == false)
         {
 			PageToken = emailListResponse.NextPageToken;
+			PreviousPageTokens.Add(PageToken);
 		}
 
         // We process each email asynchronously
@@ -394,6 +404,26 @@ public class GmailServiceClass : IGmailServiceClass
 		};
 
 		return message;
+	}
+
+	/// <summary>
+	/// Method that gets the previous page based on the PreviousPageTokens property
+	/// </summary>
+	/// <see cref="PreviousPageTokens"/>
+	/// <returns>The previous page token</returns>
+	private string GetPreviousPageToken()
+	{
+		string output;
+
+		try
+		{
+			output = PreviousPageTokens[^2];
+		}
+		catch (Exception)
+		{
+			output = PreviousPageTokens[0];
+		}
+		return output;
 	}
 	#endregion
 

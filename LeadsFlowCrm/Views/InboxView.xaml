@@ -195,6 +195,16 @@
                 Background="{StaticResource AREghZyBrush.Foreground.Static}"
                 Margin="10">
             <StackPanel Orientation="Horizontal">
+                <Button x:Name="FirstPage" 
+                        Style="{StaticResource PaginatorBtn}">
+                    <Icon:PackIconMaterial Kind="ChevronDoubleLeft" 
+                                           Style="{StaticResource PaginatorBtnIcon}" />
+                </Button>
+
+                <Rectangle Width="1" 
+                           Fill="{StaticResource AREghZyBrush.Foreground.Deeper}"
+                           Margin="3 7" />
+
                 <Button x:Name="PreviousPage" 
                         Style="{StaticResource PaginatorBtn}">
                     <Icon:PackIconMaterial Kind="ChevronLeft" 

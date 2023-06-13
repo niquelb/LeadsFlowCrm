@@ -70,17 +70,26 @@ public class InboxViewModel : Screen
 	/// </summary>
 	public async void NextPage()
 	{
-		IsInboxEmpty = false;
-		IsLoading = true;
-		CanRefreshInbox = false;
 		CurrentPageIndex++;
+		await Paginate(PaginationOptions.NextPage);
+	}
 
-		Inbox = new ObservableCollection<Email>(await _gmailService.GetPaginatedInbox(PaginationOptions.NextPage));
+	/// <summary>
+	/// Method for updating the inbox with the next page
+	/// </summary>
+	public async void PreviousPage()
+	{
+		CurrentPageIndex--;
+		await Paginate(PaginationOptions.PreviousPage);
+	}
 
-		IsLoading = false;
-		CanRefreshInbox = true;
-
-		IsInboxEmpty = Inbox.Count <= 0;
+	/// <summary>
+	/// Method for updating the inbox with the next page
+	/// </summary>
+	public async void FirstPage()
+	{
+		CurrentPageIndex = 1;
+		await Paginate(PaginationOptions.FirstPage);
 	}
 
 	/// <summary>
@@ -109,6 +118,26 @@ public class InboxViewModel : Screen
 
 		await _event.PublishOnUIThreadAsync(new EmailSelectedEvent());
 	}
+
+	/// <summary>
+	/// Method for refreshing the inbox with the desired pagination options
+	/// </summary>
+	/// <param name="pagination">Desired pagination options</param>
+	/// <returns></returns>
+	private async Task Paginate(PaginationOptions pagination)
+	{
+		IsInboxEmpty = false;
+		IsLoading = true;
+		CanRefreshInbox = false;
+
+		Inbox = new ObservableCollection<Email>(await _gmailService.GetPaginatedInbox(pagination));
+
+		IsLoading = false;
+		CanRefreshInbox = true;
+
+		IsInboxEmpty = Inbox.Count <= 0;
+
+	}
 	#endregion
 
 	#region Properties
@@ -116,7 +145,8 @@ public class InboxViewModel : Screen
 	#region Property backing fields
 	private bool _isLoading = true;
 	private bool _isInboxEmpty;
-	private bool _canRefreshInbox = false;
+	private bool _canRefreshInbox;
+	private bool _canPreviousPage;
 	private Email _selectedEmail;
 	private ObservableCollection<Email> _inbox = new();
 	private int _currentPageIndex = 1;
@@ -157,6 +187,18 @@ public class InboxViewModel : Screen
 		set
 		{
 			_canRefreshInbox = value;
+			NotifyOfPropertyChange();
+		}
+	}
+
+	/// <summary>
+	/// Reflects wether or not the user can go to the previous page
+	/// </summary>
+	public bool CanPreviousPage
+	{
+		get { return _canPreviousPage; }
+		set { 
+			_canPreviousPage = value;
 			NotifyOfPropertyChange();
 		}
 	}
