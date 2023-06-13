@@ -77,6 +77,9 @@ public class ImportContactsViewModel : Screen
 		}
 	}
 
+	/// <summary>
+	/// Tab name for the view
+	/// </summary>
 	public string DisplayHeader { get; set; } = "Import Contacts";
 
 	#region Private backing fields

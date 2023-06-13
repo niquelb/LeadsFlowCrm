@@ -48,6 +48,25 @@ public class MyContactsViewModel : Screen
 		}
 	}
 
+	#region Public Methods
+	/// <summary>
+	/// Method for deleting the selected contact
+	/// </summary>
+	public async void Delete()
+	{
+		try
+		{
+			//TODO Implement method
+		}
+		catch (Exception ex)
+		{
+			Utilities.ShowNotification("Error loading contacts", $"There was an error loading the contacts ({ex.Message})", NotificationType.Error);
+			return;
+		}
+	}
+	#endregion
+
+	#region Private Methods
 	/// <summary>
 	/// Method for retrieving the contacts from the API
 	/// </summary>
@@ -64,23 +83,12 @@ public class MyContactsViewModel : Screen
 			return new List<Contact>();
 		}
 	}
+	#endregion
 
+	#region Properties
 	/// <summary>
-	/// Method for deleting the selected contact
+	/// Tab name for the view
 	/// </summary>
-	public async void Delete()
-	{
-		try
-		{
-
-		}
-		catch (Exception ex)
-		{
-			Utilities.ShowNotification("Error loading contacts", $"There was an error loading the contacts ({ex.Message})", NotificationType.Error);
-			return;
-		}
-	}
-
 	public string DisplayHeader { get; set; } = "My Contacts";
 
 	#region Private backing fields
@@ -172,5 +180,6 @@ public class MyContactsViewModel : Screen
 		}
 	}
 
+	#endregion
 	#endregion
 }
