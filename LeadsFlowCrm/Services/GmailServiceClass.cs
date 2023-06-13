@@ -37,21 +37,31 @@ public class GmailServiceClass : IGmailServiceClass
 		_oAuthService = oAuthService;
 	}
 
+	public enum PaginationOptions
+	{
+		PreviousPage,
+		NextPage,
+		CurrentPage
+	}
+
 	#region Properties
 	/// <summary> Currently selected email </summary>
 	public Email? SelectedEmail { get; set; }
 
 	/// <summary> Special keyword reserved for referencing the logged in user </summary>
 	public static string Me => _me;
-	#endregion
 
-	#region Get and refresh methods
-	/// <summary>
-	/// Method for retrieving the Gmail service object for the Gmail API
-	/// </summary>
-	/// <returns>GmailService object</returns>
-	/// <see cref="GmailService"/>
-	public async Task<GmailService> GetGmailServiceAsync()
+	/// <summary> Gmail API pagination token </summary>
+	public string PageToken { get; set; } = string.Empty;
+    #endregion
+
+    #region Get and refresh methods
+    /// <summary>
+    /// Method for retrieving the Gmail service object for the Gmail API
+    /// </summary>
+    /// <returns>GmailService object</returns>
+    /// <see cref="GmailService"/>
+    public async Task<GmailService> GetGmailServiceAsync()
 	{
 		_gmailService ??= new GmailService(await _baseGoogleService.GetServiceAsync());
 
@@ -89,6 +99,17 @@ public class GmailServiceClass : IGmailServiceClass
 	}
 
 	/// <summary>
+	/// Method that returns the inbox paginated according to the pagination option passed in
+	/// </summary>
+	/// <param name="paginationOptions">Pagination option</param>
+	/// <returns></returns>
+	public async Task<IList<Email>> GetPaginatedInbox(PaginationOptions paginationOption)
+	{
+		_inbox = await GetEmailsFromInboxAsync(paginationOption);
+		return await GetInboxAsync();
+	}
+
+	/// <summary>
 	/// Method for getting the processed and unencoded body of the selected email
 	/// </summary>
 	/// <returns></returns>
@@ -112,13 +133,12 @@ public class GmailServiceClass : IGmailServiceClass
 			return string.Empty;
 		}
 	}
-
 	
 	/// <summary>
 	/// Method for getting the emails from the user's inbox
 	/// </summary>
 	/// <returns>List of Email objects from the user's inbox</returns>
-	private async Task<List<Email>> GetEmailsFromInboxAsync()
+	private async Task<List<Email>> GetEmailsFromInboxAsync(PaginationOptions pagination = PaginationOptions.CurrentPage)
 	{
 		List<Task<Email>> tasks = new();
 
@@ -134,6 +154,23 @@ public class GmailServiceClass : IGmailServiceClass
 		// Not include spam/trash
 		emailListRequest.IncludeSpamTrash = false;
 
+		// Specify the page size
+		emailListRequest.MaxResults = 100;
+
+		// We pass in the page token depending on the desired pagination
+		switch (pagination)
+		{
+			case PaginationOptions.PreviousPage:
+				//TODO implement previous page
+				break;
+			case PaginationOptions.NextPage:
+				emailListRequest.PageToken = PageToken;
+				break;
+			case PaginationOptions.CurrentPage:
+				emailListRequest.PageToken = string.Empty;
+				break;
+		}
+
 		// Execute the request to retrieve the list of emails
 		ListMessagesResponse emailListResponse = emailListRequest.Execute();
 
@@ -143,8 +180,13 @@ public class GmailServiceClass : IGmailServiceClass
 			return new List<Email>();
 		}
 
-		// We process each email asynchronously
-		foreach (Message email in emailListResponse.Messages)
+        if (string.IsNullOrWhiteSpace(emailListResponse.NextPageToken) == false)
+        {
+			PageToken = emailListResponse.NextPageToken;
+		}
+
+        // We process each email asynchronously
+        foreach (Message email in emailListResponse.Messages)
 		{
 			tasks.Add(ProcessEmailAsync(email, gmailService));
 		}

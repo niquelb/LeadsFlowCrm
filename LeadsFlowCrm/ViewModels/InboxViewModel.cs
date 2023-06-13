@@ -9,6 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using static LeadsFlowCrm.Services.GmailServiceClass;
 
 namespace LeadsFlowCrm.ViewModels;
 
@@ -46,6 +47,7 @@ public class InboxViewModel : Screen
 		IsInboxEmpty = Inbox.Count <= 0;
 	}
 
+	#region Public Methods
 	/// <summary>
 	/// Method for refreshing the inbox
 	/// </summary>
@@ -64,6 +66,24 @@ public class InboxViewModel : Screen
     }
 
 	/// <summary>
+	/// Method for updating the inbox with the next page
+	/// </summary>
+	public async void NextPage()
+	{
+		IsInboxEmpty = false;
+		IsLoading = true;
+		CanRefreshInbox = false;
+		CurrentPageIndex++;
+
+		Inbox = new ObservableCollection<Email>(await _gmailService.GetPaginatedInbox(PaginationOptions.NextPage));
+
+		IsLoading = false;
+		CanRefreshInbox = true;
+
+		IsInboxEmpty = Inbox.Count <= 0;
+	}
+
+	/// <summary>
 	/// Method for opening an email from the inbox
 	/// </summary>
 	public async void OpenEmail()
@@ -75,7 +95,9 @@ public class InboxViewModel : Screen
 
 		await PublishSelectedEmailAsync(_selectedEmail);
 	}
+	#endregion
 
+	#region Private Methods
 	/// <summary>
 	/// Event that gets triggered when the user selects an email
 	/// </summary>
@@ -87,15 +109,18 @@ public class InboxViewModel : Screen
 
 		await _event.PublishOnUIThreadAsync(new EmailSelectedEvent());
 	}
+	#endregion
 
-	/*
-	 * Property backing fields
-	 */
+	#region Properties
+
+	#region Property backing fields
 	private bool _isLoading = true;
 	private bool _isInboxEmpty;
 	private bool _canRefreshInbox = false;
 	private Email _selectedEmail;
 	private ObservableCollection<Email> _inbox = new();
+	private int _currentPageIndex = 1;
+	#endregion
 
 	/// <summary>
 	/// This property is used to control the visibility of the loading spinner
@@ -162,4 +187,19 @@ public class InboxViewModel : Screen
 			NotifyOfPropertyChange();
 		}
 	}
+
+	/// <summary>
+	/// Index of the current page for the paginator
+	/// </summary>
+	public int CurrentPageIndex
+	{
+		get { return _currentPageIndex; }
+		set {
+			_currentPageIndex = value;
+			NotifyOfPropertyChange();
+		}
+	}
+
+
+	#endregion
 }

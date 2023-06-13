@@ -195,36 +195,30 @@
                 Background="{StaticResource AREghZyBrush.Foreground.Static}"
                 Margin="10">
             <StackPanel Orientation="Horizontal">
-                <Button x:Name="FirstPage" Style="{StaticResource PaginatorBtn}">
-                    <Icon:PackIconMaterial Kind="ChevronDoubleLeft" Style="{StaticResource PaginatorBtnIcon}" />
+                <Button x:Name="PreviousPage" 
+                        Style="{StaticResource PaginatorBtn}">
+                    <Icon:PackIconMaterial Kind="ChevronLeft" 
+                                           Style="{StaticResource PaginatorBtnIcon}" />
                 </Button>
 
-                <Rectangle Width="1" Fill="{StaticResource AREghZyBrush.Foreground.Deeper}"
+                <Rectangle Width="1" 
+                           Fill="{StaticResource AREghZyBrush.Foreground.Deeper}"
                            Margin="3 7" />
 
-                <Button x:Name="PreviousPage" Style="{StaticResource PaginatorBtn}">
-                    <Icon:PackIconMaterial Kind="ChevronLeft" Style="{StaticResource PaginatorBtnIcon}" />
+                <Button x:Name="CurrentPage" 
+                        Style="{StaticResource PaginatorBtn}">
+                    <TextBlock x:Name="CurrentPageIndex" 
+                               Style="{StaticResource PaginatorCurrentPageText}" />
                 </Button>
 
-                <Rectangle Width="1" Fill="{StaticResource AREghZyBrush.Foreground.Deeper}"
+                <Rectangle Width="1" 
+                           Fill="{StaticResource AREghZyBrush.Foreground.Deeper}"
                            Margin="3 7" />
 
-                <Button x:Name="CurrentPage" Style="{StaticResource PaginatorBtn}">
-                    <TextBlock Text="1" Style="{StaticResource PaginatorCurrentPageText}" />
-                </Button>
-
-                <Rectangle Width="1" Fill="{StaticResource AREghZyBrush.Foreground.Deeper}"
-                           Margin="3 7" />
-
-                <Button x:Name="NextPage" Style="{StaticResource PaginatorBtn}">
-                    <Icon:PackIconMaterial Kind="ChevronRight" Style="{StaticResource PaginatorBtnIcon}" />
-                </Button>
-
-                <Rectangle Width="1" Fill="{StaticResource AREghZyBrush.Foreground.Deeper}"
-                           Margin="3 7" />
-
-                <Button x:Name="LastPage" Style="{StaticResource PaginatorBtn}">
-                    <Icon:PackIconMaterial Kind="ChevronDoubleRight" Style="{StaticResource PaginatorBtnIcon}" />
+                <Button x:Name="NextPage" 
+                        Style="{StaticResource PaginatorBtn}">
+                    <Icon:PackIconMaterial Kind="ChevronRight" 
+                                           Style="{StaticResource PaginatorBtnIcon}" />
                 </Button>
 
             </StackPanel>
