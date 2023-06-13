@@ -45,8 +45,7 @@
                                            DockPanel.Dock="Left"/>
                                 <TextBox x:Name="Email"
                                          Style="{StaticResource HintedTextBox}"
-                                         MaxWidth="300"
-                                         MinWidth="100"
+                                         Width="300"
                                          Utils:TextBoxHelper.Hint="example@email.com" 
                                          HorizontalAlignment="Right"
                                          DockPanel.Dock="Right"/>
@@ -58,8 +57,7 @@
                                            DockPanel.Dock="Left"/>
                                 <TextBox x:Name="Phone"
                                          Style="{StaticResource HintedTextBox}"
-                                         MaxWidth="300"
-                                         MinWidth="100"
+                                         Width="300"
                                          Utils:TextBoxHelper.Hint="212-456-7890" 
                                          HorizontalAlignment="Right"
                                          DockPanel.Dock="Right"/>
@@ -71,8 +69,7 @@
                                            DockPanel.Dock="Left"/>
                                 <TextBox x:Name="Website"
                                          Style="{StaticResource HintedTextBox}"
-                                         MaxWidth="300"
-                                         MinWidth="100"
+                                         Width="300"
                                          Utils:TextBoxHelper.Hint="www.example.com" 
                                          HorizontalAlignment="Right"
                                          DockPanel.Dock="Right"/>
@@ -84,8 +81,7 @@
                                            DockPanel.Dock="Left"/>
                                 <TextBox x:Name="Company"
                                          Style="{StaticResource HintedTextBox}"
-                                         MaxWidth="300"
-                                         MinWidth="100"
+                                         Width="300"
                                          Utils:TextBoxHelper.Hint="Company, Ltd." 
                                          HorizontalAlignment="Right"
                                          DockPanel.Dock="Right"/>
@@ -97,8 +93,7 @@
                                            DockPanel.Dock="Left"/>
                                 <TextBox x:Name="JobTitle"
                                          Style="{StaticResource HintedTextBox}"
-                                         MaxWidth="300"
-                                         MinWidth="100"
+                                         Width="300"
                                          Utils:TextBoxHelper.Hint="C.E.O" 
                                          HorizontalAlignment="Right"
                                          DockPanel.Dock="Right"/>
@@ -110,8 +105,7 @@
                                            DockPanel.Dock="Left"/>
                                 <TextBox x:Name="Location"
                                          Style="{StaticResource HintedTextBox}"
-                                         MaxWidth="300"
-                                         MinWidth="100"
+                                         Width="300"
                                          Utils:TextBoxHelper.Hint="San Francisco, USA" 
                                          HorizontalAlignment="Right"
                                          DockPanel.Dock="Right"/>
@@ -123,8 +117,7 @@
                                            DockPanel.Dock="Left"/>
                                 <TextBox x:Name="Address"
                                          Style="{StaticResource HintedTextBox}"
-                                         MaxWidth="300"
-                                         MinWidth="100"
+                                         Width="300"
                                          Utils:TextBoxHelper.Hint="52nd St., San Francisco, California" 
                                          HorizontalAlignment="Right"
                                          DockPanel.Dock="Right"/>
