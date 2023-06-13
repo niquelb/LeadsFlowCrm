@@ -11,60 +11,8 @@
              mc:Ignorable="d" FontSize="18"
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid Margin="15 5">
-        <!--#region Loading Spinner-->
-        <Grid>
-            <!--#region Loading grid visibility control-->
-            <Grid.Style>
-                <Style TargetType="Grid">
-                    <Setter Property="Visibility" Value="Hidden" />
-                    <Style.Triggers>
-                        <DataTrigger Binding="{Binding ShowLoadingScreen}" Value="True">
-                            <Setter Property="Visibility" Value="Visible" />
-                        </DataTrigger>
-                        <DataTrigger Binding="{Binding ShowLoadingScreen}" Value="False">
-                            <Setter Property="Visibility" Value="Hidden" />
-                        </DataTrigger>
-                    </Style.Triggers>
-                </Style>
-            </Grid.Style>
-            <!--#endregion-->
-
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="auto" />
-                <ColumnDefinition Width="*" />
-            </Grid.ColumnDefinitions>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="*" />
-                <RowDefinition Height="auto" />
-                <RowDefinition Height="auto" />
-                <RowDefinition Height="*" />
-            </Grid.RowDefinitions>
-
-            <LoadingSpinner:LoadingSpinner Grid.Column="1" Grid.Row="1" 
-                                           IsLoading="{Binding ShowLoadingScreen}"
-                                           Margin="15" Thickness="5" Color="white"/>
-            <TextBlock Grid.Column="1" Grid.Row="2" Text="Saving contact..." />
-        </Grid>
-        <!--#endregion-->
-        
         <!--#region Main content-->
         <Grid>
-            <!--#region Content grid visibility control-->
-            <Grid.Style>
-                <Style TargetType="Grid">
-                    <Setter Property="Visibility" Value="Visible" />
-                    <Style.Triggers>
-                        <DataTrigger Binding="{Binding ShowContent}" Value="True">
-                            <Setter Property="Visibility" Value="Visible" />
-                        </DataTrigger>
-                        <DataTrigger Binding="{Binding ShowContent}" Value="False">
-                            <Setter Property="Visibility" Value="Hidden" />
-                        </DataTrigger>
-                    </Style.Triggers>
-                </Style>
-            </Grid.Style>
-            <!--#endregion-->
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="auto" />
@@ -244,42 +192,129 @@
                            FontWeight="DemiBold"
                            Text="Select a Stage for the Contact"/>
                 <!--#endregion-->
-                
-                <!--#region Stages-->
-                <ScrollViewer Grid.Row="1"
-                              VerticalScrollBarVisibility="Auto">
-                    <ItemsControl x:Name="Stages"
-                                  Margin="25 10">
-                        <ItemsControl.ItemTemplate>
-                            <DataTemplate>
-                                <Border CornerRadius="15"
-                                        MinHeight="50"
-                                        cal:Message.Attach="[Event MouseLeftButtonDown] = [Action SelectStage($dataContext)]"
-                                        Background="BlueViolet" 
-                                        Margin="15"
-                                        Padding="5">
-                                    <DockPanel Margin="25 0">
-                                        <TextBlock Text="{Binding Name}"
-                                                   FontWeight="DemiBold"
-                                                   HorizontalAlignment="Center"
-                                                   VerticalAlignment="Center"
-                                                   DockPanel.Dock="Left"
-                                                   TextWrapping="WrapWithOverflow"
-                                                   FontSize="22" />
-                                        <Button Content="Select Stage"
-                                                cal:Message.Attach="[Event Click] = [Action SelectStage($dataContext)]" 
-                                                Style="{StaticResource SmallBtnStyling}"
-                                                DockPanel.Dock="Right"
-                                                HorizontalAlignment="Right"
-                                                VerticalAlignment="Stretch"
-                                                MinWidth="150"/>
-                                    </DockPanel>
-                                </Border>
 
-                            </DataTemplate>
-                        </ItemsControl.ItemTemplate>
-                    </ItemsControl>
-                </ScrollViewer>
+                <!--#region Loading Spinner-->
+                <Grid x:Name="LoadingSpinnerIsVisible"
+                      Grid.Row="1">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="auto" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="auto" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+
+                    <LoadingSpinner:LoadingSpinner Grid.Column="1" Grid.Row="1" 
+                                           IsLoading="{Binding LoadingSpinnerIsVisible}"
+                                           Margin="15" Thickness="5" Color="white"/>
+                </Grid>
+                <!--#endregion-->
+
+                <!--#region Empty screen-->
+                <Grid x:Name="EmptyScreenIsVisible"
+                      Grid.Row="1">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="auto" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="auto" />
+                        <RowDefinition Height="auto" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+
+                    <Image Source="pack://application:,,,/Media/Imgs/empty-icon.png" 
+                           Grid.Column="1" 
+                           Grid.Row="1" 
+                           MaxHeight="125"/>
+
+                    <TextBlock x:Name="EmptyScreenText" 
+                               Margin="15"
+                               Grid.Column="1"
+                               Grid.Row="2" />
+                </Grid>
+                <!--#endregion-->
+
+                <!--#region Pipelines-->
+                <Grid x:Name="PipelinesSelectorIsVisible" Grid.Row="1">
+                    <ScrollViewer VerticalScrollBarVisibility="Auto">
+                        <ItemsControl x:Name="Pipelines"
+                                      Margin="25 10">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <Border CornerRadius="15"
+                                            MinHeight="50"
+                                            Background="{StaticResource AREghZyBrush.Deep.1.Background.Static}" 
+                                            BorderBrush="BlueViolet"
+                                            BorderThickness="2"
+                                            Margin="15"
+                                            Padding="5">
+                                        <DockPanel Margin="25 0">
+                                            <TextBlock Text="{Binding Name}"
+                                                       FontWeight="DemiBold"
+                                                       HorizontalAlignment="Center"
+                                                       VerticalAlignment="Center"
+                                                       DockPanel.Dock="Left"
+                                                       TextWrapping="WrapWithOverflow"
+                                                       FontSize="22" />
+                                            <Button Content="Select Pipeline"
+                                                    cal:Message.Attach="[Event Click] = [Action SelectPipeline($dataContext)]" 
+                                                    Style="{StaticResource SmallBtnStyling}"
+                                                    DockPanel.Dock="Right"
+                                                    HorizontalAlignment="Right"
+                                                    VerticalAlignment="Stretch"
+                                                    MinWidth="150"/>
+                                        </DockPanel>
+                                    </Border>
+
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </ScrollViewer>
+                </Grid>
+                <!--#endregion-->
+
+                <!--#region Stages-->
+                <Grid x:Name="StageSelectorIsVisible" 
+                      Grid.Row="1">
+                    <ScrollViewer VerticalScrollBarVisibility="Auto">
+                        <ItemsControl x:Name="Stages"
+                                  Margin="25 10">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <Border CornerRadius="15"
+                                            MinHeight="50"
+                                            Background="BlueViolet" 
+                                            Margin="15"
+                                            Padding="5">
+                                        <DockPanel Margin="25 0">
+                                            <TextBlock Text="{Binding Name}"
+                                                       FontWeight="DemiBold"
+                                                       HorizontalAlignment="Center"
+                                                       VerticalAlignment="Center"
+                                                       DockPanel.Dock="Left"
+                                                       TextWrapping="WrapWithOverflow"
+                                                       FontSize="22" />
+                                            <Button Content="Select Stage"
+                                                    cal:Message.Attach="[Event Click] = [Action SelectStage($dataContext)]" 
+                                                    Style="{StaticResource SmallBtnStyling}"
+                                                    DockPanel.Dock="Right"
+                                                    HorizontalAlignment="Right"
+                                                    VerticalAlignment="Stretch"
+                                                    MinWidth="150"/>
+                                        </DockPanel>
+                                    </Border>
+
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </ScrollViewer>
+                </Grid>
                 <!--#endregion-->
             </Grid>
             <!--#endregion-->
