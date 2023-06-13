@@ -53,25 +53,22 @@ public class InboxViewModel : Screen
 	/// </summary>
 	public async void RefreshInbox()
 	{
-		IsInboxEmpty = false;
-		IsLoading = true;
-		CanRefreshInbox = false;
+		CurrentPageIndex = 1;
+		CanPreviousPage = false;
 
-		Inbox = new ObservableCollection<Email>(await _gmailService.RefreshAndGetInboxAsync());
+		await LoadInbox();
+	}
 
-		IsLoading = false;
-		CanRefreshInbox = true;
-
-		IsInboxEmpty = Inbox.Count <= 0;
-    }
-
+	#region Pagination
 	/// <summary>
 	/// Method for updating the inbox with the next page
 	/// </summary>
 	public async void NextPage()
 	{
 		CurrentPageIndex++;
-		await Paginate(PaginationOptions.NextPage);
+		CanPreviousPage = true;
+
+		await LoadInbox(PaginationOptions.NextPage);
 	}
 
 	/// <summary>
@@ -79,18 +76,17 @@ public class InboxViewModel : Screen
 	/// </summary>
 	public async void PreviousPage()
 	{
-		CurrentPageIndex--;
-		await Paginate(PaginationOptions.PreviousPage);
-	}
+        if (CurrentPageIndex < 1)
+        {
+			return;
+        }
 
-	/// <summary>
-	/// Method for updating the inbox with the next page
-	/// </summary>
-	public async void FirstPage()
-	{
-		CurrentPageIndex = 1;
-		await Paginate(PaginationOptions.FirstPage);
+		CurrentPageIndex--;
+		CanPreviousPage = CurrentPageIndex != 1;
+
+		await LoadInbox(PaginationOptions.PreviousPage);
 	}
+	#endregion
 
 	/// <summary>
 	/// Method for opening an email from the inbox
@@ -120,11 +116,12 @@ public class InboxViewModel : Screen
 	}
 
 	/// <summary>
-	/// Method for refreshing the inbox with the desired pagination options
+	/// Method for loading/refreshing the inbox with the optional pagination options
 	/// </summary>
-	/// <param name="pagination">Desired pagination options</param>
+	/// <see cref="PaginationOptions"/>
+	/// <param name="pagination">Optional pagination options, default is 'PaginationOptions.FirstPage'</param>
 	/// <returns></returns>
-	private async Task Paginate(PaginationOptions pagination)
+	private async Task LoadInbox(PaginationOptions pagination = PaginationOptions.FirstPage)
 	{
 		IsInboxEmpty = false;
 		IsLoading = true;
@@ -147,7 +144,7 @@ public class InboxViewModel : Screen
 	private bool _isInboxEmpty;
 	private bool _canRefreshInbox;
 	private bool _canPreviousPage;
-	private Email _selectedEmail;
+	private Email? _selectedEmail;
 	private ObservableCollection<Email> _inbox = new();
 	private int _currentPageIndex = 1;
 	#endregion
@@ -203,7 +200,6 @@ public class InboxViewModel : Screen
 		}
 	}
 
-
 	/// <summary>
 	/// Selected email
 	/// </summary>
@@ -241,7 +237,6 @@ public class InboxViewModel : Screen
 			NotifyOfPropertyChange();
 		}
 	}
-
 
 	#endregion
 }

@@ -24,9 +24,6 @@ public class GmailServiceClass : IGmailServiceClass
 	/// <summary> List of the emails in the user's inbox </summary>
 	private List<Email>? _inbox;
 
-	/// <summary> Special keyword reserved for referencing the logged in user </summary>
-	private const string _me = "me";
-
 	/// <summary> Service object for the Gmail API </summary>
 	private GmailService? _gmailService;
 	#endregion
@@ -42,7 +39,6 @@ public class GmailServiceClass : IGmailServiceClass
 	{
 		PreviousPage,
 		NextPage,
-		CurrentPage,
 		FirstPage,
 	}
 	#endregion
@@ -52,13 +48,13 @@ public class GmailServiceClass : IGmailServiceClass
 	public Email? SelectedEmail { get; set; }
 
 	/// <summary> Special keyword reserved for referencing the logged in user </summary>
-	public static string Me => _me;
+	public static string Me => "me";
 
-	/// <summary> Gmail API pagination token </summary>
-	public string PageToken { get; set; } = string.Empty;
+	/// <summary> Number of emails per page </summary>
+	public static int PageCount => 50;
 
-	/// <summary> List of previous page tokens </summary>
-	public List<string> PreviousPageTokens { get; set; } = new();
+    /// <summary> List of pagination tokens for the Gmail API </summary>
+    public List<string> PageTokens { get; set; } = new();
     #endregion
 
     #region Get and refresh methods
@@ -144,7 +140,7 @@ public class GmailServiceClass : IGmailServiceClass
 	/// Method for getting the emails from the user's inbox
 	/// </summary>
 	/// <returns>List of Email objects from the user's inbox</returns>
-	private async Task<List<Email>> GetEmailsFromInboxAsync(PaginationOptions pagination = PaginationOptions.CurrentPage)
+	private async Task<List<Email>> GetEmailsFromInboxAsync(PaginationOptions pagination = PaginationOptions.FirstPage)
 	{
 		List<Task<Email>> tasks = new();
 
@@ -161,24 +157,10 @@ public class GmailServiceClass : IGmailServiceClass
 		emailListRequest.IncludeSpamTrash = false;
 
 		// Specify the page size
-		emailListRequest.MaxResults = 100;
+		emailListRequest.MaxResults = PageCount;
 
 		// We pass in the page token depending on the desired pagination
-		switch (pagination)
-		{
-			case PaginationOptions.PreviousPage:
-				//TODO implement previous page
-				break;
-			case PaginationOptions.NextPage:
-				emailListRequest.PageToken = GetPreviousPageToken();
-				break;
-			case PaginationOptions.CurrentPage:
-				emailListRequest.PageToken = string.Empty;
-				break;
-			case PaginationOptions.FirstPage:
-				emailListRequest.PageToken = PreviousPageTokens.FirstOrDefault() ?? "";
-				break;
-		}
+		emailListRequest.PageToken = GetPageToken(pagination);
 
 		// Execute the request to retrieve the list of emails
 		ListMessagesResponse emailListResponse = emailListRequest.Execute();
@@ -191,8 +173,20 @@ public class GmailServiceClass : IGmailServiceClass
 
         if (string.IsNullOrWhiteSpace(emailListResponse.NextPageToken) == false)
         {
-			PageToken = emailListResponse.NextPageToken;
-			PreviousPageTokens.Add(PageToken);
+			bool isSame = false;
+
+            foreach (var t in PageTokens)
+            {
+                if (emailListResponse.NextPageToken.Equals(t))
+                {
+                    isSame = true;
+                }
+            }
+
+			if (isSame == false)
+			{
+				PageTokens.Add(emailListResponse.NextPageToken);
+			}
 		}
 
         // We process each email asynchronously
@@ -407,22 +401,55 @@ public class GmailServiceClass : IGmailServiceClass
 	}
 
 	/// <summary>
-	/// Method that gets the previous page based on the PreviousPageTokens property
+	/// Method for getting the appropiate PageToken for the request
 	/// </summary>
-	/// <see cref="PreviousPageTokens"/>
-	/// <returns>The previous page token</returns>
-	private string GetPreviousPageToken()
+	/// <see cref="PageTokens"/>
+	/// <param name="pagination"></param>
+	/// <returns></returns>
+	private string GetPageToken(PaginationOptions pagination)
 	{
-		string output;
+		string output = string.Empty;
 
-		try
+		/*
+		 * GMAIL API PAGINATION:
+		 * Each request returns the token to retrieve the next one
+		 * 
+		 * If we want to retrieve the first page we send an empty string or null as the PageToken
+		 * If we want to retrieve the next page we send the last PageToken we've recieved
+		 * If we want to retrieve the current page we send the second to last PageToken we've recieved
+		 * If we want to retrieve the previous page we send the third to last PageToken we've recieved
+		 * 
+		 * The way we go about this is by storing each token both in a collection of all retrieved tokens and 
+		 * 
+		 */
+
+		switch (pagination)
 		{
-			output = PreviousPageTokens[^2];
+			case PaginationOptions.PreviousPage:
+				// We remove the last inserted token
+				PageTokens.Remove(PageTokens.LastOrDefault() ?? "");
+
+                if (PageTokens.Count < 2)
+                {
+					output = string.Empty;
+
+					PageTokens.Clear();
+					break;
+				}
+
+				output = PageTokens[^2];
+
+				break;
+			case PaginationOptions.NextPage:
+				output = PageTokens.LastOrDefault() ?? "";
+				break;
+			case PaginationOptions.FirstPage:
+				output = string.Empty;
+
+				PageTokens.Clear();
+				break;
 		}
-		catch (Exception)
-		{
-			output = PreviousPageTokens[0];
-		}
+
 		return output;
 	}
 	#endregion
