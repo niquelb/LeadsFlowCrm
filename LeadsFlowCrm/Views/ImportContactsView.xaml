@@ -154,7 +154,7 @@
             </DockPanel>
             <!--#endregion-->
 
-            <!--#region Vertical separatod-->
+            <!--#region Vertical separator-->
             <StackPanel Orientation="Horizontal"
                         Grid.Column="1"
                         Margin="15">

@@ -8,11 +8,15 @@ public class ContactsShellViewModel : Conductor<object>.Collection.OneActive
 {
 	private readonly MyContactsViewModel _myContacts;
 	private readonly ImportContactsViewModel _importContacts;
+	private readonly CreateContactViewModel _createContact;
 
-	public ContactsShellViewModel(MyContactsViewModel myContacts, ImportContactsViewModel importContacts)
+	public ContactsShellViewModel(MyContactsViewModel myContacts,
+							   ImportContactsViewModel importContacts,
+							   CreateContactViewModel createContact)
     {
 		_myContacts = myContacts;
 		_importContacts = importContacts;
+		_createContact = createContact;
 	}
 
 	protected async override Task OnActivateAsync(CancellationToken cancellationToken)
@@ -44,5 +48,6 @@ public class ContactsShellViewModel : Conductor<object>.Collection.OneActive
 		Items.Clear();
 		Items.Add(_myContacts);
 		Items.Add(_importContacts);
+		Items.Add(_createContact);
 	}
 }
