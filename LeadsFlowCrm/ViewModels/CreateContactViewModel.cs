@@ -1,6 +1,8 @@
 ﻿using Caliburn.Micro;
 using LeadsFlowCrm.Models;
 using LeadsFlowCrm.Services.ModelServices;
+using LeadsFlowCrm.Utils;
+using Notifications.Wpf;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -28,15 +30,22 @@ public class CreateContactViewModel : Screen
 
 		Pipelines = new(await LoadPipelines());
 
-		//TODO: if only one pipeline exists skip the user selecting the pipeline step
-
 		LoadingSpinnerIsVisible = false;
 		PipelinesSelectorIsVisible = true;
+
+		if (Pipelines.Count <= 0)
+		{
+			Utilities.ShowNotification("No pipelines found", "You don't seem to have any pipelines!", NotificationType.Error);
+		}
 
 	}
 
 	#region Private Methods
 
+	/// <summary>
+	/// Method for loading the list of pipelines
+	/// </summary>
+	/// <returns></returns>
 	private async Task<IList<Pipeline>> LoadPipelines()
 	{
 		List<Pipeline> output = new()
@@ -51,6 +60,10 @@ public class CreateContactViewModel : Screen
 
 	#region Public Methods
 
+	/// <summary>
+	/// Method for selecting a specific stage for the new contact
+	/// </summary>
+	/// <param name="stage">Selected stage</param>
 	public void SelectStage(Stage stage)
 	{
 		SelectedStage = stage;
@@ -59,6 +72,10 @@ public class CreateContactViewModel : Screen
 		StageSelectedIsVisible = true;
 	}
 
+	/// <summary>
+	/// Method for selecting a specific pipeline from which select the stage
+	/// </summary>
+	/// <param name="pipeline">Selected pipeline</param>
 	public void SelectPipeline(Pipeline pipeline)
 	{
 		SelectedPipeline = pipeline;
@@ -68,6 +85,15 @@ public class CreateContactViewModel : Screen
 		PipelinesSelectorIsVisible = false;
 		PipelineSelectedIsVisible = true;
 		StageSelectorIsVisible = true;
+
+		if (Stages.Count <= 0)
+		{
+			Utilities.ShowNotification("No stages found", "This pipeline is empty!", NotificationType.Error);
+		}
+	}
+
+	public async void SaveContact() { 
+		//TODO check if contact exists
 	}
 
 	#endregion
@@ -80,15 +106,20 @@ public class CreateContactViewModel : Screen
 	public string DisplayHeader { get; set; } = "Create Contact";
 
     #region Private property backing fields
+
     private bool _loadingSpinnerIsVisible;
 	private bool _pipelinesSelectorIsVisible;
 	private bool _stageSelectorIsVisible;
 	private bool _pipelineSelectedIsVisible;
 	private bool _stageSelectedIsVisible;
+
+	private string _firstName = string.Empty;
+	private string _email = string.Empty;
 	private BindableCollection<Stage> _stages = new();
 	private BindableCollection<Pipeline> _pipelines = new();
 	private Stage _selectedStageSelectedStage = new();
 	private Pipeline _selectedPipeline = new();
+
 	#endregion
 
 	/// <summary>
@@ -139,6 +170,50 @@ public class CreateContactViewModel : Screen
 		}
 	}
 
+	/// <summary>
+	/// Controls wether the SaveContact button is enabled
+	/// </summary>
+	public bool CanSaveContact
+	{
+		get {
+			return string.IsNullOrWhiteSpace(FirstName) == false && string.IsNullOrWhiteSpace(Email) == false;
+		}
+		set {
+			NotifyOfPropertyChange();
+		}
+	}
+
+
+	#region Field properties
+
+	/// <summary>
+	/// First name
+	/// </summary>
+	public string FirstName
+	{
+		get { return _firstName; }
+		set { 
+			_firstName = value;
+			NotifyOfPropertyChange();
+			NotifyOfPropertyChange(nameof(CanSaveContact));
+		}
+	}
+
+	/// <summary>
+	/// Email
+	/// </summary>
+	public string Email
+	{
+		get { return _email; }
+		set { 
+			_email = value;
+			NotifyOfPropertyChange();
+			NotifyOfPropertyChange(nameof(CanSaveContact));
+		}
+	}
+
+
+	#endregion
 
 	#region Visibility controls
 
@@ -178,7 +253,9 @@ public class CreateContactViewModel : Screen
 		}
 	}
 
-
+	/// <summary>
+	/// Controls the visibility of the selected pipeline screen
+	/// </summary>
 	public bool PipelineSelectedIsVisible
 	{
 		get { return _pipelineSelectedIsVisible; }
@@ -188,7 +265,9 @@ public class CreateContactViewModel : Screen
 		}
 	}
 
-
+	/// <summary>
+	/// Controls the visibility of the selected stage
+	/// </summary>
 	public bool StageSelectedIsVisible
 	{
 		get { return _stageSelectedIsVisible; }
@@ -197,7 +276,6 @@ public class CreateContactViewModel : Screen
 			NotifyOfPropertyChange();
 		}
 	}
-
 
 	#endregion
 
