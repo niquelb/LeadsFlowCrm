@@ -24,5 +24,17 @@ namespace LeadsFlowCrm.Views
         {
             InitializeComponent();
         }
-    }
+
+		private void SidebarToggle_Click(object sender, RoutedEventArgs e)
+		{
+            if (Sidebar.Visibility == Visibility.Visible)
+            {
+                Sidebar.Visibility = Visibility.Collapsed;
+            }
+            else
+            {
+                Sidebar.Visibility = Visibility.Visible;
+			}
+        }
+	}
 }

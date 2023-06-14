@@ -114,7 +114,7 @@
                             Grid.Column="0"
                             ToolTip="Mark the email as unread"
                             Style="{StaticResource IconButton}">
-                        <Icon:PackIconMaterial Width="20" Height="20" Margin="15" Kind="EyeMinus" />
+                        <Icon:PackIconMaterial Width="20" Height="20" Margin="15" Kind="EyeOff" />
                     </Button>
                     <Button x:Name="MarkFavorite"
                             Grid.Column="0"
