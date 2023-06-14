@@ -213,7 +213,7 @@ public class CreateContactViewModel : Screen
 		PipelineSelectedIsVisible = false;
 		PipelinesSelectorIsVisible = true;
 	}
-
+		
 	/// <summary>
 	/// Method for de-selecting the stage
 	/// </summary>

@@ -32,19 +32,14 @@ public class InboxViewModel : Screen
 		 * We clear the selected item so that the same email can be opened twice in a row.
 		 * We don't use the property because that fires an event, instead we modify the backing field.
 		 */
-		_selectedEmail = new();
+		_selectedEmail = null;
 	}
 
 	protected async override void OnViewLoaded(object view)
 	{
 		base.OnViewLoaded(view);
 
-		Inbox = new ObservableCollection<Email>(await _gmailService.GetInboxAsync());
-
-		IsLoading = false;
-		CanRefreshInbox = true;
-
-		IsInboxEmpty = Inbox.Count <= 0;
+		await LoadInbox();
 	}
 
 	#region Public Methods
@@ -123,17 +118,24 @@ public class InboxViewModel : Screen
 	/// <returns></returns>
 	private async Task LoadInbox(PaginationOptions pagination = PaginationOptions.FirstPage)
 	{
-		IsInboxEmpty = false;
-		IsLoading = true;
-		CanRefreshInbox = false;
+		LoadingScreenIsVisible = true;
+		ContentIsVisible = false;
+		EmptyScreenIsVisible = false;
 
 		Inbox = new ObservableCollection<Email>(await _gmailService.GetPaginatedInbox(pagination));
 
-		IsLoading = false;
+		LoadingScreenIsVisible = false;
+
+		if (Inbox.Count > 0)
+		{
+			ContentIsVisible = true;
+		}
+		else
+		{
+			EmptyScreenIsVisible = true;
+		}
+
 		CanRefreshInbox = true;
-
-		IsInboxEmpty = Inbox.Count <= 0;
-
 	}
 	#endregion
 
@@ -141,41 +143,19 @@ public class InboxViewModel : Screen
 
 	public string DisplayHeader { get; } = "Inbox";
 
-    #region Property backing fields
-    private bool _isLoading = true;
-	private bool _isInboxEmpty;
+	#region Property backing fields
+
+	private bool _loadingScreenIsVisible;
+	private bool _emptyScreenIsVisible;
+	private bool _contentIsVisible;
+
 	private bool _canRefreshInbox;
 	private bool _canPreviousPage;
 	private Email? _selectedEmail;
 	private ObservableCollection<Email> _inbox = new();
 	private int _currentPageIndex = 1;
+
 	#endregion
-
-	/// <summary>
-	/// This property is used to control the visibility of the loading spinner
-	/// </summary>
-	public bool IsLoading
-	{
-		get { return _isLoading; }
-		set
-		{
-			_isLoading = value;
-			NotifyOfPropertyChange();
-		}
-	}
-
-	/// <summary>
-	/// This property controls wether the "empty" screen is showing or not
-	/// </summary>
-	public bool IsInboxEmpty
-	{
-		get { return _isInboxEmpty; }
-		set { 
-			_isInboxEmpty = value;
-			NotifyOfPropertyChange();
-		}
-	}
-
 
 	/// <summary>
 	/// Property to control if the refresh button is enabled or not
@@ -205,7 +185,7 @@ public class InboxViewModel : Screen
 	/// <summary>
 	/// Selected email
 	/// </summary>
-	public Email SelectedEmail
+	public Email? SelectedEmail
 	{
 		get { return _selectedEmail; }
 		set
@@ -239,6 +219,47 @@ public class InboxViewModel : Screen
 			NotifyOfPropertyChange();
 		}
 	}
+
+	#region Visibility controls
+
+	/// <summary>
+	/// Controls the visibility of the loading screen
+	/// </summary>
+	public bool LoadingScreenIsVisible
+	{
+		get { return _loadingScreenIsVisible; }
+		set {
+			_loadingScreenIsVisible = value;
+			NotifyOfPropertyChange();
+		}
+	}
+
+	/// <summary>
+	/// Controls the visibility of the "empty" screen
+	/// </summary>
+	public bool EmptyScreenIsVisible
+	{
+		get { return _emptyScreenIsVisible; }
+		set {
+			_emptyScreenIsVisible = value; 
+			NotifyOfPropertyChange();
+		}
+	}
+
+	/// <summary>
+	/// Controls the visibility of the main content
+	/// </summary>
+	public bool ContentIsVisible
+	{
+		get { return _contentIsVisible; }
+		set {
+			_contentIsVisible = value;
+			NotifyOfPropertyChange();
+		}
+	}
+
+
+	#endregion
 
 	#endregion
 }

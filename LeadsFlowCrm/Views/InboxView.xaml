@@ -20,7 +20,6 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="auto" />
             <RowDefinition Height="*" />
-            <RowDefinition Height="auto" />
         </Grid.RowDefinitions>
 
         <!--#region SearchBox-->
@@ -57,21 +56,11 @@
 
         <!--#endregion-->
 
-        <!--#region Loading Spinner-->
-        <Grid Grid.Column="0" Grid.ColumnSpan="4" Grid.Row="1">
-            <!--#region Loading grid visibility control-->
-            <Grid.Style>
-                <Style TargetType="Grid">
-                    <Setter Property="Visibility" Value="Visible" />
-                    <Style.Triggers>
-                        <DataTrigger Binding="{Binding IsLoading}" Value="False">
-                            <Setter Property="Visibility" Value="Hidden" />
-                        </DataTrigger>
-                    </Style.Triggers>
-                </Style>
-            </Grid.Style>
-            <!--#endregion-->
-
+        <!--#region Loading Screen-->
+        <Grid x:Name="LoadingScreenIsVisible" 
+              Grid.Column="0" 
+              Grid.ColumnSpan="4" 
+              Grid.Row="1">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="auto" />
@@ -85,27 +74,17 @@
             </Grid.RowDefinitions>
 
             <LoadingSpinner:LoadingSpinner Grid.Column="1" Grid.Row="1" 
-                                           IsLoading="{Binding IsLoading}"
+                                           IsLoading="{Binding LoadingScreenIsVisible}"
                                            Margin="15" Thickness="5" Color="white"/>
             <TextBlock Grid.Column="1" Grid.Row="2" Text="Loading  inbox, please hang tight..." />
         </Grid>
         <!--#endregion-->
         
         <!--#region "Empty" screen-->
-        <Grid Grid.Column="0" Grid.ColumnSpan="4" Grid.Row="1">
-            <!--#region Empty screen visibility control-->
-            <Grid.Style>
-                <Style TargetType="Grid">
-                    <Setter Property="Visibility" Value="Hidden" />
-                    <Style.Triggers>
-                        <DataTrigger Binding="{Binding IsInboxEmpty}" Value="True">
-                            <Setter Property="Visibility" Value="Visible" />
-                        </DataTrigger>
-                    </Style.Triggers>
-                </Style>
-            </Grid.Style>
-            <!--#endregion-->
-
+        <Grid x:Name="EmptyScreenIsVisible" 
+              Grid.Column="0" 
+              Grid.ColumnSpan="4" 
+              Grid.Row="1">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="auto" />
@@ -130,103 +109,101 @@
         </Grid>
         <!--#endregion-->
 
-        <!--#region Inbox-->
+        <!--#region Content-->
 
-        <!--#region ListView-->
-        <Grid Grid.Column="0" Grid.ColumnSpan="4" Grid.Row="1">
-            <!--#region Inbox grid visibility control-->
-            <Grid.Style>
-                <Style TargetType="Grid">
-                    <Setter Property="Visibility" Value="Hidden" />
-                    <Style.Triggers>
-                        <DataTrigger Binding="{Binding IsLoading}" Value="False">
-                            <Setter Property="Visibility" Value="Visible" />
-                        </DataTrigger>
-                        <DataTrigger Binding="{Binding IsInboxEmpty}" Value="True">
-                            <Setter Property="Visibility" Value="Hidden" />
-                        </DataTrigger>
-                    </Style.Triggers>
-                </Style>
-            </Grid.Style>
+        <Grid x:Name="ContentIsVisible"
+              Grid.Column="0"
+              Grid.ColumnSpan="4"
+              Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="auto" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+                <RowDefinition Height="auto" />
+            </Grid.RowDefinitions>
+            <!--#region Inbox-->
+            <Grid Grid.ColumnSpan="2">
+                <ListView ItemsSource="{Binding Inbox}" 
+                          Margin="0 15" FontSize="14" 
+                          SelectedItem="{Binding SelectedEmail}"
+                          cal:Message.Attach="[Event MouseDoubleClick] = [Action OpenEmail]" >
+                    <ListView.View>
+                        <GridView>
+                            <GridViewColumn Width="40" Header="👁">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <CheckBox IsChecked="{Binding IsRead}" IsEnabled="False"/>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                            <GridViewColumn Width="40" Header="⭐">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <CheckBox IsChecked="{Binding IsFavorite}" IsEnabled="False"/>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                            <GridViewColumn Header="Sender" 
+                                            DisplayMemberBinding="{Binding From}"
+                                            Width="auto" />
+                            <GridViewColumn Header="Subject Line" 
+                                            DisplayMemberBinding="{Binding SubjectLine}"
+                                            Width="auto" />
+                            <GridViewColumn Header="Body" 
+                                            DisplayMemberBinding="{Binding Snippet}"
+                                            Width="500" />
+                            <GridViewColumn DisplayMemberBinding="{Binding Date}"
+                                            Width="auto" />
+                        </GridView>
+                    </ListView.View>
+                </ListView>
+            </Grid>
             <!--#endregion-->
 
-            <ListView ItemsSource="{Binding Inbox}" 
-                      Margin="0 15" FontSize="14" 
-                      SelectedItem="{Binding SelectedEmail}"
-                      cal:Message.Attach="[Event MouseDoubleClick] = [Action OpenEmail]" >
-                <ListView.View>
-                    <GridView>
-                        <GridViewColumn Width="40" Header="👁">
-                            <GridViewColumn.CellTemplate>
-                                <DataTemplate>
-                                    <CheckBox IsChecked="{Binding IsRead}" IsEnabled="False"/>
-                                </DataTemplate>
-                            </GridViewColumn.CellTemplate>
-                        </GridViewColumn>
-                        <GridViewColumn Width="40" Header="⭐">
-                            <GridViewColumn.CellTemplate>
-                                <DataTemplate>
-                                    <CheckBox IsChecked="{Binding IsFavorite}" IsEnabled="False"/>
-                                </DataTemplate>
-                            </GridViewColumn.CellTemplate>
-                        </GridViewColumn>
-                        <GridViewColumn Header="Sender" 
-                                    DisplayMemberBinding="{Binding From}"
-                                    Width="auto" />
-                        <GridViewColumn Header="Subject Line" 
-                                    DisplayMemberBinding="{Binding SubjectLine}"
-                                    Width="auto" />
-                        <GridViewColumn Header="Body" 
-                                    DisplayMemberBinding="{Binding Snippet}"
-                                    Width="500" />
-                        <GridViewColumn DisplayMemberBinding="{Binding Date}"
-                                    Width="auto" />
-                    </GridView>
-                </ListView.View>
-            </ListView>
+            <!--#region Paginator-->
+            <Border Grid.Column="1"
+                    Grid.Row="1" 
+                    HorizontalAlignment="Right" 
+                    BorderBrush="{StaticResource AREghZyBrush.Foreground.Static}"
+                    BorderThickness="1" CornerRadius="5" Padding="5"
+                    Background="{StaticResource AREghZyBrush.Foreground.Static}"
+                    Margin="10">
+                <StackPanel Orientation="Horizontal">
+                    <Button x:Name="PreviousPage" 
+                            ToolTip="Previous page"
+                            Style="{StaticResource PaginatorBtn}">
+                        <Icon:PackIconMaterial Kind="ChevronLeft" 
+                                               Style="{StaticResource PaginatorBtnIcon}" />
+                    </Button>
+
+                    <Rectangle Width="1" 
+                               Fill="{StaticResource AREghZyBrush.Foreground.Deeper}"
+                               Margin="3 7" />
+
+                    <Button ToolTip="Current page"
+                            Style="{StaticResource PaginatorBtn}">
+                        <TextBlock x:Name="CurrentPageIndex" 
+                                   Style="{StaticResource PaginatorCurrentPageText}" />
+                    </Button>
+
+                    <Rectangle Width="1" 
+                               Fill="{StaticResource AREghZyBrush.Foreground.Deeper}"
+                               Margin="3 7" />
+
+                    <Button x:Name="NextPage" 
+                            ToolTip="Next page"
+                            Style="{StaticResource PaginatorBtn}">
+                        <Icon:PackIconMaterial Kind="ChevronRight" 
+                                               Style="{StaticResource PaginatorBtnIcon}" />
+                    </Button>
+
+                </StackPanel>
+
+            </Border>
+            <!--#endregion-->
         </Grid>
-        <!--#endregion-->
-
-        <!--#region Paginator-->
-        <Border Grid.Column="1" Grid.ColumnSpan="3" Grid.Row="3" 
-                HorizontalAlignment="Right" 
-                BorderBrush="{StaticResource AREghZyBrush.Foreground.Static}"
-                BorderThickness="1" CornerRadius="5" Padding="5"
-                Background="{StaticResource AREghZyBrush.Foreground.Static}"
-                Margin="10">
-            <StackPanel Orientation="Horizontal">
-                <Button x:Name="PreviousPage" 
-                        ToolTip="Previous page"
-                        Style="{StaticResource PaginatorBtn}">
-                    <Icon:PackIconMaterial Kind="ChevronLeft" 
-                                           Style="{StaticResource PaginatorBtnIcon}" />
-                </Button>
-
-                <Rectangle Width="1" 
-                           Fill="{StaticResource AREghZyBrush.Foreground.Deeper}"
-                           Margin="3 7" />
-
-                <Button ToolTip="Current page"
-                        Style="{StaticResource PaginatorBtn}">
-                    <TextBlock x:Name="CurrentPageIndex" 
-                               Style="{StaticResource PaginatorCurrentPageText}" />
-                </Button>
-
-                <Rectangle Width="1" 
-                           Fill="{StaticResource AREghZyBrush.Foreground.Deeper}"
-                           Margin="3 7" />
-
-                <Button x:Name="NextPage" 
-                        ToolTip="Next page"
-                        Style="{StaticResource PaginatorBtn}">
-                    <Icon:PackIconMaterial Kind="ChevronRight" 
-                                           Style="{StaticResource PaginatorBtnIcon}" />
-                </Button>
-
-            </StackPanel>
-
-        </Border>
-        <!--#endregion-->
 
         <!--#endregion-->
 
