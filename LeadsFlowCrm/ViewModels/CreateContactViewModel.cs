@@ -81,11 +81,12 @@ public class CreateContactViewModel : Screen
 
 		// Clear the stages and pipeline
 		SelectedStage = null;
-		SelectedPipeline = new();
+		SelectedPipeline = null;
 		Stages = new();
 
 		// Modify visibility
 		StageSelectedIsVisible = false;
+		StageSelectorIsVisible = false;
 		PipelineSelectedIsVisible = false;
 		PipelinesSelectorIsVisible = true;
 
@@ -198,6 +199,32 @@ public class CreateContactViewModel : Screen
 		ClearFields();
 	}
 
+	/// <summary>
+	/// Method for de-selecting the pipeline (and consequently the stage if there is one)
+	/// </summary>
+	public void DiscardPipeline()
+	{
+		SelectedStage = null;
+		SelectedPipeline = null;
+		Stages = new();
+
+		StageSelectedIsVisible = false;
+		StageSelectorIsVisible = false;
+		PipelineSelectedIsVisible = false;
+		PipelinesSelectorIsVisible = true;
+	}
+
+	/// <summary>
+	/// Method for de-selecting the stage
+	/// </summary>
+	public void DiscardStage()
+	{
+		SelectedStage = null;
+
+		StageSelectorIsVisible = true;
+		StageSelectedIsVisible = false;
+	}
+
 	#endregion
 
 	#region Properties
@@ -234,7 +261,7 @@ public class CreateContactViewModel : Screen
 	private BindableCollection<Stage> _stages = new();
 	private BindableCollection<Pipeline> _pipelines = new();
 	private Stage _selectedStage;
-	private Pipeline _selectedPipeline = new();
+	private Pipeline _selectedPipeline;
 
 	#endregion
 
@@ -265,7 +292,7 @@ public class CreateContactViewModel : Screen
 	/// <summary>
 	/// Selected pipeline
 	/// </summary>
-	public Pipeline SelectedPipeline
+	public Pipeline? SelectedPipeline
 	{
 		get { return _selectedPipeline; }
 		set { 
