@@ -91,6 +91,24 @@ public class CreateContactViewModel : Screen
 
 	}
 
+	/// <summary>
+	/// Method for checking if the contact exists based on a given email address
+	/// </summary>
+	/// <param name="email">Email address</param>
+	/// <returns>True if the contact exists, false if not</returns>
+	/// <exception cref="ArgumentNullException">If the email is null/empty</exception>
+	private async Task<bool> CheckIfExists(string email)
+	{
+		if (string.IsNullOrWhiteSpace(email))
+		{
+			throw new ArgumentNullException(nameof(email));
+		}
+
+		Contact? contact = await _contactService.GetByEmailAsync(email);
+
+		return contact != null;
+	}
+
 	#endregion
 
 	#region Public Methods
@@ -131,9 +149,13 @@ public class CreateContactViewModel : Screen
 	/// Method for saving the newly created contact
 	/// </summary>
 	public async void SaveContact() {
-		//TODO check if contact exists
+        if (await CheckIfExists(Email))
+		{
+			Utilities.ShowNotification("Contact already exists", $"A contact with this email address already exists. ({Email})", NotificationType.Error);
+			return;
+		}
 
-		if (SelectedStage == null)
+        if (SelectedStage == null)
 		{
 			// TODO prettify this message box
 			MessageBoxResult messageBoxResult = MessageBox.Show("There are no stages selected for this contact, do you wish to create it anyway? You can assign a stage to it later in the 'My Contacts' screen.", 
@@ -155,7 +177,7 @@ public class CreateContactViewModel : Screen
 			Phone = Phone,
 		};
 
-		try
+        try
 		{
 			await _contactService.PostToApiAsync(CreatedContact, _loggedInUser.Id, SelectedStage?.Id);
 			Utilities.ShowNotification("Creation successfull", "The contact was created successfully", NotificationType.Success);

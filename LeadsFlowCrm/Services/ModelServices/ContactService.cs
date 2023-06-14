@@ -33,6 +33,7 @@ public class ContactService : IContactService
 		_loggedInUser = loggedInUser;
 	}
 
+	#region Retrieval methods
 	/// <summary>
 	/// Method for retrieving all the contacts associated with the user from the API
 	/// </summary>
@@ -104,6 +105,41 @@ public class ContactService : IContactService
 	}
 
 	/// <summary>
+	/// Method for retrieving a contact based on a given email address from the API
+	/// </summary>
+	/// <param name="email">Email address</param>
+	/// <returns>Contact object</returns>
+	/// <exception cref="UnauthorizedAccessException">If the token is incorrect</exception>
+	/// <exception cref="Exception">If there was another issue with the API or the request</exception>
+	public async Task<Contact?> GetByEmailAsync(string email)
+	{
+		_apiClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _loggedInUser.Token);
+
+		/*
+		 * We make the query for filtering by the Stage ID, for this we need to encode it
+		 * 
+		 * The final URL should look like this without encoding → "[URL]/Contacts?query=stageId='ID'
+		 */
+		string encodedPipelineId = WebUtility.UrlEncode(email);
+		string query = $"email LIKE '{encodedPipelineId}'";
+
+		using HttpResponseMessage resp = await _apiClient.GetAsync($"api/Contacts?query={query}");
+		if (resp.IsSuccessStatusCode == false)
+		{
+			if (resp.StatusCode == HttpStatusCode.Unauthorized)
+			{
+				throw new UnauthorizedAccessException(resp.ReasonPhrase);
+			}
+
+			throw new Exception(resp.ReasonPhrase);
+		}
+
+		var output = await resp.Content.ReadAsAsync<IList<Contact>>();
+
+		return output.FirstOrDefault();
+	}
+
+	/// <summary>
 	/// Method for retrieving the user's Google contacts from the People API and converting them to a ContactModel
 	/// </summary>
 	/// <returns>List of contacts from the user's Google account</returns>
@@ -129,7 +165,9 @@ public class ContactService : IContactService
 
 		return output;
     }
+	#endregion
 
+	#region Creating and updating methods
 	/// <summary>
 	/// Method for uploading the given Contact to the API
 	/// </summary>
@@ -195,4 +233,5 @@ public class ContactService : IContactService
 			throw new Exception(resp.ReasonPhrase);
 		}
 	}
+	#endregion
 }
