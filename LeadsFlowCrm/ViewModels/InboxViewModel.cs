@@ -139,8 +139,10 @@ public class InboxViewModel : Screen
 
 	#region Properties
 
-	#region Property backing fields
-	private bool _isLoading = true;
+	public string DisplayHeader { get; } = "Inbox";
+
+    #region Property backing fields
+    private bool _isLoading = true;
 	private bool _isInboxEmpty;
 	private bool _canRefreshInbox;
 	private bool _canPreviousPage;

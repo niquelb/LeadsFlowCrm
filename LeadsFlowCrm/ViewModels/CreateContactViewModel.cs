@@ -182,7 +182,7 @@ public class CreateContactViewModel : Screen
 	/// <summary>
 	/// Tab name for the view
 	/// </summary>
-	public string DisplayHeader { get; set; } = "Create Contact";
+	public string DisplayHeader { get; } = "Create Contact";
 
 	/// <summary>
 	/// Contact that will be created

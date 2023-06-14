@@ -61,6 +61,7 @@ public class ImportContactsViewModel : Screen
 		}
 	}
 
+	#region Public Methods
 	/// <summary>
 	/// Method for saving the selected contact into the API (Contact table)
 	/// </summary>
@@ -76,11 +77,13 @@ public class ImportContactsViewModel : Screen
 			Utilities.ShowNotification("Error saving contact", $"There was an error saving the selected contact ({ex.Message})", NotificationType.Error);
 		}
 	}
+	#endregion
 
+	#region Properties
 	/// <summary>
 	/// Tab name for the view
 	/// </summary>
-	public string DisplayHeader { get; set; } = "Import Contacts";
+	public string DisplayHeader { get; } = "Import Contacts";
 
 	#region Private backing fields
 
@@ -176,6 +179,8 @@ public class ImportContactsViewModel : Screen
 			NotifyOfPropertyChange();
 		}
 	}
+
+	#endregion
 
 	#endregion
 }

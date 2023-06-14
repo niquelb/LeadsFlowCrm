@@ -14,14 +14,14 @@ namespace LeadsFlowCrm.ViewModels;
 
 public class ShellViewModel : Conductor<object>, IHandle<EmailSelectedEvent>, IHandle<NavigationEvent>
 {
-	private readonly InboxViewModel _inboxViewModel;
+	private readonly EmailClientShellViewModel _emailClientShellViewModel;
 	private readonly PipelinesViewModel _pipelinesViewModel;
 	private readonly SelectedEmailViewModel _selectedEmailViewModel;
 	private readonly ContactsShellViewModel _contactsShellViewModel;
 	private readonly IEventAggregator _event;
 	private readonly IUserService _userService;
 
-	public ShellViewModel(InboxViewModel inboxViewModel,
+	public ShellViewModel(EmailClientShellViewModel emailClientShellViewModel,
 					   PipelinesViewModel pipelinesViewModel,
 					   SelectedEmailViewModel selectedEmailViewModel,
 					   ContactsShellViewModel contactsShellViewModel,
@@ -29,7 +29,7 @@ public class ShellViewModel : Conductor<object>, IHandle<EmailSelectedEvent>, IH
 					   IEventAggregator @event,
 					   IUserService userService)
     {
-		_inboxViewModel = inboxViewModel;
+		_emailClientShellViewModel = emailClientShellViewModel;
 		_pipelinesViewModel = pipelinesViewModel;
 		_selectedEmailViewModel = selectedEmailViewModel;
 		_contactsShellViewModel = contactsShellViewModel;
@@ -38,7 +38,7 @@ public class ShellViewModel : Conductor<object>, IHandle<EmailSelectedEvent>, IH
 		_userService = userService;
 		_event.SubscribeOnUIThread(this);
 
-		ActivateItemAsync(_inboxViewModel);
+		ActivateItemAsync(_emailClientShellViewModel);
 	}
 
 	/// <summary>
@@ -75,7 +75,7 @@ public class ShellViewModel : Conductor<object>, IHandle<EmailSelectedEvent>, IH
 		switch (e.Route)
 		{
 			case NavigationEvent.NavigationRoutes.Inbox:
-				await ActivateItemAsync(_inboxViewModel, cancellationToken);
+				await ActivateItemAsync(_emailClientShellViewModel, cancellationToken);
 				break;
 			case NavigationEvent.NavigationRoutes.Pipelines:
 				await ActivateItemAsync(_pipelinesViewModel, cancellationToken);

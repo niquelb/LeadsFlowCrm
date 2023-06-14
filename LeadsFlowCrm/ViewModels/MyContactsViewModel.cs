@@ -89,7 +89,7 @@ public class MyContactsViewModel : Screen
 	/// <summary>
 	/// Tab name for the view
 	/// </summary>
-	public string DisplayHeader { get; set; } = "My Contacts";
+	public string DisplayHeader { get; } = "My Contacts";
 
 	#region Private backing fields
 
