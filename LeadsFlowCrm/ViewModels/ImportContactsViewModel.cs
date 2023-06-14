@@ -67,6 +67,12 @@ public class ImportContactsViewModel : Screen
 	/// </summary>
 	public async void SaveContact()
 	{
+		if (await CheckIfExists(SelectedContact.Email))
+		{
+			Utilities.ShowNotification("Contact already exists", $"A contact with this email address already exists. ({SelectedContact.Email})", NotificationType.Error);
+			return;
+		}
+
 		try
 		{
 			await _contactService.PostToApiAsync(contact: SelectedContact, UserId: _loggedInUser.Id);
@@ -77,6 +83,28 @@ public class ImportContactsViewModel : Screen
 			Utilities.ShowNotification("Error saving contact", $"There was an error saving the selected contact ({ex.Message})", NotificationType.Error);
 		}
 	}
+	#endregion
+
+	#region Private Methods
+
+	/// <summary>
+	/// Method for checking if the contact exists based on a given email address
+	/// </summary>
+	/// <param name="email">Email address</param>
+	/// <returns>True if the contact exists, false if not</returns>
+	/// <exception cref="ArgumentNullException">If the email is null/empty</exception>
+	private async Task<bool> CheckIfExists(string email)
+	{
+		if (string.IsNullOrWhiteSpace(email))
+		{
+			throw new ArgumentNullException(nameof(email));
+		}
+
+		Contact? contact = await _contactService.GetByEmailAsync(email);
+
+		return contact != null;
+	}
+
 	#endregion
 
 	#region Properties
