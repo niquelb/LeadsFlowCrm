@@ -11,10 +11,13 @@ namespace LeadsFlowCrm.ViewModels;
 public class EmailClientShellViewModel : Conductor<object>.Collection.OneActive
 {
 	private readonly InboxViewModel _inbox;
+	private readonly DraftsViewModel _drafts;
 
-	public EmailClientShellViewModel(InboxViewModel inbox)
+	public EmailClientShellViewModel(InboxViewModel inbox,
+								  DraftsViewModel drafts)
     {
 		_inbox = inbox;
+		_drafts = drafts;
 	}
 	protected async override Task OnActivateAsync(CancellationToken cancellationToken)
 	{
@@ -44,5 +47,6 @@ public class EmailClientShellViewModel : Conductor<object>.Collection.OneActive
 	{
 		Items.Clear();
 		Items.Add(_inbox);
+		Items.Add(_drafts);
 	}
 }

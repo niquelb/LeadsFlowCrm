@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="LeadsFlowCrm.Views.InboxView"
+﻿<UserControl x:Class="LeadsFlowCrm.Views.DraftsView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -36,7 +36,7 @@
                 <TextBox x:Name="SearchBox" 
                          Grid.Column="0" 
                          Style="{StaticResource InboxSearchBox}"
-                         Utils:TextBoxHelper.Hint="Search inbox..." />
+                         Utils:TextBoxHelper.Hint="Search drafts..." />
                 <Icon:PackIconMaterial Grid.Column="1" 
                                        Kind="Magnify" Width="20" Height="20"
                                        Panel.ZIndex="2" Margin="5 0"
@@ -57,21 +57,11 @@
 
         <!--#endregion-->
 
-        <!--#region Loading Spinner-->
-        <Grid Grid.Column="0" Grid.ColumnSpan="4" Grid.Row="1">
-            <!--#region Loading grid visibility control-->
-            <Grid.Style>
-                <Style TargetType="Grid">
-                    <Setter Property="Visibility" Value="Visible" />
-                    <Style.Triggers>
-                        <DataTrigger Binding="{Binding IsLoading}" Value="False">
-                            <Setter Property="Visibility" Value="Hidden" />
-                        </DataTrigger>
-                    </Style.Triggers>
-                </Style>
-            </Grid.Style>
-            <!--#endregion-->
-
+        <!--#region Loading screen-->
+        <Grid x:Name="LoadingScreenIsVisible"
+              Grid.Column="0"
+              Grid.ColumnSpan="4"
+              Grid.Row="1">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="auto" />
@@ -85,27 +75,17 @@
             </Grid.RowDefinitions>
 
             <LoadingSpinner:LoadingSpinner Grid.Column="1" Grid.Row="1" 
-                                           IsLoading="{Binding IsLoading}"
+                                           IsLoading="{Binding LoadingScreenIsVisible}"
                                            Margin="15" Thickness="5" Color="white"/>
-            <TextBlock Grid.Column="1" Grid.Row="2" Text="Loading  inbox, please hang tight..." />
+            <TextBlock Grid.Column="1" Grid.Row="2" Text="Loading  drafts, please hang tight..." />
         </Grid>
         <!--#endregion-->
-        
-        <!--#region "Empty" screen-->
-        <Grid Grid.Column="0" Grid.ColumnSpan="4" Grid.Row="1">
-            <!--#region Empty screen visibility control-->
-            <Grid.Style>
-                <Style TargetType="Grid">
-                    <Setter Property="Visibility" Value="Hidden" />
-                    <Style.Triggers>
-                        <DataTrigger Binding="{Binding IsInboxEmpty}" Value="True">
-                            <Setter Property="Visibility" Value="Visible" />
-                        </DataTrigger>
-                    </Style.Triggers>
-                </Style>
-            </Grid.Style>
-            <!--#endregion-->
 
+        <!--#region "Empty" screen-->
+        <Grid x:Name="EmptyScreenIsVisible"
+              Grid.Column="0" 
+              Grid.ColumnSpan="4" 
+              Grid.Row="1">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="auto" />
@@ -122,7 +102,7 @@
                    Grid.Column="1" Grid.Row="1" 
                    MaxHeight="150"/>
 
-            <TextBlock Text="Looks like your inbox is empty!" 
+            <TextBlock Text="Looks like you don't have any saved drafts!" 
                        FontSize="24"
                        Margin="15"
                        Grid.Column="1"
@@ -130,60 +110,82 @@
         </Grid>
         <!--#endregion-->
 
-        <!--#region Inbox-->
+        <!--#region Content-->
+        
+        <!--#region List-->
+        <Grid x:Name="ContentIsVisible"
+              Grid.Column="0"
+              Grid.ColumnSpan="4"
+              Grid.Row="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto" />
+            </Grid.RowDefinitions>
+            <ScrollViewer VerticalScrollBarVisibility="Auto">
+                <ItemsControl x:Name="Drafts">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Border Margin="0 15"
+                                    Style="{StaticResource RowContainer}"
+                                    cal:Message.Attach="[Event MouseLeftButtonUp]=[Action OpenDraft($dataContext)]"
+                                    MinHeight="25">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="auto" />
+                                        <ColumnDefinition Width="auto" />
+                                        <ColumnDefinition Width="auto" />
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="auto" />
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Text="{Binding To}"
+                                               VerticalAlignment="Center"
+                                               Margin="5" />
+                                    <TextBlock Text="{Binding SubjectLine}"
+                                               Grid.Column="1"
+                                               VerticalAlignment="Center"
+                                               Margin="5" />
+                                    <TextBlock Text="{Binding Snippet}"
+                                               Grid.Column="2"
+                                               Style="{StaticResource FieldText}"
+                                               VerticalAlignment="Center"
+                                               Margin="5" />
 
-        <!--#region ListView-->
-        <Grid Grid.Column="0" Grid.ColumnSpan="4" Grid.Row="1">
-            <!--#region Inbox grid visibility control-->
-            <Grid.Style>
-                <Style TargetType="Grid">
-                    <Setter Property="Visibility" Value="Hidden" />
-                    <Style.Triggers>
-                        <DataTrigger Binding="{Binding IsLoading}" Value="False">
-                            <Setter Property="Visibility" Value="Visible" />
-                        </DataTrigger>
-                        <DataTrigger Binding="{Binding IsInboxEmpty}" Value="True">
-                            <Setter Property="Visibility" Value="Hidden" />
-                        </DataTrigger>
-                    </Style.Triggers>
-                </Style>
-            </Grid.Style>
-            <!--#endregion-->
+                                    <StackPanel Orientation="Horizontal"
+                                                Grid.Column="4">
+                                        <Button x:Name="Send"
+                                                Style="{StaticResource SmallBtnStyling}"
+                                                Margin="3 3">
+                                            <StackPanel Orientation="Horizontal">
+                                                <TextBlock Text="Send Email" 
+                                                           VerticalAlignment="Center" 
+                                                           Margin="5 0" />
+                                                <Icon:PackIconMaterial Kind="SendCheck" 
+                                                                       Margin="5 0" 
+                                                                       VerticalAlignment="Center" 
+                                                                       Foreground="White"/>
+                                            </StackPanel>
+                                        </Button>
 
-            <ListView ItemsSource="{Binding Inbox}" 
-                      Margin="0 15" FontSize="14" 
-                      SelectedItem="{Binding SelectedEmail}"
-                      cal:Message.Attach="[Event MouseDoubleClick] = [Action OpenEmail]" >
-                <ListView.View>
-                    <GridView>
-                        <GridViewColumn Width="40" Header="👁">
-                            <GridViewColumn.CellTemplate>
-                                <DataTemplate>
-                                    <CheckBox IsChecked="{Binding IsRead}" IsEnabled="False"/>
-                                </DataTemplate>
-                            </GridViewColumn.CellTemplate>
-                        </GridViewColumn>
-                        <GridViewColumn Width="40" Header="⭐">
-                            <GridViewColumn.CellTemplate>
-                                <DataTemplate>
-                                    <CheckBox IsChecked="{Binding IsFavorite}" IsEnabled="False"/>
-                                </DataTemplate>
-                            </GridViewColumn.CellTemplate>
-                        </GridViewColumn>
-                        <GridViewColumn Header="Sender" 
-                                    DisplayMemberBinding="{Binding From}"
-                                    Width="auto" />
-                        <GridViewColumn Header="Subject Line" 
-                                    DisplayMemberBinding="{Binding SubjectLine}"
-                                    Width="auto" />
-                        <GridViewColumn Header="Body" 
-                                    DisplayMemberBinding="{Binding Snippet}"
-                                    Width="500" />
-                        <GridViewColumn DisplayMemberBinding="{Binding Date}"
-                                    Width="auto" />
-                    </GridView>
-                </ListView.View>
-            </ListView>
+                                        <Button x:Name="Schedule"
+                                                ToolTip="Schedule the email"
+                                                Margin="3 0"
+                                                Style="{StaticResource IconButton}">
+                                            <Icon:PackIconMaterial Kind="SendClock" Width="15" Height="15" Margin="15"/>
+                                        </Button>
+
+                                        <Button x:Name="Discard"
+                                                ToolTip="Discard the draft"
+                                                Margin="3 0"
+                                                Style="{StaticResource ExitIconButton}">
+                                            <Icon:PackIconMaterial Kind="TrashCan" Width="15" Height="15" Margin="15"/>
+                                        </Button>
+                                    </StackPanel>
+
+                                </Grid>
+                            </Border>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </ScrollViewer>
         </Grid>
         <!--#endregion-->
 

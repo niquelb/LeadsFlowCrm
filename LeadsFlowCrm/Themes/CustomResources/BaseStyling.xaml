@@ -163,5 +163,17 @@
         <Setter Property="FontWeight" Value="Medium" />
     </Style>
     <!--#endregion-->
+    
+    <!--#region Row container-->
+    <Style x:Key="RowContainer" TargetType="Border">
+        <Setter Property="Background" Value="{StaticResource AREghZyBrush.Deep.2.Background.Static}" />
+        <Setter Property="CornerRadius" Value="10" />
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Background" Value="{StaticResource AREghZyBrush.Deep.1.Background.Static}" />
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+    <!--#endregion-->
 
 </ResourceDictionary>
