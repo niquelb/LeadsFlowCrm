@@ -368,39 +368,6 @@ public class GmailServiceClass : IGmailServiceClass
 	}
 
 	/// <summary>
-	/// Method for creating a Message object based on a given Email object
-	/// </summary>
-	/// <param name="email">Email object to be used</param>
-	/// <returns>Message object</returns>
-	/// <exception cref="ArgumentNullException">If the email is null</exception>
-	private async Task<Message> CreateMessageAsync(Email email)
-	{
-		if (email == null)
-		{
-			throw new ArgumentNullException(nameof(email));
-		}
-
-		/*
-		 * To send or create drafts through the Gmail API we need to provide a Message object with the B64 encoded
-		 * email (MIME) as the "Raw" property
-		 */
-
-		var oauth = await _oAuthService.GetOauthServiceAsync();
-		var userInfo = await oauth.Userinfo.Get().ExecuteAsync();
-
-		// We create and encode the MIME message
-		var encodedEmail = Utilities.ConstructEmail(email.To, userInfo.Email, email.SubjectLine, email.Body);
-
-		// We create the Message object
-		var message = new Message
-		{
-			Raw = encodedEmail
-		};
-
-		return message;
-	}
-
-	/// <summary>
 	/// Method for getting the appropiate PageToken for the request
 	/// </summary>
 	/// <see cref="PageTokens"/>
@@ -650,6 +617,39 @@ public class GmailServiceClass : IGmailServiceClass
 		// We create and send the request
 		var draftRequest = service.Users.Drafts.Create(draft, Me);
 		await draftRequest.ExecuteAsync();
+	}
+
+	/// <summary>
+	/// Method for creating a Message object based on a given Email object
+	/// </summary>
+	/// <param name="email">Email object to be used</param>
+	/// <returns>Message object</returns>
+	/// <exception cref="ArgumentNullException">If the email is null</exception>
+	private async Task<Message> CreateMessageAsync(Email email)
+	{
+		if (email == null)
+		{
+			throw new ArgumentNullException(nameof(email));
+		}
+
+		/*
+		 * To send or create drafts through the Gmail API we need to provide a Message object with the B64 encoded
+		 * email (MIME) as the "Raw" property
+		 */
+
+		var oauth = await _oAuthService.GetOauthServiceAsync();
+		var userInfo = await oauth.Userinfo.Get().ExecuteAsync();
+
+		// We create and encode the MIME message
+		var encodedEmail = Utilities.ConstructEmail(email.To, userInfo.Email, email.SubjectLine, email.Body);
+
+		// We create the Message object
+		var message = new Message
+		{
+			Raw = encodedEmail
+		};
+
+		return message;
 	}
 	#endregion
 }
