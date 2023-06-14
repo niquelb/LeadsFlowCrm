@@ -116,14 +116,18 @@ public class InboxViewModel : Screen
 		if (email.IsFavorite)
 		{
 			await _gmailService.MarkEmailAsNotFavoriteAsync(email);
-
+			email.IsFavorite = false;
 			Utilities.ShowNotification("Marked as not favorite", "Successfully marked the email as not favorite.", NotificationType.Success);
-			return;
+		}
+		else
+		{
+			await _gmailService.MarkEmailAsFavoriteAsync(email);
+			email.IsFavorite = true;
+			Utilities.ShowNotification("Marked as favorite", "Successfully marked the email as favorite.", NotificationType.Success);
 		}
 
-		await _gmailService.MarkEmailAsFavoriteAsync(email);
-
-		Utilities.ShowNotification("Marked as favorite", "Successfully marked the email as favorite.", NotificationType.Success);
+		// We refresh the inbox to update the icons
+		RefreshInbox();
 	}
 	#endregion
 
