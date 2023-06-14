@@ -12,6 +12,7 @@ using System.Threading.Tasks;
 using Google.Apis.PeopleService.v1.Data;
 using System.Windows.Markup;
 using System.Text.Json;
+using System.Collections;
 
 namespace LeadsFlowCrm.Services.ModelServices;
 
@@ -120,8 +121,8 @@ public class ContactService : IContactService
 		 * 
 		 * The final URL should look like this without encoding → "[URL]/Contacts?query=stageId='ID'
 		 */
-		string encodedPipelineId = WebUtility.UrlEncode(email);
-		string query = $"email LIKE '{encodedPipelineId}'";
+		string encodedParam = WebUtility.UrlEncode(email);
+		string query = $"email LIKE '{encodedParam}'";
 
 		using HttpResponseMessage resp = await _apiClient.GetAsync($"api/Contacts?query={query}");
 		if (resp.IsSuccessStatusCode == false)
@@ -232,6 +233,46 @@ public class ContactService : IContactService
 
 			throw new Exception(resp.ReasonPhrase);
 		}
+	}
+
+	/// <summary>
+	/// Method for deleting the given contact from the API
+	/// </summary>
+	/// <param name="contact">Contact to be deleted</param>
+	/// <returns></returns>
+	/// <exception cref="ArgumentNullException">If the given contact's ID is null AND no contact with that email exists in the API</exception>
+	public async Task DeleteFromApiAsync(Contact contact)
+	{
+		_apiClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _loggedInUser.Token);
+
+        /*
+		 * If the given contact doesn't have an ID we have to retrieve it
+		 */
+        if (string.IsNullOrWhiteSpace(contact.Id))
+        {
+			var retrievedContact = await GetByEmailAsync(contact.Email);
+
+			// This shouldn't happen
+            if (retrievedContact == null)
+            {
+				throw new ArgumentNullException(nameof(contact.Id));
+            }
+
+            contact.Id = retrievedContact.Id;
+		}
+
+		string encodedId = WebUtility.UrlEncode(contact.Id);
+
+		using HttpResponseMessage resp = await _apiClient.DeleteAsync($"api/Contacts/{encodedId}");
+		if (resp.IsSuccessStatusCode == false)
+		{
+			if (resp.StatusCode == HttpStatusCode.Unauthorized)
+			{
+				throw new UnauthorizedAccessException(resp.ReasonPhrase);
+			}
+
+			throw new Exception(resp.ReasonPhrase);
+		};
 	}
 	#endregion
 }

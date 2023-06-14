@@ -11,5 +11,6 @@ namespace LeadsFlowCrm.Services.ModelServices
 		Task<IList<Contact>> GetFromPeopleApiAsync();
 		Task PostToApiAsync(Contact contact, string UserId, string? StageId = null);
 		Task<Contact?> GetByEmailAsync(string email);
+		Task DeleteFromApiAsync(Contact contact);
 	}
 }

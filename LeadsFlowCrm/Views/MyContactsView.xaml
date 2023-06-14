@@ -11,23 +11,7 @@
              d:DesignHeight="700" d:DesignWidth="1000">
     <Grid>
         <!--#region Contacts empty-->
-        <Grid>
-            <!--#region Empty screen visibility control-->
-            <Grid.Style>
-                <Style TargetType="Grid">
-                    <Setter Property="Visibility" Value="Hidden" />
-                    <Style.Triggers>
-                        <DataTrigger Binding="{Binding ShowEmptyScreen}" Value="True">
-                            <Setter Property="Visibility" Value="Visible" />
-                        </DataTrigger>
-                        <DataTrigger Binding="{Binding ShowEmptyScreen}" Value="False">
-                            <Setter Property="Visibility" Value="Hidden" />
-                        </DataTrigger>
-                    </Style.Triggers>
-                </Style>
-            </Grid.Style>
-            <!--#endregion-->
-
+        <Grid x:Name="EmptyScreenIsVisible">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="auto" />
@@ -53,23 +37,7 @@
         <!--#endregion-->
 
         <!--#region Loading Spinner-->
-        <Grid>
-            <!--#region Loading grid visibility control-->
-            <Grid.Style>
-                <Style TargetType="Grid">
-                    <Setter Property="Visibility" Value="Hidden" />
-                    <Style.Triggers>
-                        <DataTrigger Binding="{Binding ShowLoadingScreen}" Value="True">
-                            <Setter Property="Visibility" Value="Visible" />
-                        </DataTrigger>
-                        <DataTrigger Binding="{Binding ShowLoadingScreen}" Value="False">
-                            <Setter Property="Visibility" Value="Hidden" />
-                        </DataTrigger>
-                    </Style.Triggers>
-                </Style>
-            </Grid.Style>
-            <!--#endregion-->
-
+        <Grid x:Name="LoadingScreenIsVisible">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="auto" />
@@ -83,30 +51,14 @@
             </Grid.RowDefinitions>
 
             <LoadingSpinner:LoadingSpinner Grid.Column="1" Grid.Row="1" 
-                                           IsLoading="{Binding ShowLoadingScreen}"
+                                           IsLoading="{Binding LoadingScreenIsVisible}"
                                            Margin="15" Thickness="5" Color="white"/>
             <TextBlock Grid.Column="1" Grid.Row="2" Text="Loading  contacts, please hang tight..." />
         </Grid>
         <!--#endregion-->
 
         <!--#region Content-->
-        <Grid>
-            <!--#region Content grid visibility control-->
-            <Grid.Style>
-                <Style TargetType="Grid">
-                    <Setter Property="Visibility" Value="Visible" />
-                    <Style.Triggers>
-                        <DataTrigger Binding="{Binding ShowContent}" Value="True">
-                            <Setter Property="Visibility" Value="Visible" />
-                        </DataTrigger>
-                        <DataTrigger Binding="{Binding ShowContent}" Value="False">
-                            <Setter Property="Visibility" Value="Hidden" />
-                        </DataTrigger>
-                    </Style.Triggers>
-                </Style>
-            </Grid.Style>
-            <!--#endregion-->
-
+        <Grid x:Name="ContentIsVisible">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="auto" />
@@ -153,22 +105,8 @@
             </StackPanel>
             
             <!--#region No Contact Selected-->
-            <Grid Grid.Column="2">
-                <!--#region Not selected screen visibility control-->
-                <Grid.Style>
-                    <Style TargetType="Grid">
-                        <Setter Property="Visibility" Value="Hidden" />
-                        <Style.Triggers>
-                            <DataTrigger Binding="{Binding NoneSelected}" Value="True">
-                                <Setter Property="Visibility" Value="Visible" />
-                            </DataTrigger>
-                            <DataTrigger Binding="{Binding NoneSelected}" Value="False">
-                                <Setter Property="Visibility" Value="Hidden" />
-                            </DataTrigger>
-                        </Style.Triggers>
-                    </Style>
-                </Grid.Style>
-                <!--#endregion-->
+            <Grid x:Name="NoneSelectedIsVisible"
+                  Grid.Column="2">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*" />
                     <ColumnDefinition Width="auto" />
@@ -194,157 +132,144 @@
             <!--#endregion-->
 
             <!--#region Contact Info-->
-            <DockPanel Grid.Column="2"
-                  Margin="05 10">
-                <!--#region Not selected screen visibility control-->
-                <DockPanel.Style>
-                    <Style TargetType="DockPanel">
-                        <Setter Property="Visibility" Value="Hidden" />
-                        <Style.Triggers>
-                            <DataTrigger Binding="{Binding NoneSelected}" Value="True">
-                                <Setter Property="Visibility" Value="Hidden" />
-                            </DataTrigger>
-                            <DataTrigger Binding="{Binding NoneSelected}" Value="False">
-                                <Setter Property="Visibility" Value="Visible" />
-                            </DataTrigger>
-                        </Style.Triggers>
-                    </Style>
-                </DockPanel.Style>
-                <!--#endregion-->
-                <!--#region Name + Toolbar-->
-                <DockPanel DockPanel.Dock="Top"
-                           Margin="0 10">
-                    <TextBlock x:Name="SelectedContact_FullName"
-                               Text="Contact Name"
-                               VerticalAlignment="Center"
-                               FontWeight="DemiBold"
-                               DockPanel.Dock="Left"
-                               FontSize="24"/>
+            <Grid x:Name="SelectedContactIsVisible"
+                  Grid.Column="2">
+                <DockPanel Margin="05 10">
+                    <!--#region Name + Toolbar-->
+                    <DockPanel DockPanel.Dock="Top"
+                               Margin="0 10">
+                        <TextBlock x:Name="SelectedContact_FullName"
+                                   Text="Contact Name"
+                                   VerticalAlignment="Center"
+                                   FontWeight="DemiBold"
+                                   DockPanel.Dock="Left"
+                                   FontSize="24"/>
 
-                    <StackPanel Orientation="Horizontal"
-                                HorizontalAlignment="Right">
-                        <Button Style="{StaticResource IconButton}" 
-                                ToolTip="Stages and Pipelines">
-                            <Icon:PackIconMaterial Width="15" 
-                                                   Height="15" 
-                                                   Margin="15"  
-                                                   Kind="AccountDetails" />
-                        </Button>
-                        <Button Style="{StaticResource IconButton}"
-                                ToolTip="Edit Contact">
-                            <Icon:PackIconMaterial Width="15" 
-                                                   Height="15" 
-                                                   Margin="15"  
-                                                   Kind="AccountEdit" />
-                        </Button>
-                        <Button Style="{StaticResource IconButton}"
-                                ToolTip="Send New Correspondence">
-                            <Icon:PackIconMaterial Width="15" 
-                                                   Height="15" 
-                                                   Margin="15"  
-                                                   Kind="Email" />
-                        </Button>
-                        <Button x:Name="Delete"
-                                Style="{StaticResource ExitIconButton}"
-                                ToolTip="Delete Contact">
-                            <Icon:PackIconMaterial Width="15" 
-                                                   Height="15" 
-                                                   Margin="15"   
-                                                   Kind="TrashCan" />
-                        </Button>
-                    </StackPanel>
+                        <StackPanel Orientation="Horizontal"
+                                    HorizontalAlignment="Right">
+                            <Button Style="{StaticResource IconButton}" 
+                                    ToolTip="Stages and Pipelines">
+                                <Icon:PackIconMaterial Width="15" 
+                                                       Height="15" 
+                                                       Margin="15"  
+                                                       Kind="AccountDetails" />
+                            </Button>
+                            <Button Style="{StaticResource IconButton}"
+                                    ToolTip="Edit Contact">
+                                <Icon:PackIconMaterial Width="15" 
+                                                       Height="15" 
+                                                       Margin="15"  
+                                                       Kind="AccountEdit" />
+                            </Button>
+                            <Button Style="{StaticResource IconButton}"
+                                    ToolTip="Send New Correspondence">
+                                <Icon:PackIconMaterial Width="15" 
+                                                       Height="15" 
+                                                       Margin="15"  
+                                                       Kind="Email" />
+                            </Button>
+                            <Button x:Name="Delete"
+                                    Style="{StaticResource ExitIconButton}"
+                                    ToolTip="Delete Contact">
+                                <Icon:PackIconMaterial Width="15" 
+                                                       Height="15" 
+                                                       Margin="15"   
+                                                       Kind="TrashCan" />
+                            </Button>
+                        </StackPanel>
+
+                    </DockPanel>
+                    <!--#endregion-->
+
+                    <!--#region Main section-->
+                    <ScrollViewer VerticalScrollBarVisibility="Auto">
+                        <StackPanel Orientation="Vertical">
+                            <DockPanel Margin="0 10 0 0" >
+                                <TextBlock Text="Email"
+                                           DockPanel.Dock="Left"/>
+                                <TextBlock x:Name="SelectedContact_Email"
+                                           Text="demo@email.com"
+                                           Style="{StaticResource FieldText}"
+                                           DockPanel.Dock="Right"/>
+                            </DockPanel>
+                            <Separator Height="15"
+                                       Background="LightSlateGray"/>
+                            <DockPanel>
+                                <TextBlock Text="Phone Number"
+                                           DockPanel.Dock="Left"/>
+                                <TextBlock x:Name="SelectedContact_Phone"
+                                           Text="666768181"
+                                           Style="{StaticResource FieldText}"
+                                           DockPanel.Dock="Right"/>
+                            </DockPanel>
+                            <Separator Height="15"
+                                       Background="LightSlateGray"/>
+                            <DockPanel>
+                                <TextBlock Text="Website"
+                                           DockPanel.Dock="Left"/>
+                                <TextBlock x:Name="SelectedContact_Website"
+                                           Text="www.website.com"
+                                           Style="{StaticResource FieldText}"
+                                           DockPanel.Dock="Right"/>
+                            </DockPanel>
+                            <Separator Height="15"
+                                       Background="LightSlateGray"/>
+                            <DockPanel>
+                                <TextBlock Text="Company"
+                                           DockPanel.Dock="Left"/>
+                                <TextBlock x:Name="SelectedContact_Company"
+                                           Text="Company, Ltd."
+                                           Style="{StaticResource FieldText}"
+                                           DockPanel.Dock="Right"/>
+                            </DockPanel>
+                            <Separator Height="15"
+                                       Background="LightSlateGray"/>
+                            <DockPanel>
+                                <TextBlock Text="Job Title"
+                                           DockPanel.Dock="Left"/>
+                                <TextBlock x:Name="SelectedContact_JobTitle"
+                                           Text="Some job title"
+                                           Style="{StaticResource FieldText}"
+                                           DockPanel.Dock="Right"/>
+                            </DockPanel>
+                            <Separator Height="15"
+                                       Background="LightSlateGray"/>
+                            <DockPanel>
+                                <TextBlock Text="Location"
+                                           DockPanel.Dock="Left"/>
+                                <TextBlock x:Name="SelectedContact_Location"
+                                           Text="San Francisco, USA"
+                                           Style="{StaticResource FieldText}"
+                                           DockPanel.Dock="Right"/>
+                            </DockPanel>
+                            <Separator Height="15"
+                                       Background="LightSlateGray"/>
+                            <DockPanel>
+                                <TextBlock Text="Address"
+                                           DockPanel.Dock="Left"/>
+                                <TextBlock x:Name="SelectedContact_Address"
+                                           Text="52nd St. San Francisco, USA"
+                                           Style="{StaticResource FieldText}"
+                                           DockPanel.Dock="Right"/>
+                            </DockPanel>
+                            <Separator Height="15"
+                                       Background="LightSlateGray"/>
+                            <DockPanel>
+                                <TextBlock Text="Notes"
+                                           DockPanel.Dock="Top"/>
+                                <TextBox x:Name="SelectedContact_Notes"
+                                         Text="Some notes about the user..."
+                                         Style="{StaticResource TextArea}"
+                                         Margin="0 5"
+                                         IsReadOnly="True" />
+                            </DockPanel>
+                        </StackPanel>
+                    </ScrollViewer>
+                    <!--#endregion-->
 
                 </DockPanel>
                 <!--#endregion-->
-                
-                <!--#region Main section-->
-                <ScrollViewer VerticalScrollBarVisibility="Auto">
-                    <StackPanel Orientation="Vertical">
-                        <DockPanel Margin="0 10 0 0" >
-                            <TextBlock Text="Email"
-                                       DockPanel.Dock="Left"/>
-                            <TextBlock x:Name="SelectedContact_Email"
-                                       Text="demo@email.com"
-                                       Style="{StaticResource FieldText}"
-                                       DockPanel.Dock="Right"/>
-                        </DockPanel>
-                        <Separator Height="15"
-                                   Background="LightSlateGray"/>
-                        <DockPanel>
-                            <TextBlock Text="Phone Number"
-                                       DockPanel.Dock="Left"/>
-                            <TextBlock x:Name="SelectedContact_Phone"
-                                       Text="666768181"
-                                       Style="{StaticResource FieldText}"
-                                       DockPanel.Dock="Right"/>
-                        </DockPanel>
-                        <Separator Height="15"
-                                   Background="LightSlateGray"/>
-                        <DockPanel>
-                            <TextBlock Text="Website"
-                                       DockPanel.Dock="Left"/>
-                            <TextBlock x:Name="SelectedContact_Website"
-                                       Text="www.website.com"
-                                       Style="{StaticResource FieldText}"
-                                       DockPanel.Dock="Right"/>
-                        </DockPanel>
-                        <Separator Height="15"
-                                   Background="LightSlateGray"/>
-                        <DockPanel>
-                            <TextBlock Text="Company"
-                                       DockPanel.Dock="Left"/>
-                            <TextBlock x:Name="SelectedContact_Company"
-                                       Text="Company, Ltd."
-                                       Style="{StaticResource FieldText}"
-                                       DockPanel.Dock="Right"/>
-                        </DockPanel>
-                        <Separator Height="15"
-                                   Background="LightSlateGray"/>
-                        <DockPanel>
-                            <TextBlock Text="Job Title"
-                                       DockPanel.Dock="Left"/>
-                            <TextBlock x:Name="SelectedContact_JobTitle"
-                                       Text="Some job title"
-                                       Style="{StaticResource FieldText}"
-                                       DockPanel.Dock="Right"/>
-                        </DockPanel>
-                        <Separator Height="15"
-                                   Background="LightSlateGray"/>
-                        <DockPanel>
-                            <TextBlock Text="Location"
-                                       DockPanel.Dock="Left"/>
-                            <TextBlock x:Name="SelectedContact_Location"
-                                       Text="San Francisco, USA"
-                                       Style="{StaticResource FieldText}"
-                                       DockPanel.Dock="Right"/>
-                        </DockPanel>
-                        <Separator Height="15"
-                                   Background="LightSlateGray"/>
-                        <DockPanel>
-                            <TextBlock Text="Address"
-                                       DockPanel.Dock="Left"/>
-                            <TextBlock x:Name="SelectedContact_Address"
-                                       Text="52nd St. San Francisco, USA"
-                                       Style="{StaticResource FieldText}"
-                                       DockPanel.Dock="Right"/>
-                        </DockPanel>
-                        <Separator Height="15"
-                                   Background="LightSlateGray"/>
-                        <DockPanel>
-                            <TextBlock Text="Notes"
-                                       DockPanel.Dock="Top"/>
-                            <TextBox x:Name="SelectedContact_Notes"
-                                     Text="Some notes about the user..."
-                                     Style="{StaticResource TextArea}"
-                                     Margin="0 5"
-                                     IsReadOnly="True" />
-                        </DockPanel>
-                    </StackPanel>
-                </ScrollViewer>
-                <!--#endregion-->
-
-            </DockPanel>
-            <!--#endregion-->
+            </Grid>
 
         </Grid>
         <!--#endregion-->

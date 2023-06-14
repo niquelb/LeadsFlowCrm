@@ -29,23 +29,7 @@ public class MyContactsViewModel : Screen
 	{
 		await base.OnActivateAsync(cancellationToken);
 
-		ShowLoadingScreen = true;
-		NoneSelected = true;
-
-		// We retrieve the contacts from the API
-		Contacts = new BindableCollection<Contact>(await GetContactsAsync());
-
-		ShowLoadingScreen = false;
-
-		// If no contacts found, we show the "empty" screen
-		if (Contacts.Count <= 0)
-		{
-			ShowEmptyScreen = true;
-		}
-		else
-		{
-			ShowContent = true;
-		}
+		await LoadContacts();
 	}
 
 	#region Public Methods
@@ -54,19 +38,53 @@ public class MyContactsViewModel : Screen
 	/// </summary>
 	public async void Delete()
 	{
+		//TODO add confirmation dialog
 		try
 		{
-			//TODO Implement method
+			await _contactService.DeleteFromApiAsync(SelectedContact);
+
+			Utilities.ShowNotification("Contact deleted successfully", $"The contact was deleted successfully.", NotificationType.Success);
+
+			await LoadContacts();
 		}
 		catch (Exception ex)
 		{
-			Utilities.ShowNotification("Error loading contacts", $"There was an error loading the contacts ({ex.Message})", NotificationType.Error);
+			Utilities.ShowNotification("Error deleting contact", $"There was an error deleting the selected contact. ({ex.Message})", NotificationType.Error);
 			return;
 		}
 	}
 	#endregion
 
 	#region Private Methods
+
+	/// <summary>
+	/// Method for loading the contacts and initializing/resetting the view
+	/// </summary>
+	/// <returns></returns>
+	private async Task LoadContacts()
+	{
+		ContentIsVisible = false;
+		LoadingScreenIsVisible = true;
+
+		// We retrieve the contacts from the API
+		Contacts = new BindableCollection<Contact>(await GetContactsAsync());
+
+		SelectedContactIsVisible = false;
+		NoneSelectedIsVisible = true;
+
+		LoadingScreenIsVisible = false;
+
+		// If no contacts found, we show the "empty" screen
+		if (Contacts.Count <= 0)
+		{
+			EmptyScreenIsVisible = true;
+		}
+		else
+		{
+			ContentIsVisible = true;
+		}
+	}
+
 	/// <summary>
 	/// Method for retrieving the contacts from the API
 	/// </summary>
@@ -93,10 +111,12 @@ public class MyContactsViewModel : Screen
 
 	#region Private backing fields
 
-	private bool _showContent;
-	private bool _showEmptyScreen;
-	private bool _showLoadingScreen;
-	private bool _noneSelected = true;
+	private bool _contentIsVisible;
+	private bool _noneSelectedIsVisible;
+	private bool _loadingScreenIsVisible;
+	private bool _selectedContactIsVisible;
+	private bool _emptyScreenIsVisible;
+
 	private BindableCollection<Contact> _contacts = new();
 	private Contact _selectedContact = new();
 
@@ -125,33 +145,21 @@ public class MyContactsViewModel : Screen
 			NotifyOfPropertyChange();
 
 			// We display the contact info
-			NoneSelected = false;
+			NoneSelectedIsVisible = false;
+			SelectedContactIsVisible = true;
 		}
 	}
 
 	#region Visibility controls
 
 	/// <summary>
-	/// Controls wether the selected contact info is displayed or not
-	/// </summary>
-	public bool NoneSelected
-	{
-		get { return _noneSelected; }
-		set { 
-			_noneSelected = value;
-			NotifyOfPropertyChange();
-		}
-	}
-
-
-	/// <summary>
 	/// Controls wether the main content is showing or not
 	/// </summary>
-	public bool ShowContent
+	public bool ContentIsVisible
 	{
-		get { return _showContent; }
+		get { return _contentIsVisible; }
 		set { 
-			_showContent = value;
+			_contentIsVisible = value;
 			NotifyOfPropertyChange();
 		}
 	}
@@ -159,11 +167,11 @@ public class MyContactsViewModel : Screen
 	/// <summary>
 	/// Controls wether the loading screen is showing or not
 	/// </summary>
-	public bool ShowLoadingScreen
+	public bool LoadingScreenIsVisible
 	{
-		get { return _showLoadingScreen; }
+		get { return _loadingScreenIsVisible; }
 		set { 
-			_showLoadingScreen = value;
+			_loadingScreenIsVisible = value;
 			NotifyOfPropertyChange();
 		}
 	}
@@ -171,14 +179,35 @@ public class MyContactsViewModel : Screen
 	/// <summary>
 	/// Controls wether the "empty" screen is showing or not
 	/// </summary>
-	public bool ShowEmptyScreen
+	public bool NoneSelectedIsVisible
 	{
-		get { return _showEmptyScreen; }
+		get { return _noneSelectedIsVisible; }
 		set {
-			_showEmptyScreen = value;
+			_noneSelectedIsVisible = value;
 			NotifyOfPropertyChange();
 		}
 	}
+
+
+	public bool EmptyScreenIsVisible
+	{
+		get { return _emptyScreenIsVisible; }
+		set { 
+			_emptyScreenIsVisible = value;
+			NotifyOfPropertyChange();
+		}
+	}
+
+
+	public bool SelectedContactIsVisible
+	{
+		get { return _selectedContactIsVisible; }
+		set { 
+			_selectedContactIsVisible = value;
+			NotifyOfPropertyChange();
+		}
+	}
+
 
 	#endregion
 	#endregion
