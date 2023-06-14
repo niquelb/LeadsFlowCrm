@@ -175,6 +175,7 @@ public class CreateContactViewModel : Screen
 			FirstName = FirstName,
 			LastNames = LastNames,
 			Phone = Phone,
+			Notes = Notes,
 		};
 
         try
@@ -228,6 +229,7 @@ public class CreateContactViewModel : Screen
 	private string _jobTitle = string.Empty;
 	private string _location = string.Empty;
 	private string _address = string.Empty;
+	private string _notes;
 
 	private BindableCollection<Stage> _stages = new();
 	private BindableCollection<Pipeline> _pipelines = new();
@@ -409,6 +411,19 @@ public class CreateContactViewModel : Screen
 			NotifyOfPropertyChange();
 		}
 	}
+
+	/// <summary>
+	/// Notes
+	/// </summary>
+	public string Notes
+	{
+		get { return _notes; }
+		set { 
+			_notes = value;
+			NotifyOfPropertyChange();
+		}
+	}
+
 
 	#endregion
 

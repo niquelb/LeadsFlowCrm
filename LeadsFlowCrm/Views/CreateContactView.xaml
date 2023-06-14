@@ -145,6 +145,23 @@
                                          HorizontalAlignment="Right"
                                          DockPanel.Dock="Right"/>
                             </DockPanel>
+                            <Separator Height="15"
+                                       Background="LightSlateGray"/>
+                            <DockPanel>
+                                <TextBlock Text="Notes"
+                                           HorizontalAlignment="Center"
+                                           DockPanel.Dock="Top"/>
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+                                    <TextBox x:Name="Notes"
+                                             Margin="0 5"
+                                             Style="{StaticResource HintedTextBox}"
+                                             Utils:TextBoxHelper.Hint="Some notes about the user..." 
+                                             HorizontalAlignment="Stretch"/>
+                                </Grid>
+                            </DockPanel>
                         </StackPanel>
                     </ScrollViewer>
                     <!--#endregion-->
