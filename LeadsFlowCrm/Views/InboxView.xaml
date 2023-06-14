@@ -125,40 +125,100 @@
             </Grid.RowDefinitions>
             <!--#region Inbox-->
             <Grid Grid.ColumnSpan="2">
-                <ListView ItemsSource="{Binding Inbox}" 
-                          Margin="0 15" FontSize="14" 
-                          SelectedItem="{Binding SelectedEmail}"
-                          cal:Message.Attach="[Event MouseDoubleClick] = [Action OpenEmail]" >
-                    <ListView.View>
-                        <GridView>
-                            <GridViewColumn Width="40" Header="👁">
-                                <GridViewColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <CheckBox IsChecked="{Binding IsRead}" IsEnabled="False"/>
-                                    </DataTemplate>
-                                </GridViewColumn.CellTemplate>
-                            </GridViewColumn>
-                            <GridViewColumn Width="40" Header="⭐">
-                                <GridViewColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <CheckBox IsChecked="{Binding IsFavorite}" IsEnabled="False"/>
-                                    </DataTemplate>
-                                </GridViewColumn.CellTemplate>
-                            </GridViewColumn>
-                            <GridViewColumn Header="Sender" 
-                                            DisplayMemberBinding="{Binding From}"
-                                            Width="auto" />
-                            <GridViewColumn Header="Subject Line" 
-                                            DisplayMemberBinding="{Binding SubjectLine}"
-                                            Width="auto" />
-                            <GridViewColumn Header="Body" 
-                                            DisplayMemberBinding="{Binding Snippet}"
-                                            Width="500" />
-                            <GridViewColumn DisplayMemberBinding="{Binding Date}"
-                                            Width="auto" />
-                        </GridView>
-                    </ListView.View>
-                </ListView>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+                <ScrollViewer HorizontalScrollBarVisibility="Auto"
+                              VerticalScrollBarVisibility="Auto">
+                    <ItemsControl x:Name="Inbox">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Border Margin="0 5 0 0"
+                                        Style="{StaticResource RowContainer}"
+                                        cal:Message.Attach="[Event MouseLeftButtonUp]=[Action OpenEmail($dataContext)]"
+                                        Padding="10 0"
+                                        MinHeight="25">
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="auto" />
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition Width="auto" />
+                                        </Grid.ColumnDefinitions>
+
+                                        <!--#region Email info-->
+                                        <StackPanel Orientation="Horizontal">
+                                            <Icon:PackIconMaterial Foreground="{StaticResource AREghZyBrush.Foreground.Deeper}" 
+                                                                   Kind="EyeCheck" 
+                                                                   VerticalAlignment="Center"
+                                                                   Width="15" 
+                                                                   Height="15" 
+                                                                   Margin="5"/>
+                                            <Icon:PackIconMaterial Foreground="{StaticResource AREghZyBrush.Foreground.Deeper}" 
+                                                                   Kind="StarOutline" 
+                                                                   VerticalAlignment="Center"
+                                                                   Width="15" 
+                                                                   Height="15" 
+                                                                   Margin="5"/>
+                                            <Rectangle Width="1" 
+                                                       Fill="{StaticResource AREghZyBrush.Foreground.Deeper}"
+                                                       Margin="3 15" />
+
+                                            <TextBlock Text="{Binding From}"
+                                                        VerticalAlignment="Center"
+                                                        Margin="15 0" />
+
+                                            <TextBlock Text="{Binding SubjectLine}"
+                                                       Grid.Column="2"
+                                                       VerticalAlignment="Center"
+                                                       FontWeight="DemiBold"
+                                                       Margin="10 0" />
+                                            <TextBlock Text="{Binding Snippet}"
+                                                       TextTrimming="CharacterEllipsis"
+                                                       MaxWidth="400"
+                                                       Grid.Column="3"
+                                                       Style="{StaticResource FieldText}"
+                                                       VerticalAlignment="Center"
+                                                       Margin="10 0" />
+                                        </StackPanel>
+                                        <!--#endregion-->
+
+                                        <!--#region Buttons-->
+                                        <StackPanel Orientation="Horizontal"
+                                                    Grid.Column="2"
+                                                    Margin="0 3">
+                                            <Button ToolTip="Reply to the email"
+                                                    cal:Message.Attach="[Event Click]=[Action Reply($dataContext)]"
+                                                    Margin="3 0"
+                                                    Style="{StaticResource IconButton}">
+                                                <Icon:PackIconMaterial Width="15" Height="15" Margin="15" Kind="Reply" />
+                                            </Button>
+                                            <Button ToolTip="Mark the email as favorite"
+                                                    cal:Message.Attach="[Event Click]=[Action MarkFavorite($dataContext)]"
+                                                    Margin="3 0"
+                                                    Style="{StaticResource IconButton}">
+                                                <Icon:PackIconMaterial Width="15" Height="15" Margin="15" Kind="Star" />
+                                            </Button>
+                                            <Button ToolTip="Archive"
+                                                    cal:Message.Attach="[Event Click]=[Action Archive($dataContext)]"
+                                                    Margin="3 0"
+                                                    Style="{StaticResource IconButton}">
+                                                <Icon:PackIconMaterial Kind="ArchiveArrowDown" Width="15" Height="15" Margin="15"/>
+                                            </Button>
+                                            <Button ToolTip="Delete from inbox"
+                                                    cal:Message.Attach="[Event Click]=[Action Delete($dataContext)]"
+                                                    Margin="3 0"
+                                                    Style="{StaticResource ExitIconButton}">
+                                                <Icon:PackIconMaterial Kind="TrashCan" Width="15" Height="15" Margin="15"/>
+                                            </Button>
+                                        </StackPanel>
+                                        <!--#endregion-->
+
+                                    </Grid>
+                                </Border>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </ScrollViewer>
             </Grid>
             <!--#endregion-->
 

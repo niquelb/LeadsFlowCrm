@@ -24,21 +24,11 @@ public class InboxViewModel : Screen
 		_event = @event;
 	}
 
-	protected async override Task OnActivateAsync(CancellationToken cancellationToken)
+	protected async override Task OnInitializeAsync(CancellationToken cancellationToken)
 	{
-		await base.OnActivateAsync(cancellationToken);
+		await base.OnInitializeAsync(cancellationToken);
 
-		/*
-		 * We clear the selected item so that the same email can be opened twice in a row.
-		 * We don't use the property because that fires an event, instead we modify the backing field.
-		 */
-		_selectedEmail = null;
-	}
-
-	protected async override void OnViewLoaded(object view)
-	{
-		base.OnViewLoaded(view);
-
+		CurrentPageIndex = 1;
 		await LoadInbox();
 	}
 
@@ -86,14 +76,9 @@ public class InboxViewModel : Screen
 	/// <summary>
 	/// Method for opening an email from the inbox
 	/// </summary>
-	public async void OpenEmail()
+	public async void OpenEmail(Email email)
 	{
-		if (_selectedEmail == null)
-		{
-			return;
-		}
-
-		await PublishSelectedEmailAsync(_selectedEmail);
+		await PublishSelectedEmailAsync(email);
 	}
 	#endregion
 
@@ -151,7 +136,6 @@ public class InboxViewModel : Screen
 
 	private bool _canRefreshInbox;
 	private bool _canPreviousPage;
-	private Email? _selectedEmail;
 	private ObservableCollection<Email> _inbox = new();
 	private int _currentPageIndex = 1;
 
@@ -178,19 +162,6 @@ public class InboxViewModel : Screen
 		get { return _canPreviousPage; }
 		set { 
 			_canPreviousPage = value;
-			NotifyOfPropertyChange();
-		}
-	}
-
-	/// <summary>
-	/// Selected email
-	/// </summary>
-	public Email? SelectedEmail
-	{
-		get { return _selectedEmail; }
-		set
-		{
-			_selectedEmail = value;
 			NotifyOfPropertyChange();
 		}
 	}
