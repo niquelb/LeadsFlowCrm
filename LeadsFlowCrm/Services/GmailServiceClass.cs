@@ -686,6 +686,36 @@ public class GmailServiceClass : IGmailServiceClass
 		await sendRequest.ExecuteAsync();
 	}
 
+	/// <summary>
+	/// Method for sending a given draft through the Gmail API with the logged in user's email as the sender
+	/// </summary>
+	/// <see cref="SendEmailAsync(Email)"/>
+	/// <param name="email">Email object</param>
+	/// <returns></returns>
+	/// <exception cref="ArgumentNullException">If the given email's DraftId is null or empty</exception>
+	public async Task SendDraftAsync(Email email)
+	{
+        if (string.IsNullOrWhiteSpace(email.DraftId))
+        {
+			throw new ArgumentNullException("Email does not have a draft ID");
+        }
+
+		GmailService service = await GetGmailServiceAsync();
+
+		// We create the Message object
+		var message = await CreateMessageAsync(email);
+		
+		// We create the Draft object
+		var draft = new Draft()
+		{
+			Id = email.DraftId,
+			Message = message,
+		};
+
+		// We create and send the request
+		var sendRequest = service.Users.Drafts.Send(draft, Me);
+		await sendRequest.ExecuteAsync();
+	}
 
 	/// <summary>
 	/// Method for creating a draft through the Gmail API with the logged in user's email as the sender

@@ -155,7 +155,7 @@
 
                                     <StackPanel Orientation="Horizontal"
                                                 Grid.Column="5">
-                                        <Button x:Name="Send"
+                                        <Button cal:Message.Attach="[Event Click]=[Action Send($dataContext)]"
                                                 Style="{StaticResource SmallBtnStyling}"
                                                 Margin="3 3">
                                             <StackPanel Orientation="Horizontal">

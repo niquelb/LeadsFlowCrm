@@ -1,6 +1,8 @@
 ﻿using Caliburn.Micro;
 using LeadsFlowCrm.Models;
 using LeadsFlowCrm.Services;
+using LeadsFlowCrm.Utils;
+using Notifications.Wpf;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -44,6 +46,24 @@ public class DraftsViewModel : Screen
 	public void OpenDraft(Email email)
 	{
 		Trace.WriteLine(email.To, "EMAIL");
+	}
+
+	/// <summary>
+	/// Method for sending a draft>
+	/// </summary>
+	/// <param name="email">Selected draft</param>
+	public async void Send(Email email)
+	{
+		try
+		{
+			Utilities.ShowNotification("Sending draft", $"Sending the selected draft to {email.To}...", NotificationType.Information);
+			await _gmailService.SendDraftAsync(email);
+			Utilities.ShowNotification("Draft sent successfully", $"The draft was sent to {email.To}.", NotificationType.Success);
+		}
+		catch (Exception ex)
+		{
+			Utilities.ShowNotification("Error sending the draft", $"There was an error sending the selected draft to {email.To}. Please try again later. ({ex.Message})", NotificationType.Error);
+		}
 	}
 
 	#endregion
