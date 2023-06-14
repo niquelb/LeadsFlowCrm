@@ -270,9 +270,9 @@ public class GmailServiceClass : IGmailServiceClass
 		}
 
 		// We process each email asynchronously
-		foreach (Draft email in emailListResponse.Drafts)
+		foreach (Draft draft in emailListResponse.Drafts)
 		{
-			tasks.Add(ProcessEmailAsync(email.Message, gmailService));
+			tasks.Add(ProcessEmailAsync(draft.Message, gmailService, draft.Id));
 		}
 
 		/*
@@ -356,7 +356,7 @@ public class GmailServiceClass : IGmailServiceClass
 	/// <param name="gmailService">GmailService object</param>
 	/// <param name="userId">User's email</param>
 	/// <returns>Processed Email object</returns>
-	private static async Task<Email> ProcessEmailAsync(Message email, GmailService gmailService)
+	private static async Task<Email> ProcessEmailAsync(Message email, GmailService gmailService, string? draftId = null)
 	{
 		Email output = new();
 
@@ -455,7 +455,13 @@ public class GmailServiceClass : IGmailServiceClass
 			}
 		}
 
-		return output;
+		/*
+		 * If the email is a draft we save the id passed in as a parameter
+		 * If none was passed in this will be null, that's completely fine
+		 */
+		output.DraftId = draftId;
+
+        return output;
 	}
 
 	/// <summary>
@@ -679,6 +685,7 @@ public class GmailServiceClass : IGmailServiceClass
 		var sendRequest = service.Users.Messages.Send(message, Me);
 		await sendRequest.ExecuteAsync();
 	}
+
 
 	/// <summary>
 	/// Method for creating a draft through the Gmail API with the logged in user's email as the sender

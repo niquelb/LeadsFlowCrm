@@ -14,6 +14,11 @@ public class Email
     public Message Message { get; set; } = new Message();
 
     /// <summary>
+    /// If the email is a draft this will be it's ID
+    /// </summary>
+    public string? DraftId { get; set; }
+
+    /// <summary>
     /// Sender
     /// </summary>
     public string From { get; set; } = string.Empty;
