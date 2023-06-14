@@ -24,6 +24,9 @@ public class GmailServiceClass : IGmailServiceClass
 	/// <summary> List of the emails in the user's inbox </summary>
 	private List<Email>? _inbox;
 
+	/// <summary> List of drafts created by the user </summary>
+	private List<Email>? _drafts;
+
 	/// <summary> Service object for the Gmail API </summary>
 	private GmailService? _gmailService;
 	#endregion
@@ -82,6 +85,17 @@ public class GmailServiceClass : IGmailServiceClass
 	}
 
 	/// <summary>
+	/// Method for retrieving the drafts created by the user
+	/// </summary>
+	/// <returns>List of user's drafts</returns>
+	public async Task<IList<Email>> GetDraftsAsync()
+	{
+		_drafts ??= (await GetDraftsFromUserAsync()).ToList();
+
+		return _drafts;
+	}
+
+	/// <summary>
 	/// Method for refreshing the inbox object
 	/// </summary>
 	/// <returns></returns>
@@ -135,11 +149,12 @@ public class GmailServiceClass : IGmailServiceClass
 			return string.Empty;
 		}
 	}
-	
+
 	/// <summary>
 	/// Method for getting the emails from the user's inbox
 	/// </summary>
-	/// <returns>List of Email objects from the user's inbox</returns>
+	/// <param name="pagination">Optional pagination options</param>
+	/// <returns>List of emails from the user's inbox</returns>
 	private async Task<List<Email>> GetEmailsFromInboxAsync(PaginationOptions pagination = PaginationOptions.FirstPage)
 	{
 		List<Task<Email>> tasks = new();
@@ -171,6 +186,7 @@ public class GmailServiceClass : IGmailServiceClass
 			return new List<Email>();
 		}
 
+		// For the pagination, we only save the NextPageToken if it's a new page
         if (string.IsNullOrWhiteSpace(emailListResponse.NextPageToken) == false)
         {
 			bool isSame = false;
@@ -191,6 +207,75 @@ public class GmailServiceClass : IGmailServiceClass
 
         // We process each email asynchronously
         foreach (Message email in emailListResponse.Messages)
+		{
+			tasks.Add(ProcessEmailAsync(email, gmailService));
+		}
+
+		/*
+		 * We end up with list of tasks that will be executing in parallel, we await them.
+		 * This will return an array of emails.
+		 */
+		var output = await Task.WhenAll(tasks);
+
+		return new List<Email>(output);
+	}
+
+	/// <summary>
+	/// Method for getting the drafts created by the user
+	/// </summary>
+	/// <param name="pagination">Optional pagination options</param>
+	/// <returns></returns>
+	private async Task<IList<Email>> GetDraftsFromUserAsync(PaginationOptions pagination = PaginationOptions.FirstPage)
+	{
+		//TODO refactor to abide by DRY
+
+		List<Task<Email>> tasks = new();
+
+		// We get the service and the user's email
+		GmailService gmailService = await GetGmailServiceAsync();
+
+		// We define the request to retrieve email list
+		var emailListRequest = gmailService.Users.Messages.List(Me);
+
+		// Only get emails labeled as 'INBOX':
+		emailListRequest.LabelIds = new[] { "DRAFTS" };
+
+		// Specify the page size
+		emailListRequest.MaxResults = PageCount;
+
+		// We pass in the page token depending on the desired pagination
+		emailListRequest.PageToken = GetPageToken(pagination);
+
+		// Execute the request to retrieve the list of emails
+		ListMessagesResponse emailListResponse = emailListRequest.Execute();
+
+		// If there are no emails in the inbox or there was an error
+		if (emailListResponse == null || emailListResponse.Messages == null)
+		{
+			return new List<Email>();
+		}
+
+		// For the pagination, we only save the NextPageToken if it's a new page
+		if (string.IsNullOrWhiteSpace(emailListResponse.NextPageToken) == false)
+		{
+			bool isSame = false;
+
+			foreach (var t in PageTokens)
+			{
+				if (emailListResponse.NextPageToken.Equals(t))
+				{
+					isSame = true;
+				}
+			}
+
+			if (isSame == false)
+			{
+				PageTokens.Add(emailListResponse.NextPageToken);
+			}
+		}
+
+		// We process each email asynchronously
+		foreach (Message email in emailListResponse.Messages)
 		{
 			tasks.Add(ProcessEmailAsync(email, gmailService));
 		}
