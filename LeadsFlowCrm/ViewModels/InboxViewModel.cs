@@ -2,6 +2,8 @@
 using LeadsFlowCrm.EventModels;
 using LeadsFlowCrm.Models;
 using LeadsFlowCrm.Services;
+using LeadsFlowCrm.Utils;
+using Notifications.Wpf;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -79,6 +81,49 @@ public class InboxViewModel : Screen
 	public async void OpenEmail(Email email)
 	{
 		await PublishSelectedEmailAsync(email);
+	}
+
+	/// <summary>
+	/// Method for moving the email to the trash
+	/// </summary>
+	/// <param name="email">Email to be deleted</param>
+	public async void Delete(Email email)
+	{
+		await _gmailService.MarkEmailAsTrashAsync(email);
+
+		Inbox.Remove(email);
+		Utilities.ShowNotification("Email deleted", "Successfully deleted the email.", NotificationType.Success);
+	}
+
+	/// <summary>
+	/// Method for archiving the email
+	/// </summary>
+	/// <param name="email">Email to be archived</param>
+	public async void Archive(Email email)
+	{
+		await _gmailService.MarkEmailAsArchivedAsync(email);
+
+		Inbox.Remove(email);
+		Utilities.ShowNotification("Email archived", "Successfully archived the email.", NotificationType.Success);
+	}
+
+	/// <summary>
+	/// Method for starring/de-starring an email
+	/// </summary>
+	/// <param name="email">Email to be modified</param>
+	public async void MarkFavorite(Email email)
+	{
+		if (email.IsFavorite)
+		{
+			await _gmailService.MarkEmailAsNotFavoriteAsync(email);
+
+			Utilities.ShowNotification("Marked as not favorite", "Successfully marked the email as not favorite.", NotificationType.Success);
+			return;
+		}
+
+		await _gmailService.MarkEmailAsFavoriteAsync(email);
+
+		Utilities.ShowNotification("Marked as favorite", "Successfully marked the email as favorite.", NotificationType.Success);
 	}
 	#endregion
 

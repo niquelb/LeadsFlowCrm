@@ -116,7 +116,6 @@ public class SelectedEmailViewModel : Screen
 	{
 		await _gmailServiceClass.MarkEmailAsTrashAsync(SelectedEmail);
 
-
 		ShowNotification("Deleted", "Successfully deleted the email.", NotificationType.Success);
 	}
 
