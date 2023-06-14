@@ -153,7 +153,7 @@ public class MyContactsViewModel : Screen
 	#region Visibility controls
 
 	/// <summary>
-	/// Controls wether the main content is showing or not
+	/// Visibility control for the main content
 	/// </summary>
 	public bool ContentIsVisible
 	{
@@ -165,7 +165,7 @@ public class MyContactsViewModel : Screen
 	}
 
 	/// <summary>
-	/// Controls wether the loading screen is showing or not
+	/// Visibility control for the loading screen
 	/// </summary>
 	public bool LoadingScreenIsVisible
 	{
@@ -177,7 +177,7 @@ public class MyContactsViewModel : Screen
 	}
 
 	/// <summary>
-	/// Controls wether the "empty" screen is showing or not
+	/// Visibility control for the "no contact selected" view
 	/// </summary>
 	public bool NoneSelectedIsVisible
 	{
@@ -188,7 +188,9 @@ public class MyContactsViewModel : Screen
 		}
 	}
 
-
+	/// <summary>
+	/// Visibility control for the "empty" screen
+	/// </summary>
 	public bool EmptyScreenIsVisible
 	{
 		get { return _emptyScreenIsVisible; }
@@ -198,7 +200,9 @@ public class MyContactsViewModel : Screen
 		}
 	}
 
-
+	/// <summary>
+	/// Visibility control for the contact details view
+	/// </summary>
 	public bool SelectedContactIsVisible
 	{
 		get { return _selectedContactIsVisible; }
@@ -210,5 +214,6 @@ public class MyContactsViewModel : Screen
 
 
 	#endregion
+
 	#endregion
 }
