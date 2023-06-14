@@ -10,16 +10,23 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace LeadsFlowCrm.ViewModels;
 
 public class CreateContactViewModel : Screen
 {
 	private readonly IPipelineService _pipelineService;
+	private readonly IContactService _contactService;
+	private readonly LoggedInUser _loggedInUser;
 
-	public CreateContactViewModel(IPipelineService pipelineService)
+	public CreateContactViewModel(IPipelineService pipelineService,
+							   IContactService contactService,
+							   LoggedInUser loggedInUser)
     {
 		_pipelineService = pipelineService;
+		_contactService = contactService;
+		_loggedInUser = loggedInUser;
 	}
 
 	protected async override Task OnActivateAsync(CancellationToken cancellationToken)
@@ -54,6 +61,34 @@ public class CreateContactViewModel : Screen
 		};
 
 		return output;
+	}
+
+	/// <summary>
+	/// Method used to dispose and clear all the fields and selected pipelines/stages
+	/// </summary>
+	private void ClearFields()
+	{
+		// Clear the fields
+		FirstName = string.Empty;
+		LastNames = string.Empty;
+		Email = string.Empty;
+		Phone = string.Empty;
+		WebSite = string.Empty;
+		Company = string.Empty;
+		JobTitle = string.Empty;
+		Location = string.Empty;
+		Address = string.Empty;
+
+		// Clear the stages and pipeline
+		SelectedStage = null;
+		SelectedPipeline = new();
+		Stages = new();
+
+		// Modify visibility
+		StageSelectedIsVisible = false;
+		PipelineSelectedIsVisible = false;
+		PipelinesSelectorIsVisible = true;
+
 	}
 
 	#endregion
@@ -92,8 +127,52 @@ public class CreateContactViewModel : Screen
 		}
 	}
 
-	public async void SaveContact() { 
+	/// <summary>
+	/// Method for saving the newly created contact
+	/// </summary>
+	public async void SaveContact() {
 		//TODO check if contact exists
+
+		if (SelectedStage == null)
+		{
+			// TODO prettify this message box
+			MessageBoxResult messageBoxResult = MessageBox.Show("There are no stages selected for this contact, do you wish to create it anyway? You can assign a stage to it later in the 'My Contacts' screen.", 
+				"No stage selected", MessageBoxButton.YesNo);
+			if (messageBoxResult == MessageBoxResult.No)
+			{
+				Utilities.ShowNotification("Contact creation cancelled", "The contact was not created", NotificationType.Information);
+				return;
+			}
+
+			Utilities.ShowNotification("No stage assigned", "The contact will be created without any stage assigned to it", NotificationType.Warning);
+		}
+
+		CreatedContact = new()
+		{
+			Email = Email,
+			FirstName = FirstName,
+			LastNames = LastNames,
+			Phone = Phone,
+		};
+
+		try
+		{
+			await _contactService.PostToApiAsync(CreatedContact, _loggedInUser.Id, SelectedStage?.Id);
+			Utilities.ShowNotification("Creation successfull", "The contact was created successfully", NotificationType.Success);
+			ClearFields();
+		}
+		catch (Exception ex)
+		{
+			Utilities.ShowNotification("Creation failed", $"There was an error creating the contact ({ex.Message})", NotificationType.Error);
+		}
+    }
+
+	/// <summary>
+	/// Method for discarding the contact, clears all the fields and selected pipeline/stage
+	/// </summary>
+	public void DiscardContact()
+	{
+		ClearFields();
 	}
 
 	#endregion
@@ -105,6 +184,11 @@ public class CreateContactViewModel : Screen
 	/// </summary>
 	public string DisplayHeader { get; set; } = "Create Contact";
 
+	/// <summary>
+	/// Contact that will be created
+	/// </summary>
+	public Contact CreatedContact { get; set; } = new();
+
     #region Private property backing fields
 
     private bool _loadingSpinnerIsVisible;
@@ -114,10 +198,18 @@ public class CreateContactViewModel : Screen
 	private bool _stageSelectedIsVisible;
 
 	private string _firstName = string.Empty;
+	private string _lastNames = string.Empty;
 	private string _email = string.Empty;
+	private string _phone = string.Empty;
+	private string _website = string.Empty;
+	private string _company = string.Empty;
+	private string _jobTitle = string.Empty;
+	private string _location = string.Empty;
+	private string _address = string.Empty;
+
 	private BindableCollection<Stage> _stages = new();
 	private BindableCollection<Pipeline> _pipelines = new();
-	private Stage _selectedStageSelectedStage = new();
+	private Stage _selectedStage;
 	private Pipeline _selectedPipeline = new();
 
 	#endregion
@@ -161,11 +253,11 @@ public class CreateContactViewModel : Screen
 	/// <summary>
 	/// Selected stage
 	/// </summary>
-	public Stage SelectedStage
+	public Stage? SelectedStage
 	{
-		get { return _selectedStageSelectedStage; }
+		get { return _selectedStage; }
 		set {
-			_selectedStageSelectedStage = value;
+			_selectedStage = value;
 			NotifyOfPropertyChange();
 		}
 	}
@@ -183,7 +275,6 @@ public class CreateContactViewModel : Screen
 		}
 	}
 
-
 	#region Field properties
 
 	/// <summary>
@@ -200,18 +291,102 @@ public class CreateContactViewModel : Screen
 	}
 
 	/// <summary>
+	/// Last names
+	/// </summary>
+	public string LastNames
+	{
+		get { return _lastNames; }
+		set { 
+			_lastNames = value;
+			NotifyOfPropertyChange();
+		}
+	}
+
+	/// <summary>
 	/// Email
 	/// </summary>
 	public string Email
 	{
 		get { return _email; }
-		set { 
+		set
+		{
 			_email = value;
 			NotifyOfPropertyChange();
 			NotifyOfPropertyChange(nameof(CanSaveContact));
 		}
 	}
 
+	/// <summary>
+	/// Phone number
+	/// </summary>
+	public string Phone
+	{
+		get { return _phone; }
+		set { 
+			_phone = value;
+			NotifyOfPropertyChange();
+		}
+	}
+
+	/// <summary>
+	/// Website
+	/// </summary>
+	public string WebSite
+	{
+		get { return _website; }
+		set { 
+			_website = value;
+			NotifyOfPropertyChange();
+		}
+	}
+
+	/// <summary>
+	/// Compan name
+	/// </summary>
+	public string Company
+	{
+		get { return _company; }
+		set { 
+			_company = value;
+			NotifyOfPropertyChange();
+		}
+	}
+
+	/// <summary>
+	/// Job title
+	/// </summary>
+	public string JobTitle
+	{
+		get { return _jobTitle; }
+		set {
+			_jobTitle = value;
+			NotifyOfPropertyChange();
+		}
+	}
+
+	/// <summary>
+	/// Location
+	/// </summary>
+	public string Location
+	{
+		get { return _location; }
+		set {
+			_location = value;
+			NotifyOfPropertyChange();
+		}
+	}
+
+	/// <summary>
+	/// Address
+	/// </summary>
+	public string Address
+	{
+		get { return _address; }
+		set {
+			_address = value;
+			NotifyOfPropertyChange();
+		}
+	}
 
 	#endregion
 

@@ -18,5 +18,5 @@ public class Contact
 	}
     public string Phone { get; set; } = string.Empty;
 	public string Notes { get; set; } = string.Empty;
-    public DateTime LastEmailAt { get; set; } = DateTime.MinValue;
+    public DateTime? LastEmailAt { get; set; }
 }
