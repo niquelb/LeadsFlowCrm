@@ -227,18 +227,13 @@ public class GmailServiceClass : IGmailServiceClass
 	/// <returns></returns>
 	private async Task<IList<Email>> GetDraftsFromUserAsync(PaginationOptions pagination = PaginationOptions.FirstPage)
 	{
-		//TODO refactor to abide by DRY
-
 		List<Task<Email>> tasks = new();
 
 		// We get the service and the user's email
 		GmailService gmailService = await GetGmailServiceAsync();
 
 		// We define the request to retrieve email list
-		var emailListRequest = gmailService.Users.Messages.List(Me);
-
-		// Only get emails labeled as 'INBOX':
-		emailListRequest.LabelIds = new[] { "DRAFTS" };
+		var emailListRequest = gmailService.Users.Drafts.List(Me);
 
 		// Specify the page size
 		emailListRequest.MaxResults = PageCount;
@@ -247,10 +242,10 @@ public class GmailServiceClass : IGmailServiceClass
 		emailListRequest.PageToken = GetPageToken(pagination);
 
 		// Execute the request to retrieve the list of emails
-		ListMessagesResponse emailListResponse = emailListRequest.Execute();
+		var emailListResponse = emailListRequest.Execute();
 
 		// If there are no emails in the inbox or there was an error
-		if (emailListResponse == null || emailListResponse.Messages == null)
+		if (emailListResponse == null || emailListResponse.Drafts == null)
 		{
 			return new List<Email>();
 		}
@@ -275,9 +270,9 @@ public class GmailServiceClass : IGmailServiceClass
 		}
 
 		// We process each email asynchronously
-		foreach (Message email in emailListResponse.Messages)
+		foreach (Draft email in emailListResponse.Drafts)
 		{
-			tasks.Add(ProcessEmailAsync(email, gmailService));
+			tasks.Add(ProcessEmailAsync(email.Message, gmailService));
 		}
 
 		/*
@@ -409,6 +404,17 @@ public class GmailServiceClass : IGmailServiceClass
 		{
 			switch (header.Name)
 			{
+				/*
+				 * Recipient, this is for the emails/drafts sent by the user
+				 */
+				case "To":
+					string toHeader = header.Value;
+
+					// Extract the email address from the 'To' header
+					string? recipient = toHeader?.Split(',')[0]?.Trim(); // Extract the first email address if multiple recipients are present
+
+					output.To = recipient ?? string.Empty;
+					break;
 				/*
 				 * Sender, the standard format is "name <email>" which we break down into "From" and "FromEmail"
 				 */

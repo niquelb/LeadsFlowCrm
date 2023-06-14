@@ -1,5 +1,6 @@
 ﻿using Caliburn.Micro;
 using LeadsFlowCrm.Models;
+using LeadsFlowCrm.Services;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -12,23 +13,30 @@ namespace LeadsFlowCrm.ViewModels;
 
 public class DraftsViewModel : Screen
 {
-    public DraftsViewModel()
+	private readonly IGmailServiceClass _gmailService;
+
+	public DraftsViewModel(IGmailServiceClass gmailService)
     {
-        
-    }
+		_gmailService = gmailService;
+	}
 
 	protected async override Task OnInitializeAsync(CancellationToken cancellationToken)
 	{
 		await base.OnInitializeAsync(cancellationToken);
 
-		Drafts.Add(new()
-		{
-			To = "test@gmail.com",
-			SubjectLine = "Test email",
-			Snippet = "test email but in lower case haha",
-		});
+		LoadingScreenIsVisible = true;
 
-		ContentIsVisible = true;
+		Drafts = new(await _gmailService.GetDraftsAsync());
+
+		LoadingScreenIsVisible = false;
+
+        if (Drafts.Count <= 0)
+        {
+			EmptyScreenIsVisible = true;
+			return;
+        }
+
+        ContentIsVisible = true;
 	}
 
 	#region Public Methods
@@ -58,8 +66,21 @@ public class DraftsViewModel : Screen
 	private bool _contentIsVisible;
 
 	private BindableCollection<Email> _drafts = new();
+	private int _currentPageIndex;
 
 	#endregion
+
+	/// <summary>
+	/// Current page index for the paginator
+	/// </summary>
+	public int CurrentPageIndex
+	{
+		get { return _currentPageIndex; }
+		set { 
+			_currentPageIndex = value;
+			NotifyOfPropertyChange();
+		}
+	}
 
 	/// <summary>
 	/// List of drafts

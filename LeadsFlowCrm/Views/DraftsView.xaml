@@ -124,7 +124,7 @@
                 <ItemsControl x:Name="Drafts">
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
-                            <Border Margin="0 15"
+                            <Border Margin="0 5 0 0"
                                     Style="{StaticResource RowContainer}"
                                     cal:Message.Attach="[Event MouseLeftButtonUp]=[Action OpenDraft($dataContext)]"
                                     MinHeight="25">
@@ -133,24 +133,28 @@
                                         <ColumnDefinition Width="auto" />
                                         <ColumnDefinition Width="auto" />
                                         <ColumnDefinition Width="auto" />
+                                        <ColumnDefinition Width="auto" />
                                         <ColumnDefinition Width="*" />
                                         <ColumnDefinition Width="auto" />
                                     </Grid.ColumnDefinitions>
                                     <TextBlock Text="{Binding To}"
                                                VerticalAlignment="Center"
+                                               Style="{StaticResource FieldText}"
                                                Margin="5" />
+                                    <Separator Margin="15"
+                                               Grid.Column="1"/>
                                     <TextBlock Text="{Binding SubjectLine}"
-                                               Grid.Column="1"
+                                               Grid.Column="2"
                                                VerticalAlignment="Center"
                                                Margin="5" />
                                     <TextBlock Text="{Binding Snippet}"
-                                               Grid.Column="2"
+                                               Grid.Column="3"
                                                Style="{StaticResource FieldText}"
                                                VerticalAlignment="Center"
                                                Margin="5" />
 
                                     <StackPanel Orientation="Horizontal"
-                                                Grid.Column="4">
+                                                Grid.Column="5">
                                         <Button x:Name="Send"
                                                 Style="{StaticResource SmallBtnStyling}"
                                                 Margin="3 3">
