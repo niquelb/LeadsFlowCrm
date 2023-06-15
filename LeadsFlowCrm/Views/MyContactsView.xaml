@@ -161,7 +161,8 @@
                                                        Margin="15"  
                                                        Kind="AccountEdit" />
                             </Button>
-                            <Button Style="{StaticResource IconButton}"
+                            <Button x:Name="NewDraft"
+                                    Style="{StaticResource IconButton}"
                                     ToolTip="Send New Correspondence">
                                 <Icon:PackIconMaterial Width="15" 
                                                        Height="15" 

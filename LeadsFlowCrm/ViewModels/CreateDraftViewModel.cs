@@ -14,10 +14,11 @@ using System.Text.RegularExpressions;
 using System.Diagnostics;
 using Google.Apis.Gmail.v1;
 using Org.BouncyCastle.Cms;
+using LeadsFlowCrm.EventModels;
 
 namespace LeadsFlowCrm.ViewModels;
 
-public class CreateDraftViewModel : Screen
+public class CreateDraftViewModel : Screen, IHandle<DraftEvent>
 {
 
 	private readonly IGmailServiceClass _gmailService;
@@ -26,11 +27,14 @@ public class CreateDraftViewModel : Screen
 
 	public CreateDraftViewModel(IGmailServiceClass gmailService,
 							 IContactService contactService,
+							 IEventAggregator @event,
 							 LoggedInUser loggedInUser)
 	{
 		_gmailService = gmailService;
 		_contactService = contactService;
 		_loggedInUser = loggedInUser;
+
+		@event.SubscribeOnUIThread(this);
 	}
 
 	protected async override Task OnInitializeAsync(CancellationToken cancellationToken)
@@ -243,6 +247,7 @@ public class CreateDraftViewModel : Screen
 	#endregion
 
 	#region Private Methods
+
 	/// <summary>
 	/// Method for clearing the view
 	/// </summary>
@@ -256,6 +261,39 @@ public class CreateDraftViewModel : Screen
 
 		IsRecipientSelected = false;
 	}
+
+	#endregion
+
+	#region Events
+
+	/// <summary>
+	/// This is an event that gets fired when the user wants to create a new draft with a given list of emails (strings) as recipients
+	/// </summary>
+	/// <see cref="DraftEvent"/>
+	/// <param name="e">DraftEvent object</param>
+	/// <param name="cancellationToken">Cancellation token</param>
+	/// <returns></returns>
+	public async Task HandleAsync(DraftEvent e, CancellationToken cancellationToken)
+	{
+        if (e.Recipients.Count <= 0)
+        {
+			return;
+        }
+
+		/*
+		 * We add each email address as a recipient
+		 */
+        foreach (var r in e.Recipients)
+        {
+			To = r; // ← We do this since that's how the AddRecipients method is setup to work, by reading the Propery set by the user
+
+			AddRecipient();
+		}
+
+		// We clear the "To" property
+		To = string.Empty;
+    }
+
 	#endregion
 
 	#region Properties

@@ -16,12 +16,21 @@ namespace LeadsFlowCrm.ViewModels;
 public class MyContactsViewModel : Screen
 {
 	private readonly IContactService _contactService;
+	private readonly IEventAggregator _event;
+	private readonly IWindowManager _windowManager;
+	private readonly CreateDraftViewModel _createDraft;
 	private readonly LoggedInUser _loggedInUser;
 
 	public MyContactsViewModel(IContactService contactService,
-							   LoggedInUser loggedInUser)
+							IEventAggregator @event,
+							IWindowManager windowManager,
+							CreateDraftViewModel createDraft,
+							LoggedInUser loggedInUser)
     {
 		_contactService = contactService;
+		_event = @event;
+		_windowManager = windowManager;
+		_createDraft = createDraft;
 		_loggedInUser = loggedInUser;
 	}
 
@@ -52,6 +61,20 @@ public class MyContactsViewModel : Screen
 			Utilities.ShowNotification("Error deleting contact", $"There was an error deleting the selected contact. ({ex.Message})", NotificationType.Error);
 			return;
 		}
+	}
+
+	/// <summary>
+	/// Method to create a new draft with the selected contact as the recipient
+	/// </summary>
+	public async void NewDraft()
+	{
+		await _windowManager.ShowWindowAsync(_createDraft);
+
+		await _event.PublishOnUIThreadAsync(new DraftEvent() { 
+			Recipients = new List<string>() { 
+				SelectedContact.Email
+			} 
+		});
 	}
 	#endregion
 
