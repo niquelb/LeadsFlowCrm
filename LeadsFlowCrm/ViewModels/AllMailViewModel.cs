@@ -35,13 +35,18 @@ public class AllMailViewModel : Screen
 
 	#region Private Methods
 
+	/// <summary>
+	/// Method for loading (or refreshing) the emails
+	/// </summary>
+	/// <param name="pagination">Optional pagination parameters</param>
+	/// <returns></returns>
 	private async Task LoadEmailsAsync(PaginationOptions pagination = PaginationOptions.FirstPage)
 	{
 		LoadingScreenIsVisible = true;
 		ContentIsVisible = false;
 		EmptyScreenIsVisible = false;
 
-		Mail = new BindableCollection<Email>(await _gmailService.GetAllMailAsync(pagination));
+		Mail = new BindableCollection<Email>(await _gmailService.GetAllMailAsync(paginationOptions: pagination));
 
 		LoadingScreenIsVisible = false;
 

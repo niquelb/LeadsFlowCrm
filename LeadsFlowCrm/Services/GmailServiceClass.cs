@@ -107,6 +107,7 @@ public class GmailServiceClass : IGmailServiceClass
 	/// Method for retrieving all the user's emails
 	/// </summary>
 	/// <param name="paginationOption">Optional pagination options</param>
+	/// <param name="includeTrashSpam">Optional param for including spam or trash !! USELESS - Does nothing !!</param>
 	/// <returns></returns>
 	public async Task<IList<Email>> GetAllMailAsync(PaginationOptions paginationOptions = PaginationOptions.FirstPage, bool includeTrashSpam = false) =>
 		await GetEmailsFromUserAsync(pagination: paginationOptions, NoLabel, includeSpamTrash: includeTrashSpam);
