@@ -256,12 +256,12 @@ public class CreateContactViewModel : Screen
 	private string _jobTitle = string.Empty;
 	private string _location = string.Empty;
 	private string _address = string.Empty;
-	private string _notes;
+	private string _notes = string.Empty;
 
 	private BindableCollection<Stage> _stages = new();
 	private BindableCollection<Pipeline> _pipelines = new();
-	private Stage _selectedStage;
-	private Pipeline _selectedPipeline;
+	private Stage? _selectedStage;
+	private Pipeline? _selectedPipeline;
 
 	#endregion
 

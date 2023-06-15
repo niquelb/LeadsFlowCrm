@@ -139,23 +139,23 @@
                                     </Grid.ColumnDefinitions>
                                     <TextBlock Text="{Binding To}"
                                                VerticalAlignment="Center"
-                                               Style="{StaticResource FieldText}"
-                                               Margin="5" />
-                                    <Separator Margin="15"
-                                               Grid.Column="1"/>
+                                               Margin="15 0" />
+                                    
                                     <TextBlock Text="{Binding SubjectLine}"
-                                               TextTrimming="CharacterEllipsis"
-                                               MaxWidth="350"
-                                               Grid.Column="2"
-                                               VerticalAlignment="Center"
-                                               Margin="5" />
+                                                Grid.Column="2"
+                                                TextTrimming="CharacterEllipsis"
+                                                MaxWidth="350"
+                                                VerticalAlignment="Center"
+                                                FontWeight="DemiBold"
+                                                Margin="10 0" />
+                                    
                                     <TextBlock Text="{Binding Snippet}"
                                                TextTrimming="CharacterEllipsis"
                                                MaxWidth="450"
                                                Grid.Column="3"
                                                Style="{StaticResource FieldText}"
                                                VerticalAlignment="Center"
-                                               Margin="5" />
+                                               Margin="5 0" />
 
                                     <StackPanel Orientation="Horizontal"
                                                 Grid.Column="5">
@@ -195,47 +195,6 @@
                 </ItemsControl>
             </ScrollViewer>
         </Grid>
-        <!--#endregion-->
-
-        <!--#region Paginator-->
-        <Border Grid.Column="1" Grid.ColumnSpan="3" Grid.Row="3" 
-                HorizontalAlignment="Right" 
-                BorderBrush="{StaticResource AREghZyBrush.Foreground.Static}"
-                BorderThickness="1" CornerRadius="5" Padding="5"
-                Background="{StaticResource AREghZyBrush.Foreground.Static}"
-                Margin="10">
-            <StackPanel Orientation="Horizontal">
-                <Button x:Name="PreviousPage" 
-                        ToolTip="Previous page"
-                        Style="{StaticResource PaginatorBtn}">
-                    <Icon:PackIconMaterial Kind="ChevronLeft" 
-                                           Style="{StaticResource PaginatorBtnIcon}" />
-                </Button>
-
-                <Rectangle Width="1" 
-                           Fill="{StaticResource AREghZyBrush.Foreground.Deeper}"
-                           Margin="3 7" />
-
-                <Button ToolTip="Current page"
-                        Style="{StaticResource PaginatorBtn}">
-                    <TextBlock x:Name="CurrentPageIndex" 
-                               Style="{StaticResource PaginatorCurrentPageText}" />
-                </Button>
-
-                <Rectangle Width="1" 
-                           Fill="{StaticResource AREghZyBrush.Foreground.Deeper}"
-                           Margin="3 7" />
-
-                <Button x:Name="NextPage" 
-                        ToolTip="Next page"
-                        Style="{StaticResource PaginatorBtn}">
-                    <Icon:PackIconMaterial Kind="ChevronRight" 
-                                           Style="{StaticResource PaginatorBtnIcon}" />
-                </Button>
-
-            </StackPanel>
-
-        </Border>
         <!--#endregion-->
 
         <!--#endregion-->

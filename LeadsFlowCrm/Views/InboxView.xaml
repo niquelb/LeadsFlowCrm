@@ -260,13 +260,14 @@
                                                        VerticalAlignment="Center"
                                                        FontWeight="DemiBold"
                                                        Margin="10 0" />
+                                            
                                             <TextBlock Text="{Binding Snippet}"
                                                        TextTrimming="CharacterEllipsis"
                                                        MaxWidth="450"
                                                        Grid.Column="3"
                                                        Style="{StaticResource FieldText}"
                                                        VerticalAlignment="Center"
-                                                       Margin="10 0" />
+                                                       Margin="5 0" />
                                         </StackPanel>
                                         <!--#endregion-->
 

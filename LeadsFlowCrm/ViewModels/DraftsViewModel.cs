@@ -1,51 +1,58 @@
 ﻿using Caliburn.Micro;
+using Google.Apis.PeopleService.v1.Data;
+using LeadsFlowCrm.EventModels;
 using LeadsFlowCrm.Models;
 using LeadsFlowCrm.Services;
 using LeadsFlowCrm.Utils;
 using Notifications.Wpf;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using static LeadsFlowCrm.Services.GmailServiceClass;
 
 namespace LeadsFlowCrm.ViewModels;
 
 public class DraftsViewModel : Screen
 {
 	private readonly IGmailServiceClass _gmailService;
+	private readonly IEventAggregator _event;
 
-	public DraftsViewModel(IGmailServiceClass gmailService)
+	public DraftsViewModel(IGmailServiceClass gmailService,
+						IEventAggregator @event)
     {
 		_gmailService = gmailService;
+		_event = @event;
 	}
 
 	protected async override Task OnInitializeAsync(CancellationToken cancellationToken)
 	{
 		await base.OnInitializeAsync(cancellationToken);
 
-		LoadingScreenIsVisible = true;
-
-		Drafts = new(await _gmailService.GetDraftsAsync());
-
-		LoadingScreenIsVisible = false;
-
-        if (Drafts.Count <= 0)
-        {
-			EmptyScreenIsVisible = true;
-			return;
-        }
-
-        ContentIsVisible = true;
+		await LoadDraftsAsync();
 	}
 
 	#region Public Methods
 
-	public void OpenDraft(Email email)
+	/// <summary>
+	/// Method for refreshing the drafts
+	/// </summary>
+	public async void RefreshDrafts()
 	{
-		Trace.WriteLine(email.To, "EMAIL");
+		await LoadDraftsAsync();
+	}
+
+	/// <summary>
+	/// Method for opening a draft
+	/// </summary>
+	/// <param name="email">Selected draft</param>
+	public async void OpenDraft(Email email)
+	{
+		await PublishSelectedEmailAsync(email);
 	}
 
 	/// <summary>
@@ -67,6 +74,10 @@ public class DraftsViewModel : Screen
 		}
 	}
 
+	/// <summary>
+	/// Method for discarding a draft
+	/// </summary>
+	/// <param name="email">Selected draft</param>
 	public async void Discard(Email email)
 	{
 		try
@@ -86,6 +97,46 @@ public class DraftsViewModel : Screen
 
 	#region Private Methods
 
+	/// <summary>
+	/// Method for loading/refreshing the drafts with the optional pagination options
+	/// </summary>
+	/// <see cref="PaginationOptions"/>
+	/// <param name="pagination">Optional pagination options, default is 'PaginationOptions.FirstPage'</param>
+	/// <returns></returns>
+	private async Task LoadDraftsAsync(PaginationOptions pagination = PaginationOptions.FirstPage)
+	{
+		LoadingScreenIsVisible = true;
+		ContentIsVisible = false;
+		EmptyScreenIsVisible = false;
+
+		Drafts = new(await _gmailService.GetDraftsAsync());
+
+		LoadingScreenIsVisible = false;
+
+		if (Drafts.Count > 0)
+		{
+			ContentIsVisible = true;
+		}
+		else
+		{
+			EmptyScreenIsVisible = true;
+		}
+
+		CanRefreshDrafts = true;
+	}
+
+	/// <summary>
+	/// Event that gets triggered when the user selects an email
+	/// </summary>
+	/// <param name="email">Selected email</param>
+	/// <returns></returns>
+	private async Task PublishSelectedEmailAsync(Email email)
+	{
+		_gmailService.SelectedEmail = email;
+
+		await _event.PublishOnUIThreadAsync(new EmailSelectedEvent());
+	}
+
 	#endregion
 
 	#region Properties
@@ -101,19 +152,20 @@ public class DraftsViewModel : Screen
 	private bool _emptyScreenIsVisible;
 	private bool _contentIsVisible;
 
+	private bool _canRefreshDrafts;
 	private BindableCollection<Email> _drafts = new();
 	private int _currentPageIndex;
 
 	#endregion
 
 	/// <summary>
-	/// Current page index for the paginator
+	/// Can refresh drafts
 	/// </summary>
-	public int CurrentPageIndex
+	public bool CanRefreshDrafts
 	{
-		get { return _currentPageIndex; }
+		get { return _canRefreshDrafts; }
 		set { 
-			_currentPageIndex = value;
+			_canRefreshDrafts = value;
 			NotifyOfPropertyChange();
 		}
 	}
