@@ -1,5 +1,4 @@
 ﻿using Caliburn.Micro;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -28,7 +27,7 @@ public class ContactsShellViewModel : Conductor<object>.Collection.OneActive
 		 * This is to fix a weird issue with the tabcontroller binding to the Items collection.
 		 * If not done the view doesn't load properly again once navigated away from
 		 */
-        if (Items.Any())
+        if (Items.Count <= 0)
         {
 			AddItems();
         }

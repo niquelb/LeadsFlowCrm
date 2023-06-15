@@ -113,7 +113,7 @@ public class DraftsViewModel : Screen
 
 		LoadingScreenIsVisible = false;
 
-		if (Drafts.Any())
+		if (Drafts.Count > 0)
 		{
 			ContentIsVisible = true;
 		}
