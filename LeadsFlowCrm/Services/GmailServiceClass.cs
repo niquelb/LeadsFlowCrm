@@ -108,8 +108,8 @@ public class GmailServiceClass : IGmailServiceClass
 	/// </summary>
 	/// <param name="paginationOption">Optional pagination options</param>
 	/// <returns></returns>
-	public async Task<IList<Email>> GetAllMailAsync(PaginationOptions paginationOptions = PaginationOptions.FirstPage) =>
-		await GetEmailsFromUserAsync(pagination: paginationOptions, NoLabel);
+	public async Task<IList<Email>> GetAllMailAsync(PaginationOptions paginationOptions = PaginationOptions.FirstPage, bool includeTrashSpam = false) =>
+		await GetEmailsFromUserAsync(pagination: paginationOptions, NoLabel, includeSpamTrash: includeTrashSpam);
 
 	/// <summary>
 	/// Method for getting the processed and unencoded body of the selected email
@@ -155,9 +155,12 @@ public class GmailServiceClass : IGmailServiceClass
 		// We define the request to retrieve email list
 		var emailListRequest = gmailService.Users.Messages.List(Me);
 
-        // Only get emails with the requested label:
-        if (string.IsNullOrWhiteSpace(label) == false) // ← If no label is provided it means that all emails will be returned
-        {
+		// Query
+		emailListRequest.Q = "in:all -from:me";
+
+		// Only get emails with the requested label
+		if (string.IsNullOrWhiteSpace(label) == false) // ← If there are no labels, all emails will be returned (matching the previous query)
+		{
 			emailListRequest.LabelIds = new[] { label };
 		}
 
@@ -368,14 +371,19 @@ public class GmailServiceClass : IGmailServiceClass
 		output.Message = emailContent;
 
 		/*
+		 * The email labels (starred, unread...), these can be null
+		 */
+		var labels = emailContent.LabelIds;
+
+		/*
 		 * If the email is "starred" we mark it as favorite
 		 */
-		output.IsFavorite = emailContent.LabelIds.Contains("STARRED");
+		output.IsFavorite = labels != null && labels.Contains("STARRED");
 
 		/*
 		 * We check if the email is read or unread
 		 */
-		output.IsRead = !(emailContent.LabelIds.Contains("UNREAD"));
+		output.IsRead = labels != null && !(labels.Contains("UNREAD"));
 
 		/*
 		 * We parse the snippet, this is the part of the body visible in the inbox

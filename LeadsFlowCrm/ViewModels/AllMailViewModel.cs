@@ -3,10 +3,12 @@ using LeadsFlowCrm.Models;
 using LeadsFlowCrm.Services;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using static LeadsFlowCrm.Services.GmailServiceClass;
 
 namespace LeadsFlowCrm.ViewModels;
 
@@ -22,6 +24,9 @@ public class AllMailViewModel : Screen
 	protected async override Task OnInitializeAsync(CancellationToken cancellationToken)
 	{
 		await base.OnInitializeAsync(cancellationToken);
+
+		CurrentPageIndex = 1;
+		await LoadEmailsAsync();
 	}
 
 	#region Public Methods
@@ -29,6 +34,28 @@ public class AllMailViewModel : Screen
 	#endregion
 
 	#region Private Methods
+
+	private async Task LoadEmailsAsync(PaginationOptions pagination = PaginationOptions.FirstPage)
+	{
+		LoadingScreenIsVisible = true;
+		ContentIsVisible = false;
+		EmptyScreenIsVisible = false;
+
+		Mail = new BindableCollection<Email>(await _gmailService.GetAllMailAsync(pagination));
+
+		LoadingScreenIsVisible = false;
+
+		if (Mail.Count > 0)
+		{
+			ContentIsVisible = true;
+		}
+		else
+		{
+			EmptyScreenIsVisible = true;
+		}
+
+		// TODO CanRefresh = true
+	}
 
 	#endregion
 

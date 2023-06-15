@@ -31,7 +31,7 @@ public class InboxViewModel : Screen
 		await base.OnInitializeAsync(cancellationToken);
 
 		CurrentPageIndex = 1;
-		await LoadInbox();
+		await LoadInboxAsync();
 	}
 
 	#region Public Methods
@@ -43,7 +43,7 @@ public class InboxViewModel : Screen
 		CurrentPageIndex = 1;
 		CanPreviousPage = false;
 
-		await LoadInbox();
+		await LoadInboxAsync();
 	}
 
 	#region Pagination
@@ -55,7 +55,7 @@ public class InboxViewModel : Screen
 		CurrentPageIndex++;
 		CanPreviousPage = true;
 
-		await LoadInbox(PaginationOptions.NextPage);
+		await LoadInboxAsync(PaginationOptions.NextPage);
 	}
 
 	/// <summary>
@@ -71,7 +71,7 @@ public class InboxViewModel : Screen
 		CurrentPageIndex--;
 		CanPreviousPage = CurrentPageIndex != 1;
 
-		await LoadInbox(PaginationOptions.PreviousPage);
+		await LoadInboxAsync(PaginationOptions.PreviousPage);
 	}
 	#endregion
 
@@ -150,7 +150,7 @@ public class InboxViewModel : Screen
 	/// <see cref="PaginationOptions"/>
 	/// <param name="pagination">Optional pagination options, default is 'PaginationOptions.FirstPage'</param>
 	/// <returns></returns>
-	private async Task LoadInbox(PaginationOptions pagination = PaginationOptions.FirstPage)
+	private async Task LoadInboxAsync(PaginationOptions pagination = PaginationOptions.FirstPage)
 	{
 		LoadingScreenIsVisible = true;
 		ContentIsVisible = false;
