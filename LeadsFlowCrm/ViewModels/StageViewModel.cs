@@ -59,7 +59,7 @@ public class StageViewModel : Screen, IHandle<StageSelectedEvent>
 	/// <returns></returns>
 	private async Task LoadContacts()
 	{
-		StageEmptyIsVisible = false;
+		EmptyScreenIsVisible = false;
 		ContentIsVisible = false;
 
 		Contacts = new BindableCollection<Contact>(await _contactService.GetByStageAsync(Stage.Id));
@@ -69,8 +69,8 @@ public class StageViewModel : Screen, IHandle<StageSelectedEvent>
 			ContentIsVisible = true;
 		}
         else
-        {
-			StageEmptyIsVisible = true;
+		{
+			EmptyScreenIsVisible = true;
         }
     }
 
@@ -88,7 +88,7 @@ public class StageViewModel : Screen, IHandle<StageSelectedEvent>
 	public Contact? SelectedContact { get; set; }
 
 	#region Property backing fields
-	private bool _stageEmptyIsVisible;
+	private bool _emptyScreenIsVisible;
 	private bool _contentIsVisible;
 
 	private BindableCollection<Contact> _contacts = new();
@@ -111,11 +111,11 @@ public class StageViewModel : Screen, IHandle<StageSelectedEvent>
 	/// <summary>
 	/// Controls the visibility of the "empty" screen
 	/// </summary>
-	public bool StageEmptyIsVisible
+	public bool EmptyScreenIsVisible
 	{
-		get { return _stageEmptyIsVisible; }
+		get { return _emptyScreenIsVisible; }
 		set { 
-			_stageEmptyIsVisible = value;
+			_emptyScreenIsVisible = value;
 			NotifyOfPropertyChange();
 		}
 	}

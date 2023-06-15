@@ -156,9 +156,9 @@ public class ContactService : IContactService
         {
 			var contact = new Contact()
 			{
-				Email = person.EmailAddresses?.FirstOrDefault()?.Value ?? "-",
-				FirstName = person.Names?.FirstOrDefault()?.DisplayName ?? "-",
-				Phone = person.PhoneNumbers?.FirstOrDefault()?.Value ?? "-"
+				Email = person.EmailAddresses?.FirstOrDefault()?.Value ?? "",
+				FirstName = person.Names?.FirstOrDefault()?.DisplayName ?? "",
+				Phone = person.PhoneNumbers?.FirstOrDefault()?.Value ?? ""
 			};
 
 			output.Add(contact);
