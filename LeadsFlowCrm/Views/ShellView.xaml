@@ -14,8 +14,10 @@
               FontWeight="Light"
               Padding="3">
             <MenuItem Header="_File">
-                <MenuItem x:Name="New"
-                          Header="_New" />
+                <MenuItem Header="_New">
+                    <MenuItem x:Name="NewDraft"
+                              Header="_Draft" />
+                </MenuItem>
                 <MenuItem x:Name="Exit"
                           Header="E_xit" />
             </MenuItem>

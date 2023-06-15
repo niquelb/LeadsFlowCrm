@@ -18,7 +18,9 @@ public class ShellViewModel : Conductor<object>, IHandle<EmailSelectedEvent>, IH
 	private readonly PipelinesViewModel _pipelinesViewModel;
 	private readonly SelectedEmailViewModel _selectedEmailViewModel;
 	private readonly ContactsShellViewModel _contactsShellViewModel;
+	private readonly CreateDraftViewModel _createDraftViewModel;
 	private readonly IEventAggregator _event;
+	private readonly IWindowManager _windowManager;
 	private readonly IUserService _userService;
 
 	public ShellViewModel(EmailClientShellViewModel emailClientShellViewModel,
@@ -26,7 +28,9 @@ public class ShellViewModel : Conductor<object>, IHandle<EmailSelectedEvent>, IH
 					   SelectedEmailViewModel selectedEmailViewModel,
 					   ContactsShellViewModel contactsShellViewModel,
 					   SidebarViewModel sidebarViewModel,
+					   CreateDraftViewModel createDraftViewModel,
 					   IEventAggregator @event,
+					   IWindowManager windowManager,
 					   IUserService userService)
     {
 		_emailClientShellViewModel = emailClientShellViewModel;
@@ -34,7 +38,9 @@ public class ShellViewModel : Conductor<object>, IHandle<EmailSelectedEvent>, IH
 		_selectedEmailViewModel = selectedEmailViewModel;
 		_contactsShellViewModel = contactsShellViewModel;
 		Sidebar = sidebarViewModel;
+		_createDraftViewModel = createDraftViewModel;
 		_event = @event;
+		_windowManager = windowManager;
 		_userService = userService;
 		_event.SubscribeOnUIThread(this);
 
@@ -48,6 +54,16 @@ public class ShellViewModel : Conductor<object>, IHandle<EmailSelectedEvent>, IH
 	{
 		await _userService.LogoutUserAsync();
 
+		await TryCloseAsync();
+	}
+
+	public async void NewDraft()
+	{
+		await _windowManager.ShowWindowAsync(_createDraftViewModel);
+	}
+
+	public async void Exit()
+	{
 		await TryCloseAsync();
 	}
 
