@@ -58,11 +58,27 @@ public class DraftsViewModel : Screen
 		{
 			Utilities.ShowNotification("Sending draft", $"Sending the selected draft to {email.To}...", NotificationType.Information);
 			await _gmailService.SendDraftAsync(email);
+			Drafts.Remove(email);
 			Utilities.ShowNotification("Draft sent successfully", $"The draft was sent to {email.To}.", NotificationType.Success);
 		}
 		catch (Exception ex)
 		{
 			Utilities.ShowNotification("Error sending the draft", $"There was an error sending the selected draft to {email.To}. Please try again later. ({ex.Message})", NotificationType.Error);
+		}
+	}
+
+	public async void Discard(Email email)
+	{
+		try
+		{
+			Utilities.ShowNotification("Deleting draft", $"Deleting the selected draft...", NotificationType.Information);
+			await _gmailService.DeleteDraftAsync(email);
+			Drafts.Remove(email);
+			Utilities.ShowNotification("Draft deletion successfully", $"The draft to {email.To} was deleted successfully.", NotificationType.Success);
+		}
+		catch (Exception ex)
+		{
+			Utilities.ShowNotification("Error deleting the draft", $"There was an error deleting the selected draft. Please try again later. ({ex.Message})", NotificationType.Error);
 		}
 	}
 

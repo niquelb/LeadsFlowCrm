@@ -14,7 +14,8 @@
         ResizeMode="CanResizeWithGrip" 
         WindowStyle="None" 
         AllowsTransparency="True" 
-        Background="{x:Null}" MouseDown="Window_MouseDown">
+        Background="{x:Null}" 
+        MouseLeftButtonDown="Window_MouseDown">
     <Border CornerRadius="10" 
             Background="{StaticResource AREghZyBrush.Deep.1.Background.Static}">
         <Grid Margin="10">

@@ -12,7 +12,7 @@
         WindowStyle="None" 
         AllowsTransparency="True" 
         Background="{x:Null}" 
-        MouseDown="Window_MouseDown">
+        MouseLeftButtonDown="Window_MouseDown">
     <Border Background="#0e022c"
             CornerRadius="10">
         <Grid>

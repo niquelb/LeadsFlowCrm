@@ -144,10 +144,14 @@
                                     <Separator Margin="15"
                                                Grid.Column="1"/>
                                     <TextBlock Text="{Binding SubjectLine}"
+                                               TextTrimming="CharacterEllipsis"
+                                               MaxWidth="350"
                                                Grid.Column="2"
                                                VerticalAlignment="Center"
                                                Margin="5" />
                                     <TextBlock Text="{Binding Snippet}"
+                                               TextTrimming="CharacterEllipsis"
+                                               MaxWidth="450"
                                                Grid.Column="3"
                                                Style="{StaticResource FieldText}"
                                                VerticalAlignment="Center"
@@ -176,7 +180,7 @@
                                             <Icon:PackIconMaterial Kind="SendClock" Width="15" Height="15" Margin="15"/>
                                         </Button>
 
-                                        <Button x:Name="Discard"
+                                        <Button cal:Message.Attach="[Event Click]=[Action Discard($dataContext)]"
                                                 ToolTip="Discard the draft"
                                                 Margin="3 0"
                                                 Style="{StaticResource ExitIconButton}">
