@@ -18,5 +18,6 @@ public class Contact
 	}
     public string Phone { get; set; } = string.Empty;
 	public string Notes { get; set; } = string.Empty;
+	public string? StageId { get; set; }
     public DateTime? LastEmailAt { get; set; }
 }

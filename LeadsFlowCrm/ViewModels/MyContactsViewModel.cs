@@ -18,18 +18,24 @@ public class MyContactsViewModel : Screen
 	private readonly IContactService _contactService;
 	private readonly IEventAggregator _event;
 	private readonly IWindowManager _windowManager;
+	private readonly IPipelineService _pipelineService;
+	private readonly IStageService _stageService;
 	private readonly CreateDraftViewModel _createDraft;
 	private readonly LoggedInUser _loggedInUser;
 
 	public MyContactsViewModel(IContactService contactService,
 							IEventAggregator @event,
 							IWindowManager windowManager,
+							IPipelineService pipelineService,
+							IStageService stageService,
 							CreateDraftViewModel createDraft,
 							LoggedInUser loggedInUser)
     {
 		_contactService = contactService;
 		_event = @event;
 		_windowManager = windowManager;
+		_pipelineService = pipelineService;
+		_stageService = stageService;
 		_createDraft = createDraft;
 		_loggedInUser = loggedInUser;
 	}
@@ -38,7 +44,10 @@ public class MyContactsViewModel : Screen
 	{
 		await base.OnActivateAsync(cancellationToken);
 
+		SelectedContact = null;
 		await LoadContacts();
+
+		AssignedPipeline = await _pipelineService.GetPipelineAsync();
 	}
 
 	#region Public Methods
@@ -124,6 +133,39 @@ public class MyContactsViewModel : Screen
 			return new List<Contact>();
 		}
 	}
+
+	/// <summary>
+	/// Method for loading the selected assigned pipeline's stages
+	/// </summary>
+	/// <returns></returns>
+	private async Task LoadContactStages()
+	{
+        if (HasPipeline == false)
+        {
+			return;
+        }
+
+        if (SelectedContact == null)
+        {
+			return;
+        }
+
+        Stages.Clear();
+
+		var apiStages = await _stageService.GetByPipelineAsync(AssignedPipeline.Id);
+
+        foreach (var s in apiStages)
+        {
+			bool isCurrent = SelectedContact.StageId != null && SelectedContact.StageId == s.Id;
+
+			Stages.Add(new()
+			{
+				GivenStage = s,
+				StageName = s.Name,
+				IsCurrentStage = isCurrent,
+			});
+        }
+    }
 	#endregion
 
 	#region Properties
@@ -132,16 +174,20 @@ public class MyContactsViewModel : Screen
 	/// </summary>
 	public string DisplayHeader { get; } = "My Contacts";
 
-	#region Private backing fields
+    public bool HasPipeline { get; set; }
 
-	private bool _contentIsVisible;
+    #region Private backing fields
+
+    private bool _contentIsVisible;
 	private bool _noneSelectedIsVisible;
 	private bool _loadingScreenIsVisible;
 	private bool _selectedContactIsVisible;
 	private bool _emptyScreenIsVisible;
 
 	private BindableCollection<Contact> _contacts = new();
-	private Contact _selectedContact = new();
+	private Contact? _selectedContact = new();
+	private BindableCollection<ContactStage> _stages = new();
+	private Pipeline _assignedPipeline = new();
 
 	#endregion
 
@@ -160,18 +206,49 @@ public class MyContactsViewModel : Screen
 	/// <summary>
 	/// Selected contact
 	/// </summary>
-	public Contact SelectedContact
+	public Contact? SelectedContact
 	{
 		get { return _selectedContact; }
 		set { 
 			_selectedContact = value;
 			NotifyOfPropertyChange();
 
-			// We display the contact info
-			NoneSelectedIsVisible = false;
-			SelectedContactIsVisible = true;
+            if (value != null)
+            {
+				// We display the contact info
+				NoneSelectedIsVisible = false;
+				SelectedContactIsVisible = true;
+
+				LoadContactStages();
+			}
+        }
+	}
+
+	/// <summary>
+	/// Assigned pipeline
+	/// </summary>
+	public Pipeline AssignedPipeline
+	{
+		get { return _assignedPipeline; }
+		set { 
+			_assignedPipeline = value;
+			NotifyOfPropertyChange();
 		}
 	}
+
+
+	/// <summary>
+	/// Stages from the pipeline
+	/// </summary>
+	public BindableCollection<ContactStage> Stages
+	{
+		get { return _stages; }
+		set { 
+			_stages = value; 
+			NotifyOfPropertyChange();
+		}
+	}
+
 
 	#region Visibility controls
 

@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:LeadsFlowCrm.Views"
+             xmlns:cal="http://www.caliburnproject.org"
              xmlns:Utils="clr-namespace:LeadsFlowCrm.Utils"
              xmlns:Icon="http://metro.mahapps.com/winfx/xaml/iconpacks"
              xmlns:LoadingSpinner="clr-namespace:LoadingSpinnerControl;assembly=LoadingSpinnerControl"
@@ -147,13 +148,6 @@
 
                         <StackPanel Orientation="Horizontal"
                                     HorizontalAlignment="Right">
-                            <Button Style="{StaticResource IconButton}" 
-                                    ToolTip="Stages and Pipelines">
-                                <Icon:PackIconMaterial Width="15" 
-                                                       Height="15" 
-                                                       Margin="15"  
-                                                       Kind="AccountDetails" />
-                            </Button>
                             <Button Style="{StaticResource IconButton}"
                                     ToolTip="Edit Contact">
                                 <Icon:PackIconMaterial Width="15" 
@@ -181,10 +175,103 @@
 
                     </DockPanel>
                     <!--#endregion-->
-
+                    
                     <!--#region Main section-->
                     <ScrollViewer VerticalScrollBarVisibility="Auto">
                         <StackPanel Orientation="Vertical">
+                            <!--#region Stages-->
+                            <Expander ExpandDirection="Down"
+                                      Margin="0 10">
+                                <!--#region Header-->
+                                <Expander.Header>
+                                    <StackPanel Orientation="Horizontal"
+                                                ToolTip="Expand to see this pipeline's stages">
+                                        <TextBlock Text="Currently in the "
+                                                   FontWeight="Light"/>
+                                        <TextBlock x:Name="AssignedPipeline_Name"
+                                                   FontWeight="DemiBold"/>
+                                        <TextBlock Text=" pipeline."
+                                                   FontWeight="Light" />
+                                    </StackPanel>
+                                </Expander.Header>
+                                <!--#endregion-->
+                                
+                                <!--#region Stage list-->
+                                <ItemsControl x:Name="Stages">
+                                    <ItemsControl.ItemTemplate>
+                                        <DataTemplate>
+                                            <Border CornerRadius="15"
+                                                    MinHeight="50"
+                                                    VerticalAlignment="Top"
+                                                    Background="{StaticResource AREghZyBrush.Deep.1.Background.Static}" 
+                                                    BorderBrush="{StaticResource AREghZyBrush.ColourfulGlyph.Static}"
+                                                    BorderThickness="2"
+                                                    Margin="10"
+                                                    Padding="5">
+                                                <Grid>
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="auto" />
+                                                        <ColumnDefinition Width="*" />
+                                                        <ColumnDefinition Width="auto" />
+                                                    </Grid.ColumnDefinitions>
+                                                    <TextBlock Text="{Binding StageName}"
+                                                               VerticalAlignment="Center"
+                                                               Grid.Column="0"/>
+
+                                                    <!--#region Current stage text-->
+                                                    <Grid Grid.Column="2">
+                                                        <!--#region Visibility control-->
+                                                        <Grid.Style>
+                                                            <Style TargetType="Grid">
+                                                                <Setter Property="Visibility" Value="Hidden" />
+                                                                <Style.Triggers>
+                                                                    <DataTrigger Binding="{Binding IsCurrentStage}" Value="False">
+                                                                        <Setter Property="Visibility" Value="Hidden" />
+                                                                    </DataTrigger>
+                                                                    <DataTrigger Binding="{Binding IsCurrentStage}" Value="True">
+                                                                        <Setter Property="Visibility" Value="Visible" />
+                                                                    </DataTrigger>
+                                                                </Style.Triggers>
+                                                            </Style>
+                                                        </Grid.Style>
+                                                        <!--#endregion-->
+                                                        <TextBlock Text="Currently assigned stage."
+                                                                   VerticalAlignment="Center"
+                                                                   Margin="5 0"
+                                                                   Style="{StaticResource FieldText}"/>
+                                                    </Grid>
+                                                    <!--#endregion-->
+
+                                                    <!--#region Select stage button-->
+                                                    <Grid Grid.Column="2">
+                                                        <!--#region Visibility control-->
+                                                        <Grid.Style>
+                                                            <Style TargetType="Grid">
+                                                                <Setter Property="Visibility" Value="Hidden" />
+                                                                <Style.Triggers>
+                                                                    <DataTrigger Binding="{Binding IsCurrentStage}" Value="False">
+                                                                        <Setter Property="Visibility" Value="Visible" />
+                                                                    </DataTrigger>
+                                                                    <DataTrigger Binding="{Binding IsCurrentStage}" Value="True">
+                                                                        <Setter Property="Visibility" Value="Hidden" />
+                                                                    </DataTrigger>
+                                                                </Style.Triggers>
+                                                            </Style>
+                                                        </Grid.Style>
+                                                        <!--#endregion-->
+                                                        <Button Content="Select Stage"
+                                                                Style="{StaticResource SmallBtnStyling}"
+                                                                cal:Message.Attach="[Event Click] = [Action SelectStage($dataContext)]" />
+                                                    </Grid>
+                                                    <!--#endregion-->
+                                                </Grid>
+                                            </Border>
+                                        </DataTemplate>
+                                    </ItemsControl.ItemTemplate>
+                                </ItemsControl>
+                                <!--#endregion-->
+                            </Expander>
+                            <!--#endregion-->
                             <DockPanel Margin="0 10 0 0" >
                                 <TextBlock Text="Email"
                                            DockPanel.Dock="Left"/>
