@@ -12,12 +12,15 @@ public class EmailClientShellViewModel : Conductor<object>.Collection.OneActive
 {
 	private readonly InboxViewModel _inbox;
 	private readonly DraftsViewModel _drafts;
+	private readonly AllMailViewModel _allMail;
 
 	public EmailClientShellViewModel(InboxViewModel inbox,
-								  DraftsViewModel drafts)
+								  DraftsViewModel drafts,
+								  AllMailViewModel allMail)
     {
 		_inbox = inbox;
 		_drafts = drafts;
+		_allMail = allMail;
 	}
 	protected async override Task OnActivateAsync(CancellationToken cancellationToken)
 	{
@@ -47,6 +50,7 @@ public class EmailClientShellViewModel : Conductor<object>.Collection.OneActive
 	{
 		Items.Clear();
 		Items.Add(_inbox);
+		Items.Add(_allMail);
 		Items.Add(_drafts);
 	}
 }

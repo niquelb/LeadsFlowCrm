@@ -1,0 +1,404 @@
+﻿<UserControl x:Class="LeadsFlowCrm.Views.AllMailView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:LeadsFlowCrm.Views"
+             xmlns:cal="http://www.caliburnproject.org"
+             xmlns:Utils="clr-namespace:LeadsFlowCrm.Utils"
+             xmlns:LoadingSpinner="clr-namespace:LoadingSpinnerControl;assembly=LoadingSpinnerControl"
+             xmlns:Icon="http://metro.mahapps.com/winfx/xaml/iconpacks"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <Grid Margin="5">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="auto" />
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="auto" />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <!--#region SearchBox-->
+        <Border Grid.Column="1" Grid.Row="0" 
+                Background="{StaticResource AREghZyBrush.Foreground.Static}"
+                BorderBrush="{StaticResource AREghZyBrush.Foreground.Static}"
+                CornerRadius="10" BorderThickness="1" MinWidth="300" Padding="5">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="auto" />
+                </Grid.ColumnDefinitions>
+                <TextBox x:Name="SearchBox" 
+                         Grid.Column="0" 
+                         Style="{StaticResource InboxSearchBox}"
+                         Utils:TextBoxHelper.Hint="Search mail..." />
+                <Icon:PackIconMaterial Grid.Column="1" 
+                                       Kind="Magnify" Width="20" Height="20"
+                                       Panel.ZIndex="2" Margin="5 0"
+                                       VerticalAlignment="Center"
+                                       HorizontalAlignment="Right"
+                                       Foreground="{StaticResource AREghZyBrush.Glyph.Disabled}" />
+            </Grid>
+        </Border>
+        <!--#endregion-->
+
+        <!--#region Refresh button-->
+
+        <Button x:Name="Refresh"
+                Grid.Column="4" Grid.Row="0"
+                Style="{StaticResource IconButton}">
+            <Icon:PackIconMaterial Width="20" Height="20" Margin="10" Kind="Refresh" />
+        </Button>
+
+        <!--#endregion-->
+
+        <!--#region Loading Screen-->
+        <Grid x:Name="LoadingScreenIsVisible" 
+              Grid.Column="0" 
+              Grid.ColumnSpan="4" 
+              Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="auto" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+
+            <LoadingSpinner:LoadingSpinner Grid.Column="1" Grid.Row="1" 
+                                           IsLoading="{Binding LoadingScreenIsVisible}"
+                                           Margin="15" Thickness="5" Color="white"/>
+            <TextBlock Grid.Column="1" Grid.Row="2" Text="Loading  all mail, please hang tight..." />
+        </Grid>
+        <!--#endregion-->
+
+        <!--#region "Empty" screen-->
+        <Grid x:Name="EmptyScreenIsVisible" 
+              Grid.Column="0" 
+              Grid.ColumnSpan="4" 
+              Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="auto" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+
+            <Image Source="pack://application:,,,/Media/Imgs/empty-icon.png" 
+                   Grid.Column="1" Grid.Row="1" 
+                   MaxHeight="150"/>
+
+            <TextBlock Text="Looks like this folder is empty!" 
+                       FontSize="24"
+                       Margin="15"
+                       Grid.Column="1"
+                       Grid.Row="2" />
+        </Grid>
+        <!--#endregion-->
+
+        <!--#region Content-->
+
+        <Grid x:Name="ContentIsVisible"
+              Grid.Column="0"
+              Grid.ColumnSpan="4"
+              Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="auto" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+                <RowDefinition Height="auto" />
+            </Grid.RowDefinitions>
+            <!--#region Inbox-->
+            <Grid Grid.ColumnSpan="2">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+                <ScrollViewer HorizontalScrollBarVisibility="Auto"
+                              VerticalScrollBarVisibility="Auto">
+                    <ItemsControl x:Name="Mail">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Border Margin="0 5 0 0"
+                                        Style="{StaticResource RowContainer}"
+                                        cal:Message.Attach="[Event MouseLeftButtonUp]=[Action OpenEmail($dataContext)]"
+                                        Padding="10 0"
+                                        MinHeight="25">
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="auto" />
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition Width="auto" />
+                                        </Grid.ColumnDefinitions>
+
+                                        <!--#region Email info-->
+                                        <StackPanel Orientation="Horizontal">
+                                            <!--#region Read indicator-->
+                                            <Grid>
+                                                <Grid>
+                                                    <!--#region Visibility control-->
+                                                    <Grid.Style>
+                                                        <Style TargetType="Grid">
+                                                            <Setter Property="Visibility" Value="Hidden" />
+                                                            <Style.Triggers>
+                                                                <DataTrigger Binding="{Binding IsRead}" Value="False">
+                                                                    <Setter Property="Visibility" Value="Hidden" />
+                                                                </DataTrigger>
+                                                                <DataTrigger Binding="{Binding IsRead}" Value="True">
+                                                                    <Setter Property="Visibility" Value="Visible" />
+                                                                </DataTrigger>
+                                                            </Style.Triggers>
+                                                        </Style>
+                                                    </Grid.Style>
+                                                    <!--#endregion-->
+                                                    <Icon:PackIconMaterial Foreground="{StaticResource AREghZyBrush.Foreground.Deeper}" 
+                                                                           Kind="EyeCheck" 
+                                                                           VerticalAlignment="Center"
+                                                                           Width="15" 
+                                                                           Height="15" 
+                                                                           Margin="5"/>
+                                                </Grid>
+                                                <Grid>
+                                                    <!--#region Visibility control-->
+                                                    <Grid.Style>
+                                                        <Style TargetType="Grid">
+                                                            <Setter Property="Visibility" Value="Hidden" />
+                                                            <Style.Triggers>
+                                                                <DataTrigger Binding="{Binding IsRead}" Value="False">
+                                                                    <Setter Property="Visibility" Value="Visible" />
+                                                                </DataTrigger>
+                                                                <DataTrigger Binding="{Binding IsRead}" Value="True">
+                                                                    <Setter Property="Visibility" Value="Hidden" />
+                                                                </DataTrigger>
+                                                            </Style.Triggers>
+                                                        </Style>
+                                                    </Grid.Style>
+                                                    <!--#endregion-->
+                                                    <Icon:PackIconMaterial Foreground="{StaticResource AREghZyBrush.Foreground.Deeper}" 
+                                                                           Kind="EyeOff" 
+                                                                           VerticalAlignment="Center"
+                                                                           Width="15" 
+                                                                           Height="15" 
+                                                                           Margin="5"/>
+                                                </Grid>
+                                            </Grid>
+                                            <!--#endregion-->
+
+                                            <!--#region Favorite indicator-->
+                                            <Grid>
+                                                <Grid>
+                                                    <!--#region Visibility control-->
+                                                    <Grid.Style>
+                                                        <Style TargetType="Grid">
+                                                            <Setter Property="Visibility" Value="Hidden" />
+                                                            <Style.Triggers>
+                                                                <DataTrigger Binding="{Binding IsFavorite}" Value="False">
+                                                                    <Setter Property="Visibility" Value="Hidden" />
+                                                                </DataTrigger>
+                                                                <DataTrigger Binding="{Binding IsFavorite}" Value="True">
+                                                                    <Setter Property="Visibility" Value="Visible" />
+                                                                </DataTrigger>
+                                                            </Style.Triggers>
+                                                        </Style>
+                                                    </Grid.Style>
+                                                    <!--#endregion-->
+                                                    <Icon:PackIconMaterial Foreground="{StaticResource AREghZyBrush.Foreground.Deeper}" 
+                                                                           Kind="Star" 
+                                                                           VerticalAlignment="Center"
+                                                                           Width="15" 
+                                                                           Height="15" 
+                                                                           Margin="5"/>
+                                                </Grid>
+                                                <Grid>
+                                                    <!--#region Visibility control-->
+                                                    <Grid.Style>
+                                                        <Style TargetType="Grid">
+                                                            <Setter Property="Visibility" Value="Hidden" />
+                                                            <Style.Triggers>
+                                                                <DataTrigger Binding="{Binding IsFavorite}" Value="False">
+                                                                    <Setter Property="Visibility" Value="Visible" />
+                                                                </DataTrigger>
+                                                                <DataTrigger Binding="{Binding IsFavorite}" Value="True">
+                                                                    <Setter Property="Visibility" Value="Hidden" />
+                                                                </DataTrigger>
+                                                            </Style.Triggers>
+                                                        </Style>
+                                                    </Grid.Style>
+                                                    <!--#endregion-->
+                                                    <Icon:PackIconMaterial Foreground="{StaticResource AREghZyBrush.Foreground.Deeper}" 
+                                                                           Kind="StarOutline" 
+                                                                           VerticalAlignment="Center"
+                                                                           Width="15" 
+                                                                           Height="15" 
+                                                                           Margin="5"/>
+                                                </Grid>
+                                            </Grid>
+                                            <!--#endregion-->
+
+                                            <Rectangle Width="1" 
+                                                       Fill="{StaticResource AREghZyBrush.Foreground.Deeper}"
+                                                       Margin="3 15" />
+
+                                            <TextBlock Text="{Binding From}"
+                                                        VerticalAlignment="Center"
+                                                        Margin="15 0" />
+
+                                            <TextBlock Text="{Binding SubjectLine}"
+                                                       Grid.Column="2"
+                                                       TextTrimming="CharacterEllipsis"
+                                                       MaxWidth="350"
+                                                       VerticalAlignment="Center"
+                                                       FontWeight="DemiBold"
+                                                       Margin="10 0" />
+                                            <TextBlock Text="{Binding Snippet}"
+                                                       TextTrimming="CharacterEllipsis"
+                                                       MaxWidth="450"
+                                                       Grid.Column="3"
+                                                       Style="{StaticResource FieldText}"
+                                                       VerticalAlignment="Center"
+                                                       Margin="10 0" />
+                                        </StackPanel>
+                                        <!--#endregion-->
+
+                                        <!--#region Buttons-->
+                                        <StackPanel Orientation="Horizontal"
+                                                    Grid.Column="2"
+                                                    Margin="0 3">
+                                            <Button ToolTip="Reply to the email"
+                                                    cal:Message.Attach="[Event Click]=[Action Reply($dataContext)]"
+                                                    Margin="3 0"
+                                                    Style="{StaticResource IconButton}">
+                                                <Icon:PackIconMaterial Width="15" Height="15" Margin="15" Kind="Reply" />
+                                            </Button>
+                                            <Button ToolTip="Mark the email as favorite"
+                                                    cal:Message.Attach="[Event Click]=[Action MarkFavorite($dataContext)]"
+                                                    Margin="3 0"
+                                                    Style="{StaticResource IconButton}">
+                                                <!--#region Favorite on/off indicator-->
+                                                <Grid>
+                                                    <Grid>
+                                                        <!--#region Visibility control-->
+                                                        <Grid.Style>
+                                                            <Style TargetType="Grid">
+                                                                <Setter Property="Visibility" Value="Hidden" />
+                                                                <Style.Triggers>
+                                                                    <DataTrigger Binding="{Binding IsFavorite}" Value="False">
+                                                                        <Setter Property="Visibility" Value="Hidden" />
+                                                                    </DataTrigger>
+                                                                    <DataTrigger Binding="{Binding IsFavorite}" Value="True">
+                                                                        <Setter Property="Visibility" Value="Visible" />
+                                                                    </DataTrigger>
+                                                                </Style.Triggers>
+                                                            </Style>
+                                                        </Grid.Style>
+                                                        <!--#endregion-->
+                                                        <Icon:PackIconMaterial Width="15" Height="15" Margin="15" Kind="StarOff" />
+
+                                                    </Grid>
+                                                    <Grid>
+                                                        <!--#region Visibility control-->
+                                                        <Grid.Style>
+                                                            <Style TargetType="Grid">
+                                                                <Setter Property="Visibility" Value="Hidden" />
+                                                                <Style.Triggers>
+                                                                    <DataTrigger Binding="{Binding IsFavorite}" Value="False">
+                                                                        <Setter Property="Visibility" Value="Visible" />
+                                                                    </DataTrigger>
+                                                                    <DataTrigger Binding="{Binding IsFavorite}" Value="True">
+                                                                        <Setter Property="Visibility" Value="Hidden" />
+                                                                    </DataTrigger>
+                                                                </Style.Triggers>
+                                                            </Style>
+                                                        </Grid.Style>
+                                                        <!--#endregion-->
+                                                        <Icon:PackIconMaterial Width="15" Height="15" Margin="15" Kind="Star" />
+
+                                                    </Grid>
+                                                </Grid>
+                                                <!--#endregion-->
+                                            </Button>
+                                            <Button ToolTip="Archive"
+                                                    cal:Message.Attach="[Event Click]=[Action Archive($dataContext)]"
+                                                    Margin="3 0"
+                                                    Style="{StaticResource IconButton}">
+                                                <Icon:PackIconMaterial Kind="ArchiveArrowDown" Width="15" Height="15" Margin="15"/>
+                                            </Button>
+                                            <Button ToolTip="Delete from inbox"
+                                                    cal:Message.Attach="[Event Click]=[Action Delete($dataContext)]"
+                                                    Margin="3 0"
+                                                    Style="{StaticResource ExitIconButton}">
+                                                <Icon:PackIconMaterial Kind="TrashCan" Width="15" Height="15" Margin="15"/>
+                                            </Button>
+                                        </StackPanel>
+                                        <!--#endregion-->
+
+                                    </Grid>
+                                </Border>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </ScrollViewer>
+            </Grid>
+            <!--#endregion-->
+
+            <!--#region Paginator-->
+            <Border Grid.Column="1"
+                    Grid.Row="1" 
+                    HorizontalAlignment="Right" 
+                    BorderBrush="{StaticResource AREghZyBrush.Foreground.Static}"
+                    BorderThickness="1" CornerRadius="5" Padding="5"
+                    Background="{StaticResource AREghZyBrush.Foreground.Static}"
+                    Margin="10">
+                <StackPanel Orientation="Horizontal">
+                    <Button x:Name="PreviousPage" 
+                            ToolTip="Previous page"
+                            Style="{StaticResource PaginatorBtn}">
+                        <Icon:PackIconMaterial Kind="ChevronLeft" 
+                                               Style="{StaticResource PaginatorBtnIcon}" />
+                    </Button>
+
+                    <Rectangle Width="1" 
+                               Fill="{StaticResource AREghZyBrush.Foreground.Deeper}"
+                               Margin="3 7" />
+
+                    <Button ToolTip="Current page"
+                            Style="{StaticResource PaginatorBtn}">
+                        <TextBlock x:Name="CurrentPageIndex" 
+                                   Style="{StaticResource PaginatorCurrentPageText}" />
+                    </Button>
+
+                    <Rectangle Width="1" 
+                               Fill="{StaticResource AREghZyBrush.Foreground.Deeper}"
+                               Margin="3 7" />
+
+                    <Button x:Name="NextPage" 
+                            ToolTip="Next page"
+                            Style="{StaticResource PaginatorBtn}">
+                        <Icon:PackIconMaterial Kind="ChevronRight" 
+                                               Style="{StaticResource PaginatorBtnIcon}" />
+                    </Button>
+
+                </StackPanel>
+
+            </Border>
+            <!--#endregion-->
+        </Grid>
+
+        <!--#endregion-->
+
+    </Grid>
+</UserControl>
