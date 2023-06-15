@@ -25,5 +25,6 @@ namespace LeadsFlowCrm.Services
 		Task<IList<Email>> GetPaginatedInbox(GmailServiceClass.PaginationOptions paginationOption);
 		Task<IList<Email>> GetDraftsAsync();
 		Task SendDraftAsync(Email email);
+		Task DeleteDraftAsync(Email email);
 	}
 }

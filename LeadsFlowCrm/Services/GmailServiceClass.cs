@@ -689,7 +689,8 @@ public class GmailServiceClass : IGmailServiceClass
 	/// <summary>
 	/// Method for sending a given draft through the Gmail API with the logged in user's email as the sender
 	/// </summary>
-	/// <see cref="SendEmailAsync(Email)"/>
+	/// <see cref="Email"/>
+	/// <seealso cref="SendEmailAsync(Email)"/>
 	/// <param name="email">Email object</param>
 	/// <returns></returns>
 	/// <exception cref="ArgumentNullException">If the given email's DraftId is null or empty</exception>
@@ -720,7 +721,8 @@ public class GmailServiceClass : IGmailServiceClass
 	/// <summary>
 	/// Method for creating a draft through the Gmail API with the logged in user's email as the sender
 	/// </summary>
-	/// <see cref="CreateMessageAsync(Email)"/>
+	/// <see cref="Email"/>
+	/// <seealso cref="CreateMessageAsync(Email)"/>
 	/// <seealso cref="SendEmailAsync(Email)"/>
 	/// <param name="email">Email to be sent, the necessary properties are "To", "SubjectLine" and "Body"</param>
 	/// <returns></returns>
@@ -745,6 +747,26 @@ public class GmailServiceClass : IGmailServiceClass
 		// We create and send the request
 		var draftRequest = service.Users.Drafts.Create(draft, Me);
 		await draftRequest.ExecuteAsync();
+	}
+
+	/// <summary>
+	/// Method for deleting the desired draft using the DraftId from the email
+	/// </summary>
+	/// <see cref="Email"/>
+	/// <param name="email"></param>
+	/// <returns></returns>
+	/// <exception cref="ArgumentNullException"></exception>
+	public async Task DeleteDraftAsync(Email email)
+	{
+		if (string.IsNullOrWhiteSpace(email.DraftId))
+		{
+			throw new ArgumentNullException("Email does not have a draft ID");
+		}
+
+		GmailService service = await GetGmailServiceAsync();
+
+		var request = service.Users.Drafts.Delete(Me, email.DraftId);
+		await request.ExecuteAsync();
 	}
 
 	/// <summary>
