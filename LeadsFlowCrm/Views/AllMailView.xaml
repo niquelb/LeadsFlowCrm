@@ -147,111 +147,166 @@
 
                                         <!--#region Email info-->
                                         <StackPanel Orientation="Horizontal">
-                                            <!--#region Read indicator-->
-                                            <Grid>
+                                            <!--#region Indicators for read/favorite-->
+                                            <Grid Margin="5 0">
+                                                <!--#region Visibility control-->
+                                                <Grid.Style>
+                                                    <Style TargetType="Grid">
+                                                        <Setter Property="Visibility" Value="Collapsed" />
+                                                        <Style.Triggers>
+                                                            <DataTrigger Binding="{Binding IsTrash}" Value="False">
+                                                                <Setter Property="Visibility" Value="Visible" />
+                                                            </DataTrigger>
+                                                            <DataTrigger Binding="{Binding IsTrash}" Value="True">
+                                                                <Setter Property="Visibility" Value="Collapsed" />
+                                                            </DataTrigger>
+                                                        </Style.Triggers>
+                                                    </Style>
+                                                </Grid.Style>
+                                                <!--#endregion-->
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="*" />
+                                                    <ColumnDefinition Width="*" />
+                                                    <ColumnDefinition Width="*" />
+                                                </Grid.ColumnDefinitions>
+                                                
+                                                <!--#region Read indicator-->
                                                 <Grid>
-                                                    <!--#region Visibility control-->
-                                                    <Grid.Style>
-                                                        <Style TargetType="Grid">
-                                                            <Setter Property="Visibility" Value="Hidden" />
-                                                            <Style.Triggers>
-                                                                <DataTrigger Binding="{Binding IsRead}" Value="False">
-                                                                    <Setter Property="Visibility" Value="Hidden" />
-                                                                </DataTrigger>
-                                                                <DataTrigger Binding="{Binding IsRead}" Value="True">
-                                                                    <Setter Property="Visibility" Value="Visible" />
-                                                                </DataTrigger>
-                                                            </Style.Triggers>
-                                                        </Style>
-                                                    </Grid.Style>
-                                                    <!--#endregion-->
-                                                    <Icon:PackIconMaterial Foreground="{StaticResource AREghZyBrush.Foreground.Deeper}" 
-                                                                           Kind="EyeCheck" 
-                                                                           VerticalAlignment="Center"
-                                                                           Width="15" 
-                                                                           Height="15" 
-                                                                           Margin="5"/>
+                                                    <Grid>
+                                                        <!--#region Visibility control-->
+                                                        <Grid.Style>
+                                                            <Style TargetType="Grid">
+                                                                <Setter Property="Visibility" Value="Hidden" />
+                                                                <Style.Triggers>
+                                                                    <DataTrigger Binding="{Binding IsRead}" Value="False">
+                                                                        <Setter Property="Visibility" Value="Hidden" />
+                                                                    </DataTrigger>
+                                                                    <DataTrigger Binding="{Binding IsRead}" Value="True">
+                                                                        <Setter Property="Visibility" Value="Visible" />
+                                                                    </DataTrigger>
+                                                                </Style.Triggers>
+                                                            </Style>
+                                                        </Grid.Style>
+                                                        <!--#endregion-->
+                                                        <Icon:PackIconMaterial Foreground="{StaticResource AREghZyBrush.Foreground.Deeper}" 
+                                                                               Kind="EyeCheck" 
+                                                                               VerticalAlignment="Center"
+                                                                               Width="15" 
+                                                                               Height="15" 
+                                                                               Margin="5"/>
+                                                    </Grid>
+                                                    <Grid>
+                                                        <!--#region Visibility control-->
+                                                        <Grid.Style>
+                                                            <Style TargetType="Grid">
+                                                                <Setter Property="Visibility" Value="Hidden" />
+                                                                <Style.Triggers>
+                                                                    <DataTrigger Binding="{Binding IsRead}" Value="False">
+                                                                        <Setter Property="Visibility" Value="Visible" />
+                                                                    </DataTrigger>
+                                                                    <DataTrigger Binding="{Binding IsRead}" Value="True">
+                                                                        <Setter Property="Visibility" Value="Hidden" />
+                                                                    </DataTrigger>
+                                                                </Style.Triggers>
+                                                            </Style>
+                                                        </Grid.Style>
+                                                        <!--#endregion-->
+                                                        <Icon:PackIconMaterial Foreground="{StaticResource AREghZyBrush.Foreground.Deeper}" 
+                                                                               Kind="EyeOff" 
+                                                                               VerticalAlignment="Center"
+                                                                               Width="15" 
+                                                                               Height="15" 
+                                                                               Margin="5"/>
+                                                    </Grid>
                                                 </Grid>
-                                                <Grid>
-                                                    <!--#region Visibility control-->
-                                                    <Grid.Style>
-                                                        <Style TargetType="Grid">
-                                                            <Setter Property="Visibility" Value="Hidden" />
-                                                            <Style.Triggers>
-                                                                <DataTrigger Binding="{Binding IsRead}" Value="False">
-                                                                    <Setter Property="Visibility" Value="Visible" />
-                                                                </DataTrigger>
-                                                                <DataTrigger Binding="{Binding IsRead}" Value="True">
-                                                                    <Setter Property="Visibility" Value="Hidden" />
-                                                                </DataTrigger>
-                                                            </Style.Triggers>
-                                                        </Style>
-                                                    </Grid.Style>
-                                                    <!--#endregion-->
-                                                    <Icon:PackIconMaterial Foreground="{StaticResource AREghZyBrush.Foreground.Deeper}" 
-                                                                           Kind="EyeOff" 
-                                                                           VerticalAlignment="Center"
-                                                                           Width="15" 
-                                                                           Height="15" 
-                                                                           Margin="5"/>
+                                                <!--#endregion-->
+
+                                                <!--#region Favorite indicator-->
+                                                <Grid Grid.Column="1">
+                                                    <Grid>
+                                                        <!--#region Visibility control-->
+                                                        <Grid.Style>
+                                                            <Style TargetType="Grid">
+                                                                <Setter Property="Visibility" Value="Hidden" />
+                                                                <Style.Triggers>
+                                                                    <DataTrigger Binding="{Binding IsFavorite}" Value="False">
+                                                                        <Setter Property="Visibility" Value="Hidden" />
+                                                                    </DataTrigger>
+                                                                    <DataTrigger Binding="{Binding IsFavorite}" Value="True">
+                                                                        <Setter Property="Visibility" Value="Visible" />
+                                                                    </DataTrigger>
+                                                                </Style.Triggers>
+                                                            </Style>
+                                                        </Grid.Style>
+                                                        <!--#endregion-->
+                                                        <Icon:PackIconMaterial Foreground="{StaticResource AREghZyBrush.Foreground.Deeper}" 
+                                                                               Kind="Star" 
+                                                                               VerticalAlignment="Center"
+                                                                               Width="15" 
+                                                                               Height="15" 
+                                                                               Margin="5"/>
+                                                    </Grid>
+                                                    <Grid>
+                                                        <!--#region Visibility control-->
+                                                        <Grid.Style>
+                                                            <Style TargetType="Grid">
+                                                                <Setter Property="Visibility" Value="Hidden" />
+                                                                <Style.Triggers>
+                                                                    <DataTrigger Binding="{Binding IsFavorite}" Value="False">
+                                                                        <Setter Property="Visibility" Value="Visible" />
+                                                                    </DataTrigger>
+                                                                    <DataTrigger Binding="{Binding IsFavorite}" Value="True">
+                                                                        <Setter Property="Visibility" Value="Hidden" />
+                                                                    </DataTrigger>
+                                                                </Style.Triggers>
+                                                            </Style>
+                                                        </Grid.Style>
+                                                        <!--#endregion-->
+                                                        <Icon:PackIconMaterial Foreground="{StaticResource AREghZyBrush.Foreground.Deeper}" 
+                                                                               Kind="StarOutline" 
+                                                                               VerticalAlignment="Center"
+                                                                               Width="15" 
+                                                                               Height="15" 
+                                                                               Margin="5"/>
+                                                    </Grid>
                                                 </Grid>
+                                                <!--#endregion-->
+                                                
                                             </Grid>
                                             <!--#endregion-->
 
-                                            <!--#region Favorite indicator-->
-                                            <Grid>
-                                                <Grid>
-                                                    <!--#region Visibility control-->
-                                                    <Grid.Style>
-                                                        <Style TargetType="Grid">
-                                                            <Setter Property="Visibility" Value="Hidden" />
-                                                            <Style.Triggers>
-                                                                <DataTrigger Binding="{Binding IsFavorite}" Value="False">
-                                                                    <Setter Property="Visibility" Value="Hidden" />
-                                                                </DataTrigger>
-                                                                <DataTrigger Binding="{Binding IsFavorite}" Value="True">
-                                                                    <Setter Property="Visibility" Value="Visible" />
-                                                                </DataTrigger>
-                                                            </Style.Triggers>
-                                                        </Style>
-                                                    </Grid.Style>
-                                                    <!--#endregion-->
-                                                    <Icon:PackIconMaterial Foreground="{StaticResource AREghZyBrush.Foreground.Deeper}" 
-                                                                           Kind="Star" 
-                                                                           VerticalAlignment="Center"
-                                                                           Width="15" 
-                                                                           Height="15" 
-                                                                           Margin="5"/>
-                                                </Grid>
-                                                <Grid>
-                                                    <!--#region Visibility control-->
-                                                    <Grid.Style>
-                                                        <Style TargetType="Grid">
-                                                            <Setter Property="Visibility" Value="Hidden" />
-                                                            <Style.Triggers>
-                                                                <DataTrigger Binding="{Binding IsFavorite}" Value="False">
-                                                                    <Setter Property="Visibility" Value="Visible" />
-                                                                </DataTrigger>
-                                                                <DataTrigger Binding="{Binding IsFavorite}" Value="True">
-                                                                    <Setter Property="Visibility" Value="Hidden" />
-                                                                </DataTrigger>
-                                                            </Style.Triggers>
-                                                        </Style>
-                                                    </Grid.Style>
-                                                    <!--#endregion-->
-                                                    <Icon:PackIconMaterial Foreground="{StaticResource AREghZyBrush.Foreground.Deeper}" 
-                                                                           Kind="StarOutline" 
-                                                                           VerticalAlignment="Center"
-                                                                           Width="15" 
-                                                                           Height="15" 
-                                                                           Margin="5"/>
-                                                </Grid>
+                                            <!--#region Trash indicator-->
+                                            <Grid Margin="5 0">
+                                                <!--#region Visibility control-->
+                                                <Grid.Style>
+                                                    <Style TargetType="Grid">
+                                                        <Setter Property="Visibility" Value="Collapsed" />
+                                                        <Style.Triggers>
+                                                            <DataTrigger Binding="{Binding IsTrash}" Value="False">
+                                                                <Setter Property="Visibility" Value="Collapsed" />
+                                                            </DataTrigger>
+                                                            <DataTrigger Binding="{Binding IsTrash}" Value="True">
+                                                                <Setter Property="Visibility" Value="Visible" />
+                                                            </DataTrigger>
+                                                        </Style.Triggers>
+                                                    </Style>
+                                                </Grid.Style>
+                                                <!--#endregion-->
+                                                <Border CornerRadius="10"
+                                                        Height="25"
+                                                        VerticalAlignment="Center"
+                                                        Padding="5">
+                                                    <Border.Background>
+                                                        <SolidColorBrush Color="OrangeRed" Opacity="0.5" />
+                                                    </Border.Background>
+                                                    <TextBlock Text="DELETED"
+                                                               HorizontalAlignment="Center"
+                                                               VerticalAlignment="Center"
+                                                               FontSize="16"
+                                                               FontWeight="Medium" />
+                                                </Border>
                                             </Grid>
                                             <!--#endregion-->
-
-                                            <Rectangle Width="1" 
-                                                       Fill="{StaticResource AREghZyBrush.Foreground.Deeper}"
-                                                       Margin="3 15" />
 
                                             <TextBlock Text="{Binding From}"
                                                         VerticalAlignment="Center"
@@ -331,17 +386,50 @@
                                                 </Grid>
                                                 <!--#endregion-->
                                             </Button>
-                                            <Button ToolTip="Archive"
-                                                    cal:Message.Attach="[Event Click]=[Action Archive($dataContext)]"
-                                                    Margin="3 0"
-                                                    Style="{StaticResource IconButton}">
-                                                <Icon:PackIconMaterial Kind="ArchiveArrowDown" Width="15" Height="15" Margin="15"/>
-                                            </Button>
-                                            <Button ToolTip="Delete from inbox"
+                                            <Button ToolTip="Delete/Restore from inbox"
                                                     cal:Message.Attach="[Event Click]=[Action Delete($dataContext)]"
                                                     Margin="3 0"
                                                     Style="{StaticResource ExitIconButton}">
-                                                <Icon:PackIconMaterial Kind="TrashCan" Width="15" Height="15" Margin="15"/>
+                                                <!--#region Trash on/off indicator-->
+                                                <Grid>
+                                                    <Grid>
+                                                        <!--#region Visibility control-->
+                                                        <Grid.Style>
+                                                            <Style TargetType="Grid">
+                                                                <Setter Property="Visibility" Value="Hidden" />
+                                                                <Style.Triggers>
+                                                                    <DataTrigger Binding="{Binding IsTrash}" Value="False">
+                                                                        <Setter Property="Visibility" Value="Visible" />
+                                                                    </DataTrigger>
+                                                                    <DataTrigger Binding="{Binding IsTrash}" Value="True">
+                                                                        <Setter Property="Visibility" Value="Hidden" />
+                                                                    </DataTrigger>
+                                                                </Style.Triggers>
+                                                            </Style>
+                                                        </Grid.Style>
+                                                        <!--#endregion-->
+                                                        <Icon:PackIconMaterial Width="15" Height="15" Margin="15" Kind="TrashCan"/>
+                                                    </Grid>
+                                                    <Grid>
+                                                        <!--#region Visibility control-->
+                                                        <Grid.Style>
+                                                            <Style TargetType="Grid">
+                                                                <Setter Property="Visibility" Value="Hidden" />
+                                                                <Style.Triggers>
+                                                                    <DataTrigger Binding="{Binding IsTrash}" Value="False">
+                                                                        <Setter Property="Visibility" Value="Hidden" />
+                                                                    </DataTrigger>
+                                                                    <DataTrigger Binding="{Binding IsTrash}" Value="True">
+                                                                        <Setter Property="Visibility" Value="Visible" />
+                                                                    </DataTrigger>
+                                                                </Style.Triggers>
+                                                            </Style>
+                                                        </Grid.Style>
+                                                        <!--#endregion-->
+                                                        <Icon:PackIconMaterial Width="15" Height="15" Margin="15" Kind="Restore"/>
+                                                    </Grid>
+                                                </Grid>
+                                                <!--#endregion-->
                                             </Button>
                                         </StackPanel>
                                         <!--#endregion-->

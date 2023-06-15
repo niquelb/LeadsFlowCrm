@@ -72,4 +72,9 @@ public class Email
     /// Is read
     /// </summary>
     public bool IsRead { get; set; }
+
+    /// <summary>
+    /// Is trash
+    /// </summary>
+    public bool IsTrash { get; set; }
 }

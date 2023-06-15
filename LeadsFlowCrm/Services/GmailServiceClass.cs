@@ -351,7 +351,7 @@ public class GmailServiceClass : IGmailServiceClass
 	/// </summary>
 	/// <param name="email">Message to process</param>
 	/// <param name="gmailService">GmailService object</param>
-	/// <param name="userId">User's email</param>
+	/// <param name="draftId">Optional parameter for drafts</param>
 	/// <returns>Processed Email object</returns>
 	private static async Task<Email> ProcessEmailAsync(Message email, GmailService gmailService, string? draftId = null)
 	{
@@ -385,6 +385,11 @@ public class GmailServiceClass : IGmailServiceClass
 		 * We check if the email is read or unread
 		 */
 		output.IsRead = labels != null && !(labels.Contains("UNREAD"));
+
+		/*
+		 * We check if the email is marked as trash
+		 */
+		output.IsTrash = labels != null && labels.Contains("TRASH")	;
 
 		/*
 		 * We parse the snippet, this is the part of the body visible in the inbox
