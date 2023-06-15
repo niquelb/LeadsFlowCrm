@@ -48,7 +48,7 @@
 
         <!--#region Refresh button-->
 
-        <Button x:Name="Refresh"
+        <Button x:Name="RefreshEmails"
                 Grid.Column="4" Grid.Row="0"
                 Style="{StaticResource IconButton}">
             <Icon:PackIconMaterial Width="20" Height="20" Margin="10" Kind="Refresh" />
@@ -76,7 +76,7 @@
             <LoadingSpinner:LoadingSpinner Grid.Column="1" Grid.Row="1" 
                                            IsLoading="{Binding LoadingScreenIsVisible}"
                                            Margin="15" Thickness="5" Color="white"/>
-            <TextBlock Grid.Column="1" Grid.Row="2" Text="Loading  all mail, please hang tight..." />
+            <TextBlock Grid.Column="1" Grid.Row="2" Text="Loading emails, please hang tight..." />
         </Grid>
         <!--#endregion-->
 
@@ -101,7 +101,7 @@
                    Grid.Column="1" Grid.Row="1" 
                    MaxHeight="150"/>
 
-            <TextBlock Text="Looks like this folder is empty!" 
+            <TextBlock Text="Looks like this is empty!" 
                        FontSize="24"
                        Margin="15"
                        Grid.Column="1"
@@ -123,14 +123,15 @@
                 <RowDefinition Height="*" />
                 <RowDefinition Height="auto" />
             </Grid.RowDefinitions>
-            <!--#region Inbox-->
+            
+            <!--#region Emails-->
             <Grid Grid.ColumnSpan="2">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="*" />
                 </Grid.RowDefinitions>
                 <ScrollViewer HorizontalScrollBarVisibility="Auto"
                               VerticalScrollBarVisibility="Auto">
-                    <ItemsControl x:Name="Mail">
+                    <ItemsControl x:Name="Emails">
                         <ItemsControl.ItemTemplate>
                             <DataTemplate>
                                 <Border Margin="0 5 0 0"
@@ -297,7 +298,7 @@
                                                         VerticalAlignment="Center"
                                                         Padding="5">
                                                     <Border.Background>
-                                                        <SolidColorBrush Color="OrangeRed" Opacity="0.5" />
+                                                        <SolidColorBrush Color="#fc5f2b" Opacity=".75" />
                                                     </Border.Background>
                                                     <TextBlock Text="DELETED"
                                                                HorizontalAlignment="Center"
@@ -386,51 +387,56 @@
                                                 </Grid>
                                                 <!--#endregion-->
                                             </Button>
-                                            <Button ToolTip="Delete/Restore from inbox"
-                                                    cal:Message.Attach="[Event Click]=[Action Delete($dataContext)]"
-                                                    Margin="3 0"
-                                                    Style="{StaticResource ExitIconButton}">
-                                                <!--#region Trash on/off indicator-->
+                                            <!--#region Trash on/off indicator-->
+                                            <Grid>
                                                 <Grid>
-                                                    <Grid>
-                                                        <!--#region Visibility control-->
-                                                        <Grid.Style>
-                                                            <Style TargetType="Grid">
-                                                                <Setter Property="Visibility" Value="Hidden" />
-                                                                <Style.Triggers>
-                                                                    <DataTrigger Binding="{Binding IsTrash}" Value="False">
-                                                                        <Setter Property="Visibility" Value="Visible" />
-                                                                    </DataTrigger>
-                                                                    <DataTrigger Binding="{Binding IsTrash}" Value="True">
-                                                                        <Setter Property="Visibility" Value="Hidden" />
-                                                                    </DataTrigger>
-                                                                </Style.Triggers>
-                                                            </Style>
-                                                        </Grid.Style>
-                                                        <!--#endregion-->
+                                                    <!--#region Visibility control-->
+                                                    <Grid.Style>
+                                                        <Style TargetType="Grid">
+                                                            <Setter Property="Visibility" Value="Hidden" />
+                                                            <Style.Triggers>
+                                                                <DataTrigger Binding="{Binding IsTrash}" Value="False">
+                                                                    <Setter Property="Visibility" Value="Visible" />
+                                                                </DataTrigger>
+                                                                <DataTrigger Binding="{Binding IsTrash}" Value="True">
+                                                                    <Setter Property="Visibility" Value="Hidden" />
+                                                                </DataTrigger>
+                                                            </Style.Triggers>
+                                                        </Style>
+                                                    </Grid.Style>
+                                                    <!--#endregion-->
+                                                    <Button ToolTip="Delete from inbox"
+                                                            cal:Message.Attach="[Event Click]=[Action Delete($dataContext)]"
+                                                            Margin="3 0"
+                                                            Style="{StaticResource ExitIconButton}">
                                                         <Icon:PackIconMaterial Width="15" Height="15" Margin="15" Kind="TrashCan"/>
-                                                    </Grid>
-                                                    <Grid>
-                                                        <!--#region Visibility control-->
-                                                        <Grid.Style>
-                                                            <Style TargetType="Grid">
-                                                                <Setter Property="Visibility" Value="Hidden" />
-                                                                <Style.Triggers>
-                                                                    <DataTrigger Binding="{Binding IsTrash}" Value="False">
-                                                                        <Setter Property="Visibility" Value="Hidden" />
-                                                                    </DataTrigger>
-                                                                    <DataTrigger Binding="{Binding IsTrash}" Value="True">
-                                                                        <Setter Property="Visibility" Value="Visible" />
-                                                                    </DataTrigger>
-                                                                </Style.Triggers>
-                                                            </Style>
-                                                        </Grid.Style>
-                                                        <!--#endregion-->
-                                                        <Icon:PackIconMaterial Width="15" Height="15" Margin="15" Kind="Restore"/>
-                                                    </Grid>
+                                                    </Button>
                                                 </Grid>
-                                                <!--#endregion-->
-                                            </Button>
+                                                <Grid>
+                                                    <!--#region Visibility control-->
+                                                    <Grid.Style>
+                                                        <Style TargetType="Grid">
+                                                            <Setter Property="Visibility" Value="Hidden" />
+                                                            <Style.Triggers>
+                                                                <DataTrigger Binding="{Binding IsTrash}" Value="False">
+                                                                    <Setter Property="Visibility" Value="Hidden" />
+                                                                </DataTrigger>
+                                                                <DataTrigger Binding="{Binding IsTrash}" Value="True">
+                                                                    <Setter Property="Visibility" Value="Visible" />
+                                                                </DataTrigger>
+                                                            </Style.Triggers>
+                                                        </Style>
+                                                    </Grid.Style>
+                                                    <!--#endregion-->
+                                                    <Button ToolTip="Restore from trash"
+                                                            cal:Message.Attach="[Event Click]=[Action RestoreFromTrash($dataContext)]"
+                                                            Margin="3 0"
+                                                            Style="{StaticResource IconButton}">
+                                                        <Icon:PackIconMaterial Width="15" Height="15" Margin="15" Kind="Restore"/>
+                                                    </Button>
+                                                </Grid>
+                                            </Grid>
+                                            <!--#endregion-->
                                         </StackPanel>
                                         <!--#endregion-->
 

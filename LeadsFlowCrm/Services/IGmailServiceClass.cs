@@ -25,5 +25,6 @@ namespace LeadsFlowCrm.Services
 		Task SendDraftAsync(Email email);
 		Task DeleteDraftAsync(Email email);
 		Task<IList<Email>> GetAllMailAsync(PaginationOptions paginationOptions = PaginationOptions.FirstPage, bool includeTrashSpam = false);
+		Task MarkEmailAsNotTrashAsync(Email email);
 	}
 }

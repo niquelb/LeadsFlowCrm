@@ -1,6 +1,9 @@
 ﻿using Caliburn.Micro;
+using LeadsFlowCrm.EventModels;
 using LeadsFlowCrm.Models;
 using LeadsFlowCrm.Services;
+using LeadsFlowCrm.Utils;
+using Notifications.Wpf;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -15,10 +18,13 @@ namespace LeadsFlowCrm.ViewModels;
 public class AllMailViewModel : Screen
 {
 	private readonly IGmailServiceClass _gmailService;
+	private readonly IEventAggregator _event;
 
-	public AllMailViewModel(IGmailServiceClass gmailService)
+	public AllMailViewModel(IGmailServiceClass gmailService,
+						 IEventAggregator @event)
     {
 		_gmailService = gmailService;
+		_event = @event;
 	}
 
 	protected async override Task OnInitializeAsync(CancellationToken cancellationToken)
@@ -30,6 +36,68 @@ public class AllMailViewModel : Screen
 	}
 
 	#region Public Methods
+
+	/// <summary>
+	/// Method for refreshing the email collection
+	/// </summary>
+	public async void RefreshEmails()
+	{
+		CurrentPageIndex = 1;
+		//CanPreviousPage = false; TODO <-
+
+		await LoadEmailsAsync();
+	}
+
+	/// <summary>
+	/// Method for opening an email from the inbox
+	/// </summary>
+	public async void OpenEmail(Email email)
+	{
+		await PublishSelectedEmailAsync(email);
+	}
+
+	/// <summary>
+	/// Method for moving the email to the trash
+	/// </summary>
+	/// <param name="email">Email to be deleted</param>
+	public async void Delete(Email email)
+	{
+		await _gmailService.MarkEmailAsTrashAsync(email);
+
+		RefreshEmails();
+		Utilities.ShowNotification("Email deleted", "Successfully deleted the email.", NotificationType.Success);
+	}
+
+	public async void RestoreFromTrash(Email email)
+	{
+		await _gmailService.MarkEmailAsNotTrashAsync(email);
+
+		RefreshEmails();
+		Utilities.ShowNotification("Email recovered", "Successfully recovered the email.", NotificationType.Success);
+	}
+
+	/// <summary>
+	/// Method for starring/de-starring an email
+	/// </summary>
+	/// <param name="email">Email to be modified</param>
+	public async void MarkFavorite(Email email)
+	{
+		if (email.IsFavorite)
+		{
+			await _gmailService.MarkEmailAsNotFavoriteAsync(email);
+			email.IsFavorite = false;
+			Utilities.ShowNotification("Marked as not favorite", "Successfully marked the email as not favorite.", NotificationType.Success);
+		}
+		else
+		{
+			await _gmailService.MarkEmailAsFavoriteAsync(email);
+			email.IsFavorite = true;
+			Utilities.ShowNotification("Marked as favorite", "Successfully marked the email as favorite.", NotificationType.Success);
+		}
+
+		// We refresh the inbox to update the icons
+		RefreshEmails();
+	}
 
 	#endregion
 
@@ -46,11 +114,11 @@ public class AllMailViewModel : Screen
 		ContentIsVisible = false;
 		EmptyScreenIsVisible = false;
 
-		Mail = new BindableCollection<Email>(await _gmailService.GetAllMailAsync(paginationOptions: pagination));
+		Emails = new(await _gmailService.GetAllMailAsync(paginationOptions: pagination));
 
 		LoadingScreenIsVisible = false;
 
-		if (Mail.Count > 0)
+		if (Emails.Count > 0)
 		{
 			ContentIsVisible = true;
 		}
@@ -60,6 +128,18 @@ public class AllMailViewModel : Screen
 		}
 
 		// TODO CanRefresh = true
+	}
+
+	/// <summary>
+	/// Event that gets triggered when the user selects an email
+	/// </summary>
+	/// <param name="email">Selected email</param>
+	/// <returns></returns>
+	private async Task PublishSelectedEmailAsync(Email email)
+	{
+		_gmailService.SelectedEmail = email;
+
+		await _event.PublishOnUIThreadAsync(new EmailSelectedEvent());
 	}
 
 	#endregion
@@ -74,7 +154,7 @@ public class AllMailViewModel : Screen
 	private bool _emptyScreenIsVisible;
 	private bool _contentIsVisible;
 
-	private BindableCollection<Email> _mail;
+	private BindableCollection<Email> _emails = new();
 	private int _currentPageIndex = 1;
 
 	#endregion
@@ -82,11 +162,11 @@ public class AllMailViewModel : Screen
 	/// <summary>
 	/// Emails to be displayed
 	/// </summary>
-	public BindableCollection<Email> Mail
+	public BindableCollection<Email> Emails
 	{
-		get { return _mail; }
+		get { return _emails; }
 		set { 
-			_mail = value;
+			_emails = value;
 			NotifyOfPropertyChange();
 		}
 	}

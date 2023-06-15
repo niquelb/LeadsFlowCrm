@@ -31,6 +31,7 @@ public class InboxViewModel : Screen
 		await base.OnInitializeAsync(cancellationToken);
 
 		CurrentPageIndex = 1;
+
 		await LoadInboxAsync();
 	}
 
