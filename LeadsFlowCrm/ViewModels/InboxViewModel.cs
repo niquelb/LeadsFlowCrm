@@ -85,7 +85,7 @@ public class InboxViewModel : Screen
 	}
 
 	/// <summary>
-	/// Method for moving the email to the trash
+	/// Method for moving an email to the trash
 	/// </summary>
 	/// <param name="email">Email to be deleted</param>
 	public async void Delete(Email email)

@@ -248,10 +248,6 @@
                                                 </Grid>
                                             </Grid>
                                             <!--#endregion-->
-                                            
-                                            <Rectangle Width="1" 
-                                                       Fill="{StaticResource AREghZyBrush.Foreground.Deeper}"
-                                                       Margin="3 15" />
 
                                             <TextBlock Text="{Binding From}"
                                                         VerticalAlignment="Center"

@@ -43,7 +43,7 @@ public class AllMailViewModel : Screen
 	public async void RefreshEmails()
 	{
 		CurrentPageIndex = 1;
-		//CanPreviousPage = false; TODO <-
+		CanPreviousPage = false;
 
 		await LoadEmailsAsync();
 	}
@@ -57,7 +57,7 @@ public class AllMailViewModel : Screen
 	}
 
 	/// <summary>
-	/// Method for moving the email to the trash
+	/// Method for moving an email to the trash
 	/// </summary>
 	/// <param name="email">Email to be deleted</param>
 	public async void Delete(Email email)
@@ -68,6 +68,10 @@ public class AllMailViewModel : Screen
 		Utilities.ShowNotification("Email deleted", "Successfully deleted the email.", NotificationType.Success);
 	}
 
+	/// <summary>
+	/// Method for restoring an email from the trash
+	/// </summary>
+	/// <param name="email"></param>
 	public async void RestoreFromTrash(Email email)
 	{
 		await _gmailService.MarkEmailAsNotTrashAsync(email);
@@ -98,6 +102,37 @@ public class AllMailViewModel : Screen
 		// We refresh the inbox to update the icons
 		RefreshEmails();
 	}
+
+	#region Pagination
+
+	/// <summary>
+	/// Method for updating the inbox with the next page
+	/// </summary>
+	public async void NextPage()
+	{
+		CurrentPageIndex++;
+		CanPreviousPage = true;
+
+		await LoadEmailsAsync(PaginationOptions.NextPage);
+	}
+
+	/// <summary>
+	/// Method for updating the inbox with the next page
+	/// </summary>
+	public async void PreviousPage()
+	{
+		if (CurrentPageIndex < 1)
+		{
+			return;
+		}
+
+		CurrentPageIndex--;
+		CanPreviousPage = CurrentPageIndex != 1;
+
+		await LoadEmailsAsync(PaginationOptions.PreviousPage);
+	}
+
+	#endregion
 
 	#endregion
 
@@ -154,10 +189,38 @@ public class AllMailViewModel : Screen
 	private bool _emptyScreenIsVisible;
 	private bool _contentIsVisible;
 
+	private bool _canRefreshEmails;
+	private bool _canPreviousPage;
 	private BindableCollection<Email> _emails = new();
 	private int _currentPageIndex = 1;
 
 	#endregion
+
+	/// <summary>
+	/// Property to control if the refresh button is enabled or not
+	/// </summary>
+	public bool CanRefreshEmails
+	{
+		get { return _canRefreshEmails; }
+		set { 
+			_canRefreshEmails = value;
+			NotifyOfPropertyChange();
+		}
+	}
+
+
+	/// <summary>
+	/// Reflects wether or not the user can go to the previous page
+	/// </summary>
+	public bool CanPreviousPage
+	{
+		get { return _canPreviousPage; }
+		set
+		{
+			_canPreviousPage = value;
+			NotifyOfPropertyChange();
+		}
+	}
 
 	/// <summary>
 	/// Emails to be displayed
