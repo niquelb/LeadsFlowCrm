@@ -18,7 +18,7 @@ public class SidebarViewModel
 		_createDraftViewModel = createDraftViewModel;
 	}
 
-	public async void NewCorrespondence()
+	public async void NewDraft()
 	{
 		await _windowManager.ShowWindowAsync(_createDraftViewModel);
 	}
@@ -34,9 +34,5 @@ public class SidebarViewModel
 	public async void Contacts()
 	{
 		await _event.PublishOnUIThreadAsync(new NavigationEvent(NavigationEvent.NavigationRoutes.Contacts));
-	}
-	public void Utils()
-	{
-		throw new NotImplementedException();
 	}
 }

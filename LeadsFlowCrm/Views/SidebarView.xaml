@@ -32,6 +32,7 @@
         <!--#region Sidebar Body-->
         <Border Style="{StaticResource Sidebar}" 
                 x:Name="Sidebar"
+                Width="300"
                 Grid.Column="0" 
                 Grid.ColumnSpan="2" 
                 Grid.Row="1">
@@ -43,27 +44,27 @@
                     <Button x:Name="Inbox" Style="{StaticResource SidebarBtn}">
                         <StackPanel Orientation="Horizontal">
                             <Icon:PackIconMaterial Kind="Gmail" Style="{StaticResource SidebarIcon}"/>
-                            <TextBlock Text="Inbox"/>
+                            <TextBlock Text="Inbox" VerticalAlignment="Center"/>
                         </StackPanel>
                     </Button>
                     <Button x:Name="Pipelines" Style="{StaticResource SidebarBtn}">
                         <StackPanel Orientation="Horizontal">
                             <Icon:PackIconMaterial Kind="Pipe" Style="{StaticResource SidebarIcon}"/>
-                            <TextBlock Text="Pipelines"/>
+                            <TextBlock Text="Pipelines" VerticalAlignment="Center"/>
                         </StackPanel>
                     </Button>
                     <Button x:Name="Contacts" Style="{StaticResource SidebarBtn}">
                         <StackPanel Orientation="Horizontal">
                             <Icon:PackIconMaterial Kind="Contacts" Style="{StaticResource SidebarIcon}"/>
-                            <TextBlock Text="Contacts"/>
+                            <TextBlock Text="Contacts" VerticalAlignment="Center"/>
                         </StackPanel>
                     </Button>
-                    <Button x:Name="Utils" Style="{StaticResource SidebarBtn}" IsEnabled="False">
+                    <!--<Button x:Name="Utils" Style="{StaticResource SidebarBtn}" IsEnabled="False">
                         <StackPanel Orientation="Horizontal">
                             <Icon:PackIconMaterial Kind="Tools" Style="{StaticResource SidebarIcon}"/>
                             <TextBlock Text="Utils"/>
                         </StackPanel>
-                    </Button>
+                    </Button>-->
                 </StackPanel>
                 <!--#endregion-->
 
@@ -76,10 +77,10 @@
                         <RowDefinition Height="auto" />
                     </Grid.RowDefinitions>
 
-                    <Button x:Name="NewCorrespondence" 
+                    <Button x:Name="NewDraft" 
                             Grid.Row="1"
                             Style="{StaticResource BaseBtnStyling}" 
-                            Content="New Correspondence" />
+                            Content="New Draft" />
 
                     <Separator Grid.Row="2" Margin="25" Width="0"/>
 

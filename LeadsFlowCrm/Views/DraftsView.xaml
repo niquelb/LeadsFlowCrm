@@ -120,7 +120,8 @@
             <Grid.RowDefinitions>
                 <RowDefinition Height="auto" />
             </Grid.RowDefinitions>
-            <ScrollViewer VerticalScrollBarVisibility="Auto">
+            <ScrollViewer VerticalScrollBarVisibility="Auto"
+                          HorizontalScrollBarVisibility="Auto">
                 <ItemsControl x:Name="Drafts">
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
