@@ -1,4 +1,5 @@
 ﻿using Caliburn.Micro;
+using LeadsFlowCrm.EventModels;
 using LeadsFlowCrm.Models;
 using LeadsFlowCrm.Services;
 using LeadsFlowCrm.Services.ModelServices;
@@ -17,15 +18,24 @@ namespace LeadsFlowCrm.ViewModels;
 public class ImportContactsViewModel : Screen
 {
 	private readonly IContactService _contactService;
+	private readonly IEventAggregator _event;
+	private readonly IWindowManager _windowManager;
 	private readonly IPeopleServiceClass _peopleService;
+	private readonly CreateDraftViewModel _createDraft;
 	private readonly LoggedInUser _loggedInUser;
 
 	public ImportContactsViewModel(IContactService contactService,
+								IEventAggregator @event,
+								IWindowManager windowManager,
 								IPeopleServiceClass peopleService,
+								CreateDraftViewModel createDraft,
 								LoggedInUser loggedInUser)
     {
 		_contactService = contactService;
+		_event = @event;
+		_windowManager = windowManager;
 		_peopleService = peopleService;
+		_createDraft = createDraft;
 		_loggedInUser = loggedInUser;
 	}
 
@@ -82,6 +92,21 @@ public class ImportContactsViewModel : Screen
 		{
 			Utilities.ShowNotification("Error saving contact", $"There was an error saving the selected contact ({ex.Message})", NotificationType.Error);
 		}
+	}
+
+	/// <summary>
+	/// Method to create a new draft with the selected contact as the recipient
+	/// </summary>
+	public async void NewDraft()
+	{
+		await _windowManager.ShowWindowAsync(_createDraft);
+
+		await _event.PublishOnUIThreadAsync(new DraftEvent()
+		{
+			Recipients = new List<string>() {
+				SelectedContact.Email
+			}
+		});
 	}
 	#endregion
 

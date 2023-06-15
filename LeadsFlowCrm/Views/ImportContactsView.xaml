@@ -248,8 +248,9 @@
                                                        Margin="15"  
                                                        Kind="AccountPlus" />
                             </Button>
-                            <Button Style="{StaticResource IconButton}"
-                                    ToolTip="Send New Correspondence">
+                            <Button x:Name="NewDraft"
+                                    Style="{StaticResource IconButton}"
+                                    ToolTip="Create Draft">
                                 <Icon:PackIconMaterial Width="15" 
                                                        Height="15" 
                                                        Margin="15"  
