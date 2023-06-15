@@ -232,7 +232,7 @@
                                                     <Icon:PackIconMaterial Kind="Email" Width="15" Height="15" Margin="15"/>
                                                 </Button>
                                                 <Button ToolTip="Remove from stage"
-                                                        cal:Message.Attach="[Event Click]=[Action Delete($dataContext)]"
+                                                        cal:Message.Attach="[Event Click]=[Action Remove($dataContext)]"
                                                         Margin="3 0"
                                                         Style="{StaticResource ExitIconButton}">
                                                     <Icon:PackIconMaterial Kind="TrashCan" Width="15" Height="15" Margin="15"/>
