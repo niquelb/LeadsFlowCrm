@@ -17,11 +17,18 @@ public class SelectedEmailViewModel : Screen
 {
 	private readonly IGmailServiceClass _gmailServiceClass;
 	private readonly IEventAggregator _event;
+	private readonly IWindowManager _windowManager;
+	private readonly CreateDraftViewModel _createDraft;
 
-	public SelectedEmailViewModel(IGmailServiceClass gmailServiceClass, IEventAggregator @event)
+	public SelectedEmailViewModel(IGmailServiceClass gmailServiceClass,
+							   IEventAggregator @event,
+							   IWindowManager windowManager,
+							   CreateDraftViewModel createDraft)
     {
 		_gmailServiceClass = gmailServiceClass;
 		_event = @event;
+		_windowManager = windowManager;
+		_createDraft = createDraft;
 	}
 
     protected async override void OnViewLoaded(object view)
@@ -89,6 +96,22 @@ public class SelectedEmailViewModel : Screen
 	/// </summary>
 	public async void Back() => await _event.PublishOnUIThreadAsync(new NavigationEvent(NavigationEvent.NavigationRoutes.Inbox));
 
+
+	/// <summary>
+	/// Method for creating a draft with the given email's sender as the recipient (not an actual reply in the thread but shh)
+	/// </summary>
+	public async void Reply()
+	{
+		await _windowManager.ShowWindowAsync(_createDraft);
+
+		await _event.PublishOnUIThreadAsync(new DraftEvent()
+		{
+			Recipients = new List<string>() {
+				SelectedEmail.FromEmail
+			}
+		});
+	}
+
 	/// <summary>
 	/// Method for marking the email as unread
 	/// </summary>
@@ -138,8 +161,6 @@ public class SelectedEmailViewModel : Screen
 	}
 
 	public NotificationManager Notification { get; set; } = new();
-
-    public bool CanReply { get; set; } = false;
 
 	public bool CanLabel { get; set; } = false;
 

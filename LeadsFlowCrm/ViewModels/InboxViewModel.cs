@@ -19,11 +19,18 @@ public class InboxViewModel : Screen
 {
 	private readonly IGmailServiceClass _gmailService;
 	private readonly IEventAggregator _event;
+	private readonly IWindowManager _windowManager;
+	private readonly CreateDraftViewModel _createDraft;
 
-	public InboxViewModel(IGmailServiceClass gmailService, IEventAggregator @event)
+	public InboxViewModel(IGmailServiceClass gmailService,
+					   IEventAggregator @event,
+					   IWindowManager windowManager,
+					   CreateDraftViewModel createDraft)
 	{
 		_gmailService = gmailService;
 		_event = @event;
+		_windowManager = windowManager;
+		_createDraft = createDraft;
 	}
 
 	protected async override Task OnInitializeAsync(CancellationToken cancellationToken)
@@ -45,6 +52,24 @@ public class InboxViewModel : Screen
 		CanPreviousPage = false;
 
 		await LoadInboxAsync();
+	}
+
+	/// <summary>
+	/// Method for creating a draft with the given email's sender as the recipient (not an actual reply in the thread but shh)
+	/// </summary>
+	/// <param name="email">Selected email</param>
+	public async void Reply(Email email)
+	{
+		string emailAddress = email.FromEmail;
+
+		await _windowManager.ShowWindowAsync(_createDraft);
+
+		await _event.PublishOnUIThreadAsync(new DraftEvent()
+		{
+			Recipients = new List<string>() {
+				emailAddress
+			}
+		});
 	}
 
 	#region Pagination

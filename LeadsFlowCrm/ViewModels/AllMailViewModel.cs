@@ -18,13 +18,19 @@ namespace LeadsFlowCrm.ViewModels;
 public class AllMailViewModel : Screen
 {
 	private readonly IGmailServiceClass _gmailService;
+	private readonly IWindowManager _windowManager;
 	private readonly IEventAggregator _event;
+	private readonly CreateDraftViewModel _createDraft;
 
 	public AllMailViewModel(IGmailServiceClass gmailService,
-						 IEventAggregator @event)
+						 IWindowManager windowManager,
+						 IEventAggregator @event,
+						 CreateDraftViewModel createDraft)
     {
 		_gmailService = gmailService;
+		_windowManager = windowManager;
 		_event = @event;
+		_createDraft = createDraft;
 	}
 
 	protected async override Task OnInitializeAsync(CancellationToken cancellationToken)
@@ -46,6 +52,24 @@ public class AllMailViewModel : Screen
 		CanPreviousPage = false;
 
 		await LoadEmailsAsync();
+	}
+
+	/// <summary>
+	/// Method for creating a draft with the given email's sender as the recipient (not an actual reply in the thread but shh)
+	/// </summary>
+	/// <param name="email">Selected email</param>
+	public async void Reply(Email email)
+	{
+		string emailAddress = email.FromEmail;
+
+		await _windowManager.ShowWindowAsync(_createDraft);
+
+		await _event.PublishOnUIThreadAsync(new DraftEvent()
+		{
+			Recipients = new List<string>() {
+				emailAddress
+			}
+		});
 	}
 
 	/// <summary>
