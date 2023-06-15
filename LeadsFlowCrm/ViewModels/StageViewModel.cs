@@ -59,11 +59,20 @@ public class StageViewModel : Screen, IHandle<StageSelectedEvent>
 	/// <returns></returns>
 	private async Task LoadContacts()
 	{
-		Contacts = new ObservableCollection<Contact>(await _contactService.GetByStageAsync(Stage.Id));
+		StageEmptyIsVisible = false;
+		ContentIsVisible = false;
 
-		// Show the "empty" screen if no contacts found
-		IsStageEmpty = Contacts.Count <= 0;
-	}
+		Contacts = new BindableCollection<Contact>(await _contactService.GetByStageAsync(Stage.Id));
+
+		if (Contacts.Any())
+		{
+			ContentIsVisible = true;
+		}
+        else
+        {
+			StageEmptyIsVisible = true;
+        }
+    }
 
 	#endregion
 
@@ -76,17 +85,19 @@ public class StageViewModel : Screen, IHandle<StageSelectedEvent>
 	/// <summary>
 	/// Selected contact
 	/// </summary>
-	public Contact SelectedContact { get; set; } = new();
+	public Contact? SelectedContact { get; set; }
 
 	#region Property backing fields
-	private bool _isStageEmpty;
-	private ObservableCollection<Contact> _contacts = new();
+	private bool _stageEmptyIsVisible;
+	private bool _contentIsVisible;
+
+	private BindableCollection<Contact> _contacts = new();
 	#endregion
 
 	/// <summary>
 	/// Contacts for the stage
 	/// </summary>
-	public ObservableCollection<Contact> Contacts
+	public BindableCollection<Contact> Contacts
 	{
 		get { return _contacts; }
 		set { 
@@ -95,17 +106,33 @@ public class StageViewModel : Screen, IHandle<StageSelectedEvent>
 		}
 	}
 
+	#region Visibility controls
+
 	/// <summary>
-	/// Wether the stage has contacts or is empty
+	/// Controls the visibility of the "empty" screen
 	/// </summary>
-	public bool IsStageEmpty
+	public bool StageEmptyIsVisible
 	{
-		get { return _isStageEmpty; }
+		get { return _stageEmptyIsVisible; }
 		set { 
-			_isStageEmpty = value;
+			_stageEmptyIsVisible = value;
 			NotifyOfPropertyChange();
 		}
 	}
+
+	/// <summary>
+	/// Controls the visibility of the content
+	/// </summary>
+	public bool ContentIsVisible
+	{
+		get { return _contentIsVisible; }
+		set {
+			_contentIsVisible = value;
+			NotifyOfPropertyChange();
+		}
+	}
+	#endregion
+
 	#endregion
 
 }
