@@ -59,10 +59,16 @@ public class GmailServiceClass : IGmailServiceClass
 
 	#region Labels
 	/// <summary>
-	/// Labels to get the emails from the inbox
+	/// Label to get the emails from the inbox
 	/// </summary>
 	/// <see cref="GetEmailsFromUserAsync(PaginationOptions)"/>
 	public const string InboxLabel = "INBOX";
+
+	/// <summary>
+	/// Empty label to get all mail
+	/// </summary>
+	/// <see cref="GetEmailsFromUserAsync(PaginationOptions)"/>
+	public const string NoLabel = "";
 	#endregion
 
 	#endregion
@@ -84,6 +90,7 @@ public class GmailServiceClass : IGmailServiceClass
 	/// <summary>
 	/// Method for retrieving the emails from the user's inbox
 	/// </summary>
+	/// <param name="paginationOption">Optional pagination options</param>
 	/// <returns>List of the emails in the user's inbox</returns>
 	public async Task<IList<Email>> GetInboxAsync(PaginationOptions paginationOption = PaginationOptions.FirstPage) => 
 		await GetEmailsFromUserAsync(pagination: paginationOption, label: InboxLabel);
@@ -91,9 +98,18 @@ public class GmailServiceClass : IGmailServiceClass
 	/// <summary>
 	/// Method for retrieving the drafts created by the user
 	/// </summary>
+	/// <param name="paginationOption">Optional pagination options</param>
 	/// <returns>List of user's drafts</returns>
 	public async Task<IList<Email>> GetDraftsAsync(PaginationOptions paginationOption = PaginationOptions.FirstPage) => 
 		await GetDraftsFromUserAsync(pagination: paginationOption);
+
+	/// <summary>
+	/// Method for retrieving all the user's emails
+	/// </summary>
+	/// <param name="paginationOption">Optional pagination options</param>
+	/// <returns></returns>
+	public async Task<IList<Email>> GetAllMailAsync(PaginationOptions paginationOptions = PaginationOptions.FirstPage) =>
+		await GetEmailsFromUserAsync(pagination: paginationOptions, NoLabel);
 
 	/// <summary>
 	/// Method for getting the processed and unencoded body of the selected email
@@ -125,9 +141,11 @@ public class GmailServiceClass : IGmailServiceClass
 	/// </summary>
 	/// <param name="pagination">Optional pagination options</param>
 	/// <param name="label">Label for the emails, by default the label is "INBOX"</param>
-	/// <see cref="InboxLabel"/>
+	/// <param name="includeSpamTrash">Wether or not to include emails marked as trash or spam, by default it's set to false</param>
 	/// <returns>List of emails from the user's inbox</returns>
-	private async Task<IList<Email>> GetEmailsFromUserAsync(PaginationOptions pagination = PaginationOptions.FirstPage, string label = InboxLabel)
+	private async Task<IList<Email>> GetEmailsFromUserAsync(PaginationOptions pagination = PaginationOptions.FirstPage,
+														 string label = InboxLabel,
+														 bool includeSpamTrash = false)
 	{
 		List<Task<Email>> tasks = new();
 
@@ -137,11 +155,14 @@ public class GmailServiceClass : IGmailServiceClass
 		// We define the request to retrieve email list
 		var emailListRequest = gmailService.Users.Messages.List(Me);
 
-		// Only get emails with the requested label:
-		emailListRequest.LabelIds = new[] { label };
+        // Only get emails with the requested label:
+        if (string.IsNullOrWhiteSpace(label) == false) // ← If no label is provided it means that all emails will be returned
+        {
+			emailListRequest.LabelIds = new[] { label };
+		}
 
-		// Not include spam/trash
-		emailListRequest.IncludeSpamTrash = false;
+        // Not include spam/trash
+        emailListRequest.IncludeSpamTrash = includeSpamTrash;
 
 		// Specify the page size
 		emailListRequest.MaxResults = PageCount;
