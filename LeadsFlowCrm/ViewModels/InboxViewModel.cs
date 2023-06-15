@@ -156,7 +156,7 @@ public class InboxViewModel : Screen
 		ContentIsVisible = false;
 		EmptyScreenIsVisible = false;
 
-		Inbox = new ObservableCollection<Email>(await _gmailService.GetPaginatedInbox(pagination));
+		Inbox = new ObservableCollection<Email>(await _gmailService.GetInboxAsync(pagination));
 
 		LoadingScreenIsVisible = false;
 

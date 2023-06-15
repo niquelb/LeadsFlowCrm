@@ -21,12 +21,6 @@ public class GmailServiceClass : IGmailServiceClass
 	private readonly IOAuthServiceClass _oAuthService;
 	private readonly IBaseGoogleServiceClass _baseGoogleService;
 
-	/// <summary> List of the emails in the user's inbox </summary>
-	private List<Email>? _inbox;
-
-	/// <summary> List of drafts created by the user </summary>
-	private List<Email>? _drafts;
-
 	/// <summary> Service object for the Gmail API </summary>
 	private GmailService? _gmailService;
 	#endregion
@@ -38,6 +32,10 @@ public class GmailServiceClass : IGmailServiceClass
 	}
 
 	#region Enums
+
+	/// <summary>
+	/// Pagination options available
+	/// </summary>
 	public enum PaginationOptions
 	{
 		PreviousPage,
@@ -57,16 +55,26 @@ public class GmailServiceClass : IGmailServiceClass
 	public static int PageCount => 50;
 
     /// <summary> List of pagination tokens for the Gmail API </summary>
-    public List<string> PageTokens { get; set; } = new();
-    #endregion
+    private List<string> PageTokens { get; set; } = new();
 
-    #region Get and refresh methods
-    /// <summary>
-    /// Method for retrieving the Gmail service object for the Gmail API
-    /// </summary>
-    /// <returns>GmailService object</returns>
-    /// <see cref="GmailService"/>
-    public async Task<GmailService> GetGmailServiceAsync()
+	#region Labels
+	/// <summary>
+	/// Labels to get the emails from the inbox
+	/// </summary>
+	/// <see cref="GetEmailsFromUserAsync(PaginationOptions)"/>
+	public const string InboxLabel = "INBOX";
+	#endregion
+
+	#endregion
+
+	#region Get and processing methods
+
+	/// <summary>
+	/// Method for retrieving the Gmail service object for the Gmail API
+	/// </summary>
+	/// <returns>GmailService object</returns>
+	/// <see cref="GmailService"/>
+	public async Task<GmailService> GetGmailServiceAsync()
 	{
 		_gmailService ??= new GmailService(await _baseGoogleService.GetServiceAsync());
 
@@ -77,53 +85,15 @@ public class GmailServiceClass : IGmailServiceClass
 	/// Method for retrieving the emails from the user's inbox
 	/// </summary>
 	/// <returns>List of the emails in the user's inbox</returns>
-	public async Task<List<Email>> GetInboxAsync()
-	{
-		_inbox ??= await GetEmailsFromInboxAsync();
-
-		return _inbox;
-	}
+	public async Task<IList<Email>> GetInboxAsync(PaginationOptions paginationOption = PaginationOptions.FirstPage) => 
+		await GetEmailsFromUserAsync(pagination: paginationOption, label: InboxLabel);
 
 	/// <summary>
 	/// Method for retrieving the drafts created by the user
 	/// </summary>
 	/// <returns>List of user's drafts</returns>
-	public async Task<IList<Email>> GetDraftsAsync()
-	{
-		_drafts ??= (await GetDraftsFromUserAsync()).ToList();
-
-		return _drafts;
-	}
-
-	/// <summary>
-	/// Method for refreshing the inbox object
-	/// </summary>
-	/// <returns></returns>
-	public async Task RefreshInboxAsync()
-	{
-		_inbox = await GetEmailsFromInboxAsync();
-	}
-
-	/// <summary>
-	/// Method for refreshing and then retrieving the inbox object
-	/// </summary>
-	/// <returns>List of the emails in the user's inbox</returns>
-	public async Task<List<Email>> RefreshAndGetInboxAsync()
-	{
-		await RefreshInboxAsync();
-		return await GetInboxAsync();
-	}
-
-	/// <summary>
-	/// Method that returns the inbox paginated according to the pagination option passed in
-	/// </summary>
-	/// <param name="paginationOptions">Pagination option</param>
-	/// <returns></returns>
-	public async Task<IList<Email>> GetPaginatedInbox(PaginationOptions paginationOption)
-	{
-		_inbox = await GetEmailsFromInboxAsync(paginationOption);
-		return await GetInboxAsync();
-	}
+	public async Task<IList<Email>> GetDraftsAsync(PaginationOptions paginationOption = PaginationOptions.FirstPage) => 
+		await GetDraftsFromUserAsync(pagination: paginationOption);
 
 	/// <summary>
 	/// Method for getting the processed and unencoded body of the selected email
@@ -154,8 +124,10 @@ public class GmailServiceClass : IGmailServiceClass
 	/// Method for getting the emails from the user's inbox
 	/// </summary>
 	/// <param name="pagination">Optional pagination options</param>
+	/// <param name="label">Label for the emails, by default the label is "INBOX"</param>
+	/// <see cref="InboxLabel"/>
 	/// <returns>List of emails from the user's inbox</returns>
-	private async Task<List<Email>> GetEmailsFromInboxAsync(PaginationOptions pagination = PaginationOptions.FirstPage)
+	private async Task<IList<Email>> GetEmailsFromUserAsync(PaginationOptions pagination = PaginationOptions.FirstPage, string label = InboxLabel)
 	{
 		List<Task<Email>> tasks = new();
 
@@ -165,8 +137,8 @@ public class GmailServiceClass : IGmailServiceClass
 		// We define the request to retrieve email list
 		var emailListRequest = gmailService.Users.Messages.List(Me);
 
-		// Only get emails labeled as 'INBOX':
-		emailListRequest.LabelIds = new[] { "INBOX" };
+		// Only get emails with the requested label:
+		emailListRequest.LabelIds = new[] { label };
 
 		// Not include spam/trash
 		emailListRequest.IncludeSpamTrash = false;
