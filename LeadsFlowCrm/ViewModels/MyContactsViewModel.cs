@@ -85,6 +85,33 @@ public class MyContactsViewModel : Screen
 			} 
 		});
 	}
+	
+	/// <summary>
+	/// Method to update the assigned stage for the user
+	/// </summary>
+	/// <param name="cStage">ContactStage object</param>
+	public async void SelectStage(ContactStage cStage)
+	{
+        if (SelectedContact == null)
+        {
+			return;
+        }
+
+        if (string.IsNullOrWhiteSpace(cStage.GivenStage.Id))
+        {
+			throw new ArgumentNullException(nameof(cStage.GivenStage.Id));
+        }
+
+		Utilities.ShowNotification("Updating stage", "Updating the contact's stage...", NotificationType.Information);
+
+		// We update the contact in the API
+        await _contactService.ModifyStageIdToApiAsync(SelectedContact.Id, cStage.GivenStage.Id);
+
+		Utilities.ShowNotification("Success", "Successfully updated the contact's stage", NotificationType.Success);
+
+		// We refresh the stages
+		await LoadContacts();
+	}
 	#endregion
 
 	#region Private Methods
@@ -140,11 +167,6 @@ public class MyContactsViewModel : Screen
 	/// <returns></returns>
 	private async Task LoadContactStages()
 	{
-        if (HasPipeline == false)
-        {
-			return;
-        }
-
         if (SelectedContact == null)
         {
 			return;
@@ -173,8 +195,6 @@ public class MyContactsViewModel : Screen
 	/// Tab name for the view
 	/// </summary>
 	public string DisplayHeader { get; } = "My Contacts";
-
-    public bool HasPipeline { get; set; }
 
     #region Private backing fields
 

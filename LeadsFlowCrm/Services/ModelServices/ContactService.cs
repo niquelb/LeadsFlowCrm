@@ -185,7 +185,6 @@ public class ContactService : IContactService
 		/*
 		 Expected json for the body:
 			{
-				"id": "string",			← This is automatically generated, not needed
 				"email": "string",
 				"firstName": "string",
 				"lastNames": "string",
@@ -241,6 +240,8 @@ public class ContactService : IContactService
 	/// <param name="contact">Contact to be deleted</param>
 	/// <returns></returns>
 	/// <exception cref="ArgumentNullException">If the given contact's ID is null AND no contact with that email exists in the API</exception>
+	/// <exception cref="UnauthorizedAccessException">If the token is invalid/exception>
+	/// <exception cref="Exception">If there is any other problem with the request</exception>
 	public async Task DeleteFromApiAsync(Contact contact)
 	{
 		_apiClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _loggedInUser.Token);
@@ -273,6 +274,43 @@ public class ContactService : IContactService
 
 			throw new Exception(resp.ReasonPhrase);
 		};
+	}
+
+	/// <summary>
+	/// Method to update the given contact's stage ID in the API
+	/// </summary>
+	/// <param name="contactId">Contact's ID</param>
+	/// <param name="stageId">New stage ID</param>
+	/// <returns></returns>
+	/// <exception cref="UnauthorizedAccessException">If the token is invalid/exception>
+	/// <exception cref="Exception">If there is any other problem with the request</exception>
+	public async Task ModifyStageIdToApiAsync(string contactId, string stageId)
+	{
+		_apiClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _loggedInUser.Token);
+
+		// We create the body of the request
+		var bodyMap = new Dictionary<string, string?>
+		{
+			["id"] = contactId,
+			["stageId"] = stageId,
+		};
+
+		// We parse the body to a Json string
+		string bodyStr = JsonSerializer.Serialize(bodyMap);
+
+		// We create the content object for the request
+		StringContent body = new(bodyStr, Encoding.UTF8, "application/json");
+
+		using HttpResponseMessage resp = await _apiClient.PutAsync($"api/Contacts", body);
+		if (resp.IsSuccessStatusCode == false)
+		{
+			if (resp.StatusCode == HttpStatusCode.Unauthorized)
+			{
+				throw new UnauthorizedAccessException(resp.ReasonPhrase);
+			}
+
+			throw new Exception(resp.ReasonPhrase);
+		}
 	}
 	#endregion
 }
