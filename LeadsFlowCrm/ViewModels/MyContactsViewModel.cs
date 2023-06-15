@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -134,7 +135,7 @@ public class MyContactsViewModel : Screen
 		LoadingScreenIsVisible = false;
 
 		// If no contacts found, we show the "empty" screen
-		if (Contacts.Count <= 0)
+		if (Contacts.Any())
 		{
 			EmptyScreenIsVisible = true;
 		}

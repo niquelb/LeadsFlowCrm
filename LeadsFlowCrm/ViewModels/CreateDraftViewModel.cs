@@ -68,7 +68,7 @@ public class CreateDraftViewModel : Screen, IHandle<DraftEvent>
 			return;
 		}
 
-		if (Recipients.Count <= 0)
+		if (Recipients.Any())
 		{
 			Utilities.ShowNotification("No recipients specified", "The email was not sent because there are no specified recipients.", NotificationType.Error);
 			return;
@@ -135,7 +135,7 @@ public class CreateDraftViewModel : Screen, IHandle<DraftEvent>
 			return;
 		}
 
-		if (Recipients.Count <= 0)
+		if (Recipients.Any())
 		{
 			Utilities.ShowNotification("No recipients specified", "The draft was not saved because there are no specified recipients.", NotificationType.Error);
 			return;
@@ -275,7 +275,7 @@ public class CreateDraftViewModel : Screen, IHandle<DraftEvent>
 	/// <returns></returns>
 	public async Task HandleAsync(DraftEvent e, CancellationToken cancellationToken)
 	{
-        if (e.Recipients.Count <= 0)
+        if (e.Recipients.Any())
         {
 			return;
         }

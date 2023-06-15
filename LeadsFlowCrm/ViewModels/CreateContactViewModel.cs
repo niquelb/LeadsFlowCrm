@@ -40,7 +40,7 @@ public class CreateContactViewModel : Screen
 		LoadingSpinnerIsVisible = false;
 		PipelinesSelectorIsVisible = true;
 
-		if (Pipelines.Count <= 0)
+		if (Pipelines.Any())
 		{
 			Utilities.ShowNotification("No pipelines found", "You don't seem to have any pipelines!", NotificationType.Error);
 		}
@@ -140,7 +140,7 @@ public class CreateContactViewModel : Screen
 		PipelineSelectedIsVisible = true;
 		StageSelectorIsVisible = true;
 
-		if (Stages.Count <= 0)
+		if (Stages.Any())
 		{
 			Utilities.ShowNotification("No stages found", "This pipeline is empty!", NotificationType.Error);
 		}

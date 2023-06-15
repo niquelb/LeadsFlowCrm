@@ -177,7 +177,7 @@ public class AllMailViewModel : Screen
 
 		LoadingScreenIsVisible = false;
 
-		if (Emails.Count > 0)
+		if (Emails.Any())
 		{
 			ContentIsVisible = true;
 		}

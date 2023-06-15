@@ -61,7 +61,7 @@ public class ImportContactsViewModel : Screen
 		ShowLoadingScreen = false;
 
 		// If no contacts found, we show the "empty" screen
-		if (GoogleContacts.Count <= 0)
+		if (GoogleContacts.Any())
 		{
 			ShowEmptyScreen = true;
 		}
