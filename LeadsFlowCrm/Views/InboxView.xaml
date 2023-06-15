@@ -270,10 +270,14 @@
                                         </StackPanel>
                                         <!--#endregion-->
 
-                                        <!--#region Buttons-->
+                                        <!--#region Buttons & Date-->
                                         <StackPanel Orientation="Horizontal"
                                                     Grid.Column="2"
                                                     Margin="0 3">
+                                            <TextBlock Text="{Binding Date}"
+                                                       Style="{StaticResource FieldText}"
+                                                       VerticalAlignment="Center"
+                                                       Margin="10 0" />
                                             <Button ToolTip="Reply to the email"
                                                     cal:Message.Attach="[Event Click]=[Action Reply($dataContext)]"
                                                     Margin="3 0"
