@@ -11,6 +11,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows.Input;
 using static LeadsFlowCrm.Services.GmailServiceClass;
 
 namespace LeadsFlowCrm.ViewModels;
@@ -127,6 +128,34 @@ public class AllMailViewModel : Screen
 		RefreshEmails();
 	}
 
+	/// <summary>
+	/// Method to query the inbox
+	/// </summary>
+	public async void Query()
+	{
+		if (string.IsNullOrWhiteSpace(SearchText))
+		{
+			return;
+		}
+
+		await LoadEmailsAsync(query: SearchText);
+	}
+
+	/// <summary>
+	/// Method that gets executed when the user presses a key on the search box, if that key is "enter", the query method
+	/// is executed
+	/// </summary>
+	/// <param name="keyArgs">Key arguments</param>
+	public void SubmitSearch(KeyEventArgs keyArgs)
+	{
+		if (keyArgs.Key != Key.Enter)
+		{
+			return;
+		}
+
+		Query();
+	}
+
 	#region Pagination
 
 	/// <summary>
@@ -167,13 +196,16 @@ public class AllMailViewModel : Screen
 	/// </summary>
 	/// <param name="pagination">Optional pagination parameters</param>
 	/// <returns></returns>
-	private async Task LoadEmailsAsync(PaginationOptions pagination = PaginationOptions.FirstPage)
+	private async Task LoadEmailsAsync(PaginationOptions pagination = PaginationOptions.FirstPage,
+									string query = "")
 	{
 		LoadingScreenIsVisible = true;
 		ContentIsVisible = false;
 		EmptyScreenIsVisible = false;
 
-		Emails = new(await _gmailService.GetAllMailAsync(paginationOptions: pagination));
+		Emails = new(await _gmailService.GetAllMailAsync(paginationOptions: pagination, query: Utilities.FormatQuery(query)));
+
+		SearchText = string.Empty;
 
 		LoadingScreenIsVisible = false;
 
@@ -186,7 +218,7 @@ public class AllMailViewModel : Screen
 			EmptyScreenIsVisible = true;
 		}
 
-		// TODO CanRefresh = true
+		CanRefreshEmails = true;
 	}
 
 	/// <summary>
@@ -215,6 +247,7 @@ public class AllMailViewModel : Screen
 
 	private bool _canRefreshEmails;
 	private bool _canPreviousPage;
+	private string _searchText;
 	private BindableCollection<Email> _emails = new();
 	private int _currentPageIndex = 1;
 
@@ -266,6 +299,18 @@ public class AllMailViewModel : Screen
 		get { return _currentPageIndex; }
 		set { 
 			_currentPageIndex = value;
+			NotifyOfPropertyChange();
+		}
+	}
+
+	/// <summary>
+	/// Searchbox text
+	/// </summary>
+	public string SearchText
+	{
+		get { return _searchText; }
+		set {
+			_searchText = value;
 			NotifyOfPropertyChange();
 		}
 	}

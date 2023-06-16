@@ -89,4 +89,15 @@ public static class Utilities
 			Type = notificationType
 		});
 	}
+
+	/// <summary>
+	/// Method for formating a query for the Gmail API that searchs in the "from" and "subject" (SL)
+	/// </summary>
+	/// <param name="query">Query</param>
+	/// <returns>Formatted query</returns>
+	public static string FormatQuery(string query)
+	{
+		var output = $"from:*{query}* OR subject:*{query}*";
+		return output;
+	}
 }

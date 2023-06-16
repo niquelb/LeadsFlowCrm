@@ -214,7 +214,9 @@ public class InboxViewModel : Screen
 		ContentIsVisible = false;
 		EmptyScreenIsVisible = false;
 
-		Inbox = new ObservableCollection<Email>(await _gmailService.GetInboxAsync(paginationOption: pagination, query: FormatQuery(query)));
+		Inbox = new ObservableCollection<Email>(await _gmailService.GetInboxAsync(paginationOption: pagination, query: Utilities.FormatQuery(query)));
+
+		SearchText = string.Empty;
 
 		LoadingScreenIsVisible = false;
 
@@ -230,11 +232,7 @@ public class InboxViewModel : Screen
 		CanRefreshInbox = true;
 	}
 
-	private string FormatQuery(string query)
-	{
-		var output = $"from:*{query}* OR subject:*{query}*";
-		return output;
-	}
+	
 	#endregion
 
 	#region Properties
