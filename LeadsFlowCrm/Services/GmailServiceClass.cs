@@ -75,6 +75,8 @@ public class GmailServiceClass : IGmailServiceClass
 
 	#region Get and processing methods
 
+	#region Public Methods
+
 	/// <summary>
 	/// Method for retrieving the Gmail service object for the Gmail API
 	/// </summary>
@@ -216,6 +218,10 @@ public class GmailServiceClass : IGmailServiceClass
 
 		return new List<Email>(output);
 	}
+
+	#endregion
+
+	#region Private Methods
 
 	/// <summary>
 	/// Method for getting the drafts created by the user
@@ -525,7 +531,12 @@ public class GmailServiceClass : IGmailServiceClass
 	}
 	#endregion
 
+	#endregion
+
 	#region Email marking methods (favorites...)
+
+	#region Public Methods
+
 	/// <summary>
 	/// Method for marking a specific email as read both in the model and through the Gmail API
 	/// </summary>
@@ -662,6 +673,10 @@ public class GmailServiceClass : IGmailServiceClass
 		email.IsFavorite = false;
 	}
 
+	#endregion
+
+	#region Private Methods
+
 	/// <summary>
 	/// Method for adding or removing specified labels to a given email
 	/// </summary>
@@ -684,9 +699,15 @@ public class GmailServiceClass : IGmailServiceClass
 
 		await service.Users.Messages.Modify(messageRequest, Me, email.Id).ExecuteAsync();
 	}
+
+	#endregion
+
 	#endregion
 
 	#region Sending + Drafting
+
+	#region Public Methods
+
 	/// <summary>
 	/// Method for sending an email through the Gmail API with the logged in user's email as the sender
 	/// </summary>
@@ -794,6 +815,10 @@ public class GmailServiceClass : IGmailServiceClass
 		await request.ExecuteAsync();
 	}
 
+	#endregion
+
+	#region Private Methods
+
 	/// <summary>
 	/// Method for creating a Message object based on a given Email object
 	/// </summary>
@@ -826,5 +851,8 @@ public class GmailServiceClass : IGmailServiceClass
 
 		return message;
 	}
+
+	#endregion
+
 	#endregion
 }
