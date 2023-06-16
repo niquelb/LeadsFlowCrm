@@ -34,7 +34,7 @@ public class AuthController : ControllerBase
 	/// [OK] if successful, 
 	/// [BadRequest] if the OAuth is invalid, 
 	/// [NotFound] if no user with that email exists,
-	/// [Problem] if the token generation fails or there are any other problems
+	/// [Problem] if the token generation fails or there are any other problems with the API
 	/// </returns>
 	[HttpPost("Login")]
 	public async Task<ActionResult> Login([FromBody] LoginUser loggedInUser)
@@ -57,7 +57,6 @@ public class AuthController : ControllerBase
 			 */
 			if (user == null || string.IsNullOrWhiteSpace(user.Id))
 			{
-				// TODO: register the user if it doesn't exist
 				return NotFound("No user was found with the given email");
 			}
 
@@ -74,6 +73,60 @@ public class AuthController : ControllerBase
 
 			return Ok(new LoggedInUser { Id = user.Id, Token = token });
 
+		}
+		catch (Exception ex)
+		{
+			return Problem(ex.Message);
+		}
+	}
+
+	/// <summary>
+	/// Sign in method for the API
+	/// </summary>
+	/// <param name="user">User to be signed in</param>
+	/// <returns>
+	/// [OK] if successful, token is returned, 
+	/// [BadRequest] if the user already exists or if the email is null/blank, 
+	/// [Problem] if the token generation fails or there are any other problems with the API
+	/// </returns>
+	[HttpPost("SignIn")]
+	public async Task<ActionResult> SignIn([FromBody] User user)
+	{
+		try
+		{
+            if (string.IsNullOrWhiteSpace(user.Email))
+            {
+				return BadRequest("Email cannot be null");
+            }
+
+			var apiUser = (await _userDAO.GetUsers($"email like '{user.Email}'")).FirstOrDefault();
+
+			// We check if the user already exists
+			if (apiUser != null)
+			{
+				return BadRequest("User already exists");
+			}
+
+			// We create the user
+			await _userDAO.InsertUser(user);
+
+			// We do the query again to obtain the ID, this time it should work
+			var insertedUser = (await _userDAO.GetUsers($"email like '{user.Email}'")).FirstOrDefault();
+
+			if (insertedUser == null || string.IsNullOrWhiteSpace(insertedUser.Id))
+			{
+				return Problem("User was not created correctly");
+			}
+
+			// We generate the token
+			string token = _auth.GetToken(insertedUser.Id);
+
+			if (string.IsNullOrEmpty(token))
+			{
+				return Problem("There was an error generating the token");
+			}
+
+			return Ok(new LoggedInUser { Id = insertedUser.Id, Token = token });
 		}
 		catch (Exception ex)
 		{

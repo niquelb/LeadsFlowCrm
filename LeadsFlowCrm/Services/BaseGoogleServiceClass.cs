@@ -168,7 +168,7 @@ public class BaseGoogleServiceClass : IBaseGoogleServiceClass
 		// Check if the token was revoked successfully
 		if (response.IsSuccessStatusCode == false)
 		{
-			throw new Exception($"[{response.StatusCode.ToString()}] → {await response.Content.ReadAsStringAsync()}");
+			throw new Exception($"[{response.StatusCode}] → {await response.Content.ReadAsStringAsync()}");
 		}
 	}
 }
