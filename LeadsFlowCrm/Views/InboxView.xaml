@@ -32,9 +32,11 @@
                     <ColumnDefinition Width="*" />
                     <ColumnDefinition Width="auto" />
                 </Grid.ColumnDefinitions>
-                <TextBox x:Name="SearchBox" 
+                <TextBox x:Name="SearchText" 
                          Grid.Column="0" 
                          Style="{StaticResource InboxSearchBox}"
+                         cal:Message.Attach="[Event LostFocus]=[Action Query]; 
+                                            [Event KeyDown]=[Action SubmitSearch($eventArgs)]"
                          Utils:TextBoxHelper.Hint="Search inbox..." />
                 <Icon:PackIconMaterial Grid.Column="1" 
                                        Kind="Magnify" Width="20" Height="20"

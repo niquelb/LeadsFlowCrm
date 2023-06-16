@@ -7,10 +7,12 @@ using Notifications.Wpf;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows.Input;
 using static LeadsFlowCrm.Services.GmailServiceClass;
 
 namespace LeadsFlowCrm.ViewModels;
@@ -72,35 +74,6 @@ public class InboxViewModel : Screen
 		});
 	}
 
-	#region Pagination
-	/// <summary>
-	/// Method for updating the inbox with the next page
-	/// </summary>
-	public async void NextPage()
-	{
-		CurrentPageIndex++;
-		CanPreviousPage = true;
-
-		await LoadInboxAsync(PaginationOptions.NextPage);
-	}
-
-	/// <summary>
-	/// Method for updating the inbox with the next page
-	/// </summary>
-	public async void PreviousPage()
-	{
-        if (CurrentPageIndex < 1)
-        {
-			return;
-        }
-
-		CurrentPageIndex--;
-		CanPreviousPage = CurrentPageIndex != 1;
-
-		await LoadInboxAsync(PaginationOptions.PreviousPage);
-	}
-	#endregion
-
 	/// <summary>
 	/// Method for opening an email from the inbox
 	/// </summary>
@@ -155,6 +128,64 @@ public class InboxViewModel : Screen
 		// We refresh the inbox to update the icons
 		RefreshInbox();
 	}
+
+	/// <summary>
+	/// Method to query the inbox
+	/// </summary>
+	public async void Query()
+	{
+        if (string.IsNullOrWhiteSpace(SearchText))
+        {
+			return;
+        }
+
+        await LoadInboxAsync(query: SearchText);
+	}
+
+	/// <summary>
+	/// Method that gets executed when the user presses a key on the search box, if that key is "enter", the query method
+	/// is executed
+	/// </summary>
+	/// <param name="keyArgs">Key arguments</param>
+	public void SubmitSearch(KeyEventArgs keyArgs)
+	{
+		if (keyArgs.Key != Key.Enter)
+		{
+			return;
+		}
+
+		Query();
+	}
+
+	#region Pagination
+	/// <summary>
+	/// Method for updating the inbox with the next page
+	/// </summary>
+	public async void NextPage()
+	{
+		CurrentPageIndex++;
+		CanPreviousPage = true;
+
+		await LoadInboxAsync(PaginationOptions.NextPage);
+	}
+
+	/// <summary>
+	/// Method for updating the inbox with the next page
+	/// </summary>
+	public async void PreviousPage()
+	{
+        if (CurrentPageIndex < 1)
+        {
+			return;
+        }
+
+		CurrentPageIndex--;
+		CanPreviousPage = CurrentPageIndex != 1;
+
+		await LoadInboxAsync(PaginationOptions.PreviousPage);
+	}
+	#endregion
+
 	#endregion
 
 	#region Private Methods
@@ -176,13 +207,14 @@ public class InboxViewModel : Screen
 	/// <see cref="PaginationOptions"/>
 	/// <param name="pagination">Optional pagination options, default is 'PaginationOptions.FirstPage'</param>
 	/// <returns></returns>
-	private async Task LoadInboxAsync(PaginationOptions pagination = PaginationOptions.FirstPage)
+	private async Task LoadInboxAsync(PaginationOptions pagination = PaginationOptions.FirstPage,
+								   string query = "")
 	{
 		LoadingScreenIsVisible = true;
 		ContentIsVisible = false;
 		EmptyScreenIsVisible = false;
 
-		Inbox = new ObservableCollection<Email>(await _gmailService.GetInboxAsync(pagination));
+		Inbox = new ObservableCollection<Email>(await _gmailService.GetInboxAsync(paginationOption: pagination, query: FormatQuery(query)));
 
 		LoadingScreenIsVisible = false;
 
@@ -197,10 +229,19 @@ public class InboxViewModel : Screen
 
 		CanRefreshInbox = true;
 	}
+
+	private string FormatQuery(string query)
+	{
+		var output = $"from:*{query}* OR subject:*{query}*";
+		return output;
+	}
 	#endregion
 
 	#region Properties
 
+	/// <summary>
+	/// Tab name
+	/// </summary>
 	public string DisplayHeader { get; } = "Inbox";
 
 	#region Property backing fields
@@ -213,6 +254,7 @@ public class InboxViewModel : Screen
 	private bool _canPreviousPage;
 	private ObservableCollection<Email> _inbox = new();
 	private int _currentPageIndex = 1;
+	private string _searchText = string.Empty;
 
 	#endregion
 
@@ -262,6 +304,18 @@ public class InboxViewModel : Screen
 		get { return _currentPageIndex; }
 		set {
 			_currentPageIndex = value;
+			NotifyOfPropertyChange();
+		}
+	}
+
+	/// <summary>
+	/// Searchbox text
+	/// </summary>
+	public string SearchText
+	{
+		get { return _searchText; }
+		set {
+			_searchText = value;
 			NotifyOfPropertyChange();
 		}
 	}
