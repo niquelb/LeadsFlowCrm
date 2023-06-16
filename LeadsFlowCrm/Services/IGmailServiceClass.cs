@@ -10,8 +10,9 @@ namespace LeadsFlowCrm.Services
 	public interface IGmailServiceClass
 	{
 		Email? SelectedEmail { get; set; }
-		Task<IList<Email>> GetInboxAsync(PaginationOptions paginationOption = PaginationOptions.FirstPage);
-		Task<IList<Email>> GetDraftsAsync(PaginationOptions paginationOption = PaginationOptions.FirstPage);
+		Task<IList<Email>> GetInboxAsync(PaginationOptions paginationOption = PaginationOptions.FirstPage, string query = "");
+		Task<IList<Email>> GetDraftsAsync(PaginationOptions paginationOption = PaginationOptions.FirstPage, string query = "");
+		Task<IList<Email>> GetAllMailAsync(PaginationOptions paginationOptions = PaginationOptions.FirstPage, bool includeTrashSpam = false, string query = "");
 		Task<GmailService> GetGmailServiceAsync();
 		string GetProcessedBody(Email email);
 		Task MarkEmailAsReadAsync(Email email);
@@ -24,7 +25,6 @@ namespace LeadsFlowCrm.Services
 		Task SaveDraftAsync(Email email);
 		Task SendDraftAsync(Email email);
 		Task DeleteDraftAsync(Email email);
-		Task<IList<Email>> GetAllMailAsync(PaginationOptions paginationOptions = PaginationOptions.FirstPage, bool includeTrashSpam = false);
 		Task MarkEmailAsNotTrashAsync(Email email);
 	}
 }

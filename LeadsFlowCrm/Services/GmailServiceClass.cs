@@ -94,15 +94,15 @@ public class GmailServiceClass : IGmailServiceClass
 	/// </summary>
 	/// <param name="paginationOption">Optional pagination options</param>
 	/// <returns>List of the emails in the user's inbox</returns>
-	public async Task<IList<Email>> GetInboxAsync(PaginationOptions paginationOption = PaginationOptions.FirstPage) => 
-		await GetEmailsFromUserAsync(pagination: paginationOption, label: InboxLabel);
+	public async Task<IList<Email>> GetInboxAsync(PaginationOptions paginationOption = PaginationOptions.FirstPage, string query = "") => 
+		await GetEmailsFromUserAsync(pagination: paginationOption, label: InboxLabel, query: query);
 
 	/// <summary>
 	/// Method for retrieving the drafts created by the user
 	/// </summary>
 	/// <param name="paginationOption">Optional pagination options</param>
 	/// <returns>List of user's drafts</returns>
-	public async Task<IList<Email>> GetDraftsAsync(PaginationOptions paginationOption = PaginationOptions.FirstPage) => 
+	public async Task<IList<Email>> GetDraftsAsync(PaginationOptions paginationOption = PaginationOptions.FirstPage, string query = "") => 
 		await GetDraftsFromUserAsync(pagination: paginationOption);
 
 	/// <summary>
@@ -111,8 +111,8 @@ public class GmailServiceClass : IGmailServiceClass
 	/// <param name="paginationOption">Optional pagination options</param>
 	/// <param name="includeTrashSpam">Optional param for including spam or trash !! USELESS - Does nothing !!</param>
 	/// <returns></returns>
-	public async Task<IList<Email>> GetAllMailAsync(PaginationOptions paginationOptions = PaginationOptions.FirstPage, bool includeTrashSpam = false) =>
-		await GetEmailsFromUserAsync(pagination: paginationOptions, NoLabel, includeSpamTrash: includeTrashSpam);
+	public async Task<IList<Email>> GetAllMailAsync(PaginationOptions paginationOptions = PaginationOptions.FirstPage, bool includeTrashSpam = false, string query = "") =>
+		await GetEmailsFromUserAsync(pagination: paginationOptions, NoLabel, includeSpamTrash: includeTrashSpam, query: query);
 
 	/// <summary>
 	/// Method for getting the processed and unencoded body of the selected email
@@ -139,6 +139,10 @@ public class GmailServiceClass : IGmailServiceClass
 		}
 	}
 
+	#endregion
+
+	#region Private Methods
+
 	/// <summary>
 	/// Method for getting the emails from the user's inbox
 	/// </summary>
@@ -148,6 +152,7 @@ public class GmailServiceClass : IGmailServiceClass
 	/// <returns>List of emails from the user's inbox</returns>
 	private async Task<IList<Email>> GetEmailsFromUserAsync(PaginationOptions pagination = PaginationOptions.FirstPage,
 														 string label = InboxLabel,
+														 string query = "",
 														 bool includeSpamTrash = false)
 	{
 		List<Task<Email>> tasks = new();
@@ -159,7 +164,7 @@ public class GmailServiceClass : IGmailServiceClass
 		var emailListRequest = gmailService.Users.Messages.List(Me);
 
 		// Query
-		emailListRequest.Q = "in:all -from:me";
+		emailListRequest.Q = $"in:all -from:me {query}";
 
 		// Only get emails with the requested label
 		if (string.IsNullOrWhiteSpace(label) == false) // ← If there are no labels, all emails will be returned (matching the previous query)
@@ -219,16 +224,13 @@ public class GmailServiceClass : IGmailServiceClass
 		return new List<Email>(output);
 	}
 
-	#endregion
-
-	#region Private Methods
-
 	/// <summary>
 	/// Method for getting the drafts created by the user
 	/// </summary>
 	/// <param name="pagination">Optional pagination options</param>
 	/// <returns></returns>
-	private async Task<IList<Email>> GetDraftsFromUserAsync(PaginationOptions pagination = PaginationOptions.FirstPage)
+	private async Task<IList<Email>> GetDraftsFromUserAsync(PaginationOptions pagination = PaginationOptions.FirstPage,
+														 string query = "")
 	{
 		List<Task<Email>> tasks = new();
 
@@ -243,6 +245,9 @@ public class GmailServiceClass : IGmailServiceClass
 
 		// We pass in the page token depending on the desired pagination
 		emailListRequest.PageToken = GetPageToken(pagination);
+
+		// Query
+		emailListRequest.Q = query;
 
 		// Execute the request to retrieve the list of emails
 		var emailListResponse = emailListRequest.Execute();
