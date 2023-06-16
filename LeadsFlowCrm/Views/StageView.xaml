@@ -251,7 +251,7 @@
                 <!--#endregion-->
 
                 <!--#region Paginator-->
-                <Border Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="2" 
+                <!--<Border Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="2" 
                         HorizontalAlignment="Right" 
                         BorderBrush="{StaticResource AREghZyBrush.Foreground.Static}"
                         BorderThickness="1" CornerRadius="5" Padding="5"
@@ -292,7 +292,7 @@
 
                     </StackPanel>
 
-                </Border>
+                </Border>-->
                 <!--#endregion-->
 
             </Grid>

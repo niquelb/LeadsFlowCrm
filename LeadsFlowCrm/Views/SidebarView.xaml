@@ -88,7 +88,7 @@
                         <Button x:Name="Settings" Style="{StaticResource SidebarFooterBtn}">
                             <Icon:PackIconMaterial Kind="Cog" Margin="15"/>
                         </Button>
-                        <Button x:Name="Logout" Style="{StaticResource SidebarFooterBtn}">
+                        <Button x:Name="Logout" Style="{StaticResource ExitIconButton}">
                             <Icon:PackIconMaterial Kind="Logout" Margin="15"/>
                         </Button>
                     </StackPanel>

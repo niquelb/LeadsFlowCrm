@@ -12,7 +12,7 @@ using System.Windows;
 
 namespace LeadsFlowCrm.ViewModels;
 
-public class ShellViewModel : Conductor<object>, IHandle<EmailSelectedEvent>, IHandle<NavigationEvent>
+public class ShellViewModel : Conductor<object>, IHandle<EmailSelectedEvent>, IHandle<NavigationEvent>, IHandle<LogoutEvent>
 {
 	private readonly EmailClientShellViewModel _emailClientShellViewModel;
 	private readonly PipelinesViewModel _pipelinesViewModel;
@@ -102,5 +102,10 @@ public class ShellViewModel : Conductor<object>, IHandle<EmailSelectedEvent>, IH
 			default:
 				throw new ArgumentException($"{nameof(e.Route)} is not a valid navigation object or is not yet implemented");
 		}
+	}
+
+	public async Task HandleAsync(LogoutEvent message, CancellationToken cancellationToken)
+	{
+		Logout();
 	}
 }

@@ -35,4 +35,9 @@ public class SidebarViewModel
 	{
 		await _event.PublishOnUIThreadAsync(new NavigationEvent(NavigationEvent.NavigationRoutes.Contacts));
 	}
+
+	public async void Logout()
+	{
+		await _event.PublishOnUIThreadAsync(new LogoutEvent());
+	}
 }
