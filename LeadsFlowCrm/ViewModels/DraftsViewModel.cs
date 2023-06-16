@@ -13,6 +13,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows.Input;
 using static LeadsFlowCrm.Services.GmailServiceClass;
 
 namespace LeadsFlowCrm.ViewModels;
@@ -93,6 +94,34 @@ public class DraftsViewModel : Screen
 		}
 	}
 
+	/// <summary>
+	/// Method to query the inbox
+	/// </summary>
+	public async void Query()
+	{
+		if (string.IsNullOrWhiteSpace(SearchText))
+		{
+			return;
+		}
+
+		await LoadDraftsAsync(query: SearchText);
+	}
+
+	/// <summary>
+	/// Method that gets executed when the user presses a key on the search box, if that key is "enter", the query method
+	/// is executed
+	/// </summary>
+	/// <param name="keyArgs">Key arguments</param>
+	public void SubmitSearch(KeyEventArgs keyArgs)
+	{
+		if (keyArgs.Key != Key.Enter)
+		{
+			return;
+		}
+
+		Query();
+	}
+
 	#endregion
 
 	#region Private Methods
@@ -103,13 +132,14 @@ public class DraftsViewModel : Screen
 	/// <see cref="PaginationOptions"/>
 	/// <param name="pagination">Optional pagination options, default is 'PaginationOptions.FirstPage'</param>
 	/// <returns></returns>
-	private async Task LoadDraftsAsync(PaginationOptions pagination = PaginationOptions.FirstPage)
+	private async Task LoadDraftsAsync(PaginationOptions pagination = PaginationOptions.FirstPage,
+									string query = "")
 	{
 		LoadingScreenIsVisible = true;
 		ContentIsVisible = false;
 		EmptyScreenIsVisible = false;
 
-		Drafts = new(await _gmailService.GetDraftsAsync());
+		Drafts = new(await _gmailService.GetDraftsAsync(query: Utilities.FormatQuery(query)));
 
 		LoadingScreenIsVisible = false;
 
@@ -155,6 +185,7 @@ public class DraftsViewModel : Screen
 	private bool _canRefreshDrafts;
 	private BindableCollection<Email> _drafts = new();
 	private int _currentPageIndex;
+	private string _searchText;
 
 	#endregion
 
@@ -178,6 +209,18 @@ public class DraftsViewModel : Screen
 		get { return _drafts; }
 		set { 
 			_drafts = value;
+			NotifyOfPropertyChange();
+		}
+	}
+
+	/// <summary>
+	/// Searchbox text
+	/// </summary>
+	public string SearchText
+	{
+		get { return _searchText; }
+		set { 
+			_searchText = value;
 			NotifyOfPropertyChange();
 		}
 	}
